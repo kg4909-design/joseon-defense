@@ -2,7 +2,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
 (async () => {
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const p = await b.newPage({ viewport: { width: 1280, height: 800 } }); const errs = []; p.on('pageerror', (e) => errs.push(e.message));
-  await p.addInitScript(() => { { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.21'); }; if (!localStorage.getItem('jd_sv_2')) localStorage.setItem('jd_sv_2', JSON.stringify({ ts: Date.now(), rd: 4, dur: 300, diff: 'hard', wall: 2, role: 'gunner', name: '민수', ver: 'v0.16' })); });
+  await p.addInitScript(() => { { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.22'); }; if (!localStorage.getItem('jd_sv_2')) localStorage.setItem('jd_sv_2', JSON.stringify({ ts: Date.now(), rd: 4, dur: 300, diff: 'hard', wall: 2, role: 'gunner', name: '민수', ver: 'v0.16' })); });
   await p.goto('file:///home/claude/work/game/dist/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' });
   await p.click('#btnLoad'); await p.waitForTimeout(300); await p.screenshot({ path: '/tmp/sv_load.png' });
   console.log('buttons', await p.evaluate(() => [...document.querySelectorAll('.svb')].map((b) => b.textContent + (b.disabled ? '[x]' : ''))));
