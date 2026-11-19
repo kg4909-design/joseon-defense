@@ -558,7 +558,7 @@ const ER = [
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
 const VER = 'v0.21';
 const UPDATES = [
-  { v: 'v0.21', d: '11/19', t: ['♾ 무한 모드! 30라운드를 깨면 끝없이 이어져요 (방에서 바로 시작할 수도 있어요). 버틴 시간·처치 수·퀴즈 정답으로 점수를 매겨요', '📖 도감과 🏆 랭킹이 생겼어요 (시작 화면 아래 버튼): 시너지·영웅·적장 도감', '레벨 업 때 퀴즈가 나와요! 이번 시대·지난 시대·더 먼저 배운 시대 문제가 섞여 나오고, 맞히면 보너스 카드 1장', '라운드가 끝나면 복기 카드를 10초 동안 읽어야 다음으로 넘어갈 수 있어요', '무기를 Lv.5까지 키우면 공격 이펙트가 금빛으로 빛나요', '⛶ 전체화면 버튼 추가 (카카오톡 안 브라우저는 막혀 있어서 크롬·삼성 인터넷으로 열어야 해요)'] },
+  { v: 'v0.21', d: '11/19', t: ['♾ 무한 모드! 30라운드를 깨면 끝없이 이어져요 (방에서 바로 시작할 수도 있어요). 버틴 시간·처치 수·퀴즈 정답으로 점수를 매겨요', '📖 도감과 🏆 랭킹이 생겼어요 (시작 화면 아래 버튼): 시너지·영웅·적장 도감', '레벨 업 때 퀴즈가 나와요! 이번 시대·지난 시대·더 먼저 배운 시대 문제가 섞여 나오고, 맞히면 보너스 카드 1장', '라운드가 끝나면 복기 카드를 10초 동안 읽어야 다음으로 넘어갈 수 있어요', '무기를 Lv.5까지 키우면 공격 이펙트가 금빛으로 빛나요', '⛶ 전체화면 버튼 추가 (카카오톡 안 브라우저는 막혀 있어서 크롬·삼성 인터넷으로 열어야 해요)', '소집 병사 밸런스 조정: 창병·기마병을 약하게, 레벨1 병사 1명이 적 보병 3명과 겨우 비길 정도예요', '창병은 적 보병과, 기마병은 적 기병과 같은 속도로 움직여요', '사거리 순서: 궁병 < 조총병 < 화포. 내 캐릭터 사거리 표시도 다시 보여요'] },
   { v: 'v0.20', d: '11/19', t: ['시작화면이 옆으로 밀리고 일본 장수 그림이 줄지어 보이던 문제를 고쳤어요 (태블릿·폰도 확인)', '업데이트 노트가 팝업으로 바뀌었어요 (새 버전일 때 한 번 나와요)', '창병·기마병이 거점 앞으로 나가 적을 막아요! 다치면 쓰러졌다가 잠시 뒤 다시 일어나요', '날아오는 화살·총알도 앞에 선 병사가 막아 줘요'] },
   { v: 'v0.19', d: '11/19', t: ['영웅마다 고유 무기 1개로 시작 (궁수=활, 화포수=대포 …)', '무기 12종 · 능력 12종! 무기 4개, 능력 4개까지 고를 수 있어요', '짝이 맞는 무기끼리, 능력끼리 시너지! 둘 다 Lv5면 특수 능력', '모든 라운드를 깨면 히든 영웅 이순신 등장', '탈출: 병사·곡식 없음, 쓰러지면 끝! 뒤로 처진 적은 사라져요', '밤이 더 어두워졌어요'] },
   { v: 'v0.18', d: '11/19', t: ['야간 전투가 더 어두워졌고, 지친 우리는 느려지고 적은 더 빨라져요', '탈출: 적이 앞을 막아서고, 위아래에서 몰려오고, 매복이 갑자기 나타나요 (뒤에서 오는 적은 없어요)'] },
@@ -598,11 +598,11 @@ const Net = {
 
 // ---------- 병종 / 적 / 카드 정의 ----------
 const UT = { // 소집 병사
-  bow:    { n: '궁병',   c: '#e6c84a', ch: '궁', rg: 190, dmg: 9,  rt: 1.0, aoe: 0 },
-  spear:  { n: '창병',   c: '#58b86a', ch: '창', rg: 130, dmg: 22, rt: 0.8, aoe: 0 },
-  gun:    { n: '조총병', c: '#d9d9d9', ch: '총', rg: 230, dmg: 40, rt: 0.4, aoe: 0 },
-  cannon: { n: '화포',   c: '#e98a3c', ch: '포', rg: 210, dmg: 30, rt: 0.35, aoe: 48 },
-  cav:    { n: '기마병', c: '#6fb3ff', ch: '마', rg: 120, dmg: 12, rt: 2.0, aoe: 0 }
+  bow:    { n: '궁병',   c: '#e6c84a', ch: '궁', rg: 200, dmg: 9,  rt: 1.0, aoe: 0 },
+  spear:  { n: '창병',   c: '#58b86a', ch: '창', rg: 130, dmg: 11, rt: 0.8, aoe: 0 },
+  gun:    { n: '조총병', c: '#d9d9d9', ch: '총', rg: 240, dmg: 40, rt: 0.4, aoe: 0 },
+  cannon: { n: '화포',   c: '#e98a3c', ch: '포', rg: 290, dmg: 30, rt: 0.35, aoe: 48 },
+  cav:    { n: '기마병', c: '#6fb3ff', ch: '마', rg: 120, dmg: 8, rt: 1.3, aoe: 0 }
 };
 const LVM = [1, 2.3, 5.2, 12];
 const ROLE = { // 영웅(플레이어) — 시작할 때 고유 무기 1개만 들고 시작
@@ -728,7 +728,9 @@ function heroStats(p) { // 카드·시너지 반영 스탯
   const b = ROLE[p.role], c = p.cards, n = (k) => c[k] || 0, sa = p.sa || {};
   const lowHp = 1 - Math.max(0, p.hp) / p.mx;
   const dmg = (1 + 0.3 * n('forge')) * (1 + 0.12 * n('gong')) * (G.buffAtk > 0 ? 1.4 : 1) * (1 + 0.12 * n('spirit') * lowHp) * (1 + (sa.gong_spirit ? 0.06 : 0) + (sa.gong_spirit === 2 ? 0.3 : 0) + (sa.powder_forge === 2 ? 0.15 : 0));
-  return { dmg, as: (1 + 0.12 * n('train')) * (1 + (sa.train_crit ? 0.08 : 0)),
+  const WR = { bow: 340, nu: 330, cannon: 380, musket: 420, rocket: 400, stone: 270, turtle: 360, hwacha: 340, spear: 150, flail: 120, bomb: 340 };
+  let rg = 0; for (const k in WR) if (c[k]) rg = Math.max(rg, WR[k]); if (c.sword) rg = Math.max(rg, 133 + 12 * c.sword + (c.evo_sword ? 45 : 0)); if (c.buddha) rg = Math.max(rg, 105 + 16 * c.buddha + (c.evo_buddha ? 40 : 0));
+  return { rg, dmg, as: (1 + 0.12 * n('train')) * (1 + (sa.train_crit ? 0.08 : 0)),
     sp: b.sp * 1.2 * (1 + 0.25 * n('horse')) * (1 + 0.06 * n('scout')) * (1 + (sa.horse_scout ? 0.08 : 0) + (sa.horse_scout === 2 ? 0.25 : 0)) * (1 - 0.3 * (G.nl || 0)),
     aoe: 1 + 0.12 * n('powder') + (sa.powder_forge ? 0.1 : 0) + (sa.powder_forge === 2 ? 0.4 : 0),
     dr: Math.min(0.55, 0.08 * n('guard')), crit: Math.min(0.8, 0.06 * n('crit') + (sa.train_crit === 2 ? 0.25 : 0)),
@@ -948,17 +950,17 @@ function stepBattle(dt) {
       u.cd = 1 / T.rt; const d = T.dmg * LVM[u.lv - 1] * umul; dmgEnemy(t, d); G.shots.push([s0[0], s0[1], t.x, t.y, 2 + (u.lv > 2 ? 1 : 0), u.t]); if (T.aoe) splash(t.x, t.y, T.aoe, d, t); return; }
     // 근접 병사(창병·기마병): 거점 앞으로 나가 적을 막고 싸워요. 다치면 쓰러졌다가 잠시 뒤 다시 일어나요
     if (u.x === undefined) { u.x = s0[0]; u.y = s0[1]; }
-    u.mh = (u.t === 'cav' ? 90 : 80) * (1 + 0.7 * (u.lv - 1)); if (u.hp === undefined || u.hp > u.mh) u.hp = u.mh;
+    u.mh = (u.t === 'cav' ? 60 : 50) * (1 + 0.6 * (u.lv - 1)); if (u.hp === undefined || u.hp > u.mh) u.hp = u.mh;
     if (u.dn > 0) { u.dn -= dt; u.x = s0[0]; u.y = s0[1]; if (u.dn <= 0) { u.dn = 0; u.hp = u.mh; } return; }
     if (u.hp <= 0) { u.dn = 15; u.hp = 0; G.fx.push([u.x, u.y, 28, 'die']); return; }
     u.cd -= dt; let tg = null, bs = 1e12;
     for (const e of G.en) { if (e.t === 'camp') continue; if (Math.hypot(e.x - G.ax, e.y - G.ay) > 400) continue; const d = Math.hypot(e.x - u.x, e.y - u.y) - (e.t === 'shoot' ? 150 : 0); if (d < bs) { bs = d; tg = e; } }
-    const spd = (u.t === 'cav' ? 190 : 105) * dt;
+    const spd = ET[u.t === 'cav' ? 'cav' : 'grunt'].sp * 1.2 * dt; // 적 보병·기병과 같은 속도
     if (tg) { const dx = tg.x - u.x, dy = tg.y - u.y, d = Math.hypot(dx, dy) || 1; if (d > 26) { const m = Math.min(spd, d - 22); u.x += dx / d * m; u.y += dy / d * m; }
-      if (d < 40 && u.cd <= 0) { u.cd = 1 / T.rt; const dm = T.dmg * 1.3 * LVM[u.lv - 1] * umul; dmgEnemy(tg, dm); G.shots.push([u.x, u.y, tg.x, tg.y, 2 + (u.lv > 2 ? 1 : 0), u.t]);
-        if (u.t === 'cav' && tg.t !== 'boss' && tg.t !== 'camp' && tg.t !== 'tank') { const q = clampW(tg.x + dx / d * 34, tg.y + dy / d * 34); tg.x = q[0]; tg.y = q[1]; tg.st = Math.max(tg.st, 0.3); } } }
+      if (d < 40 && u.cd <= 0) { u.cd = 1 / T.rt; const dm = T.dmg * LVM[u.lv - 1] * umul; dmgEnemy(tg, dm); G.shots.push([u.x, u.y, tg.x, tg.y, 2 + (u.lv > 2 ? 1 : 0), u.t]);
+        if (u.t === 'cav' && tg.t !== 'boss' && tg.t !== 'camp' && tg.t !== 'tank') { const q = clampW(tg.x + dx / d * 18, tg.y + dy / d * 18); tg.x = q[0]; tg.y = q[1]; } } }
     else { const dx = s0[0] - u.x, dy = s0[1] - u.y, d = Math.hypot(dx, dy); if (d > 4) { const m = Math.min(spd, d); u.x += dx / d * m; u.y += dy / d * m; } else u.hp = Math.min(u.mh, u.hp + u.mh * 0.03 * dt); }
-    let nc = 0; for (const e of G.en) { if (e.t === 'camp') continue; if (Math.hypot(e.x - u.x, e.y - u.y) < ET[e.t].r + 18) { e.slw = Math.max(e.slw || 0, G.t + 0.4); if (nc++ < 3) u.hp -= ET[e.t].dm * G.dif.dm * 0.35 * dt; } } // 닿은 적은 느려지고(저지), 병사는 조금씩 다쳐요
+    let nc = 0; for (const e of G.en) { if (e.t === 'camp') continue; if (Math.hypot(e.x - u.x, e.y - u.y) < ET[e.t].r + 18) { e.slw = Math.max(e.slw || 0, G.t + 0.4); if (nc++ < 3) u.hp -= ET[e.t].dm * G.dif.dm * 1.0 * dt; } } // 닿은 적은 느려지고(저지), 병사는 조금씩 다쳐요
   }); }
   // 조선인의 혼: 떨어진 자리에 남아 있다가 가까이 가면 먹어요 (자석은 전부 빨아들여요)
   { const mg = G.magT > 0; if (mg) G.magT -= dt; for (let i = G.souls.length - 1; i >= 0; i--) { const q = G.souls[i]; let bh = null, bd = 1e12; for (const h of hs2) { const d2 = (h.x - q.x) ** 2 + (h.y - q.y) ** 2; if (d2 < bd) { bd = d2; bh = h; } } if (!bh) break; const d = Math.sqrt(bd);
@@ -1623,7 +1625,7 @@ function draw() {
         if (p.cards.gong) { const gl = p.cards.gong, fx0 = q[0] - 16, fy0 = fy - 6; cx.strokeStyle = '#6e4a2a'; cx.lineWidth = 2.5; cx.beginPath(); cx.moveTo(fx0, fy0); cx.lineTo(fx0, fy0 - 34 - gl * 3); cx.stroke(); cx.fillStyle = gl >= 5 ? '#ffd34d' : '#e8402f'; const wv = Math.sin(tm * 6) * 3, hh0 = 34 + gl * 3; cx.beginPath(); cx.moveTo(fx0, fy0 - hh0); cx.lineTo(fx0 + 16 + gl * 2 + wv, fy0 - hh0 + 6); cx.lineTo(fx0, fy0 - hh0 + 14); cx.closePath(); cx.fill(); } }
       if (!dn && p.cards) { if (p.cards.powder) { cx.fillStyle = 'rgba(255,150,50,' + (0.14 + 0.05 * p.cards.powder) + ')'; cx.beginPath(); cx.ellipse(q[0], fy, 22 + p.cards.powder * 3, 9 + p.cards.powder, 0, 0, 7); cx.fill(); }
         if (p.cards.armor) { cx.strokeStyle = 'rgba(130,190,255,.6)'; cx.lineWidth = 1.5 + p.cards.armor * 0.5; cx.beginPath(); cx.ellipse(q[0], fy - 14, 18 + p.cards.armor * 2, 26 + p.cards.armor * 2, 0, 0, 7); cx.stroke(); } }
-      if (mine) { if (p.rg && !dn) { cx.strokeStyle = 'rgba(255,255,255,.55)'; cx.fillStyle = 'rgba(255,255,255,.07)'; cx.lineWidth = 2; cx.setLineDash([10, 9]); cx.beginPath(); cx.arc(q[0], fy - 18, p.rg, 0, 7); cx.fill(); cx.stroke(); cx.setLineDash([]); } cx.fillStyle = 'rgba(255,230,120,.35)'; cx.beginPath(); cx.ellipse(q[0], fy, 34, 13, 0, 0, 7); cx.fill(); cx.strokeStyle = '#e8402f'; cx.lineWidth = 4; cx.beginPath(); cx.ellipse(q[0], fy, 28 + Math.sin(tm * 4) * 1.5, 11, 0, 0, 7); cx.stroke(); }
+      if (mine) { if (p.rg && !dn) { cx.strokeStyle = 'rgba(255,255,255,.85)'; cx.fillStyle = 'rgba(255,255,255,.09)'; cx.lineWidth = 3; cx.setLineDash([12, 9]); cx.beginPath(); cx.arc(q[0], fy - 18, p.rg, 0, 7); cx.fill(); cx.stroke(); cx.setLineDash([]); } cx.fillStyle = 'rgba(255,230,120,.35)'; cx.beginPath(); cx.ellipse(q[0], fy, 34, 13, 0, 0, 7); cx.fill(); cx.strokeStyle = '#e8402f'; cx.lineWidth = 4; cx.beginPath(); cx.ellipse(q[0], fy, 28 + Math.sin(tm * 4) * 1.5, 11, 0, 0, 7); cx.stroke(); }
       spr(RSP[p.role], q[0], fy, H, { fr: fr10(tm, p.id.length * 5), flip: !!FACE.get(key), bob: Math.abs(sn) * 3.5 * walk + Math.sin(tm * 2) * 0.8, lean: dn ? -1.35 : sn * 0.05 * walk, dx: kk.dx, dy: kk.dy, sx: kk.sx, sy: kk.sy });
       cx.globalAlpha = 1;
       if (mine) { const by = fy - H * SPS - 44 + Math.sin(tm * 5) * 4; cx.fillStyle = '#e8402f'; cx.strokeStyle = '#fff'; cx.lineWidth = 3; cx.beginPath(); cx.moveTo(q[0], by + 10); cx.lineTo(q[0] - 11, by - 8); cx.lineTo(q[0] + 11, by - 8); cx.closePath(); cx.stroke(); cx.fill(); }
@@ -1710,7 +1712,7 @@ function draw() {
   if (V.evR) { cx.fillStyle = 'rgba(20,16,40,.85)'; rr(250, 214, 460, 66, 33); cx.fill(); cx.fillStyle = '#fff'; cx.font = 'bold 22px sans-serif'; cx.textAlign = 'center'; cx.fillText('결정: ' + V.evR, 480, 255); }
   cx.restore();
 }
-function boot() { initLobby(); setupInput(); applySt(); show('sLobby'); window.__dbg = { get G() { return G; }, get V() { return V; }, Net, R, hostCtl, hostMsg, stepBattle, makeSnap, ER, pickQuiz, gainXp }; }
+function boot() { initLobby(); setupInput(); applySt(); show('sLobby'); window.__dbg = { get G() { return G; }, get V() { return V; }, Net, R, hostCtl, hostMsg, stepBattle, makeSnap, ER, pickQuiz, gainXp, spawn, UT, ET }; }
 boot();
 lobbyArt();
 if (window.BWJ) BWJ.init({ game: '조선의 위기 디펜스', ver: VER, parent: '#stage' });
