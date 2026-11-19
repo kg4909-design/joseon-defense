@@ -117,12 +117,22 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #evBox{left:276px!important;top:72px!important;width:470px!important}
 #sBrief .panel{font-size:17px!important;padding:10px 18px!important;margin:6px 0!important;line-height:1.45!important}#sBrief h2{margin:2px 0 0!important}#sBrief #bkGoal{margin:6px 0!important;font-size:16px}
 #objBar{position:static;display:inline-block;margin-top:4px;font-size:14px;font-weight:800;padding:3px 14px}
+
+#btnGear,#btnGearL{position:absolute;right:12px;top:104px;width:44px;height:44px;border-radius:50%;background:var(--cream);border:3px solid var(--line);font-size:22px;padding:0;margin:0;box-shadow:0 3px 0 var(--line);z-index:6}
+#btnGearL{top:auto;bottom:16px;right:16px}
+#setBox{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:520px;background:var(--cream);border:4px solid var(--line);border-radius:26px;padding:16px 22px;z-index:30;color:var(--txt);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+#setBox.on{display:block}#setBox h3{margin:0 0 8px;font-size:22px}#setBox .sr{display:flex;align-items:center;gap:8px;margin:8px 0}#setBox .sr b{width:120px;font-size:16px}
+#setBox button[data-k]{flex:1;padding:8px 4px;font-size:15px;border-radius:14px;background:#fff;border:2px solid var(--line);color:var(--txt);margin:0}#setBox button[data-k].on{background:var(--orange);box-shadow:inset 0 0 0 2px #fff}
+#setBox small{display:block;color:#7a6652;margin-top:6px}#setClose{display:block;margin:10px auto 0;padding:8px 26px}
+#toast{position:absolute;left:50%;top:84px;transform:translateX(-50%);background:rgba(40,30,20,.88);color:#fff;padding:9px 18px;border-radius:99px;font-size:15px;transition:opacity .4s;opacity:0;z-index:40;pointer-events:none}
+#sBattle.lefty #joyZone{left:auto;right:0}#sBattle.lefty #btnSummon{right:auto;left:134px}#sBattle.lefty #btnSkill{right:auto;left:14px}
 </style>
 </head><body>
 <div id="stage">
 <canvas id="cv" width="960" height="540"></canvas>
 
 <div class="screen" id="sLobby">
+  <button id="btnGearL" title="설정">⚙</button>
   <canvas id="lobCv" width="960" height="540"></canvas>
   <div class="mist m1"></div><div class="mist m2"></div>
   <div id="lobArt"></div>
@@ -168,7 +178,14 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
   <button id="btnFight">전투 시작!</button><div id="bkWait" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div>
 </div>
 
+<div id="setBox"><h3>⚙ 설정</h3>
+ <div class="sr"><b>조이스틱 크기</b><button data-k="joy" data-v="s">작게</button><button data-k="joy" data-v="m">보통</button><button data-k="joy" data-v="l">크게</button></div>
+ <div class="sr"><b>쓰는 손</b><button data-k="hand" data-v="R">오른손잡이</button><button data-k="hand" data-v="L">왼손잡이</button></div>
+ <div class="sr"><b>화질</b><button data-k="q" data-v="auto">자동</button><button data-k="q" data-v="high">고화질</button><button data-k="q" data-v="low">저사양</button></div>
+ <small>저사양: 해상도를 낮추고 30프레임으로 그려요. 적 수와 효과도 줄어요. 자동은 느려지면 스스로 저사양으로 바꿔요.</small>
+ <button id="setClose">닫기</button></div>
 <div class="screen" id="sBattle">
+  <button id="btnGear" title="설정">⚙</button>
   <div id="me"><img id="meAv" alt=""><div class="meR"><div class="meT"><b id="hudLv">Lv.1</b><span>체력 · 경험치</span></div><div class="bar hp"><i id="barHp"></i></div><div class="bar xp"><i id="barXp"></i></div></div></div>
   <div class="cap" id="hudFoodBox"><span id="hudFood"></span></div><div class="cap" id="hudName"></div>
   <div id="hudMid"><span id="hudT">00:00</span><div id="objBar" class="cap"></div><div id="hudBase"><div class="bar"><i id="barB"></i></div></div><i id="barT" style="display:none"></i></div>
