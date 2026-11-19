@@ -170,7 +170,15 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #svList{display:flex;flex-direction:column;gap:8px}.svb{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:8px 16px;font-size:18px;background:var(--cream2);color:var(--txt);border:2px solid var(--line);box-shadow:0 3px 0 var(--line)}.svb small{font-size:13px;color:var(--sub)}.svb:disabled{opacity:.5}
 #bQ{margin:6px 0}#bQ .qo{display:block;width:100%;text-align:left;margin:4px 0;padding:8px 14px;font-size:17px}
 @media (max-height:620px){#updBox{display:none}}
-#btnSingle,#btnLoad,#btnCreate{white-space:nowrap;font-size:20px;padding:12px 16px}
+#btnSingle,#btnLoad,#btnCreate{white-space:nowrap;font-size:18px;padding:11px 10px;flex:1 1 auto}
+#lobMenu{width:min(470px,46vw);box-sizing:border-box}#lobMenu .row{gap:8px;flex-wrap:nowrap}#lobMenu .row input{min-width:0}
+#lobSet{left:auto;right:16px;bottom:12px;max-width:min(560px,60vw)}#lobSet input{width:100%!important;box-sizing:border-box}
+#err{min-height:0;margin:0;font-size:14px}
+#updBox{right:14px;top:21%;bottom:auto;width:270px;max-height:none;overflow:visible;font-size:12.5px;padding:8px 12px;border-width:2px;border-radius:16px;box-shadow:0 3px 0 var(--line);opacity:.96}
+#updBox li:nth-child(n+5){display:none}#updBox h4{font-size:14px;margin:0 0 3px}#updBox .up{margin-bottom:4px}#updBox ul{padding-left:15px;margin:2px 0 0}#updBox li{margin:1px 0;line-height:1.25}
+@media (max-height:760px),(max-width:900px){#updBox{display:none}}
+.noarmy #hudFoodBox{display:none!important}
+.card .sy{display:block;font-size:12px;color:#c0392b;font-weight:800;font-style:normal}
 #infoBox{display:none;position:absolute;left:46%;top:78px;transform:translateX(-50%);max-width:min(500px,58%);background:rgba(255,246,222,.97);border:3px solid #7a4a24;border-radius:16px;padding:8px 14px;box-shadow:0 4px 0 #7a4a24;color:#3b2a1a;z-index:12;pointer-events:none;text-align:center}
 #infoBox.on{display:block}#infoBox b{display:block;font-size:17px}#infoBox span{display:block;font-size:14px;line-height:1.35;margin-top:2px}
 </style>
@@ -203,7 +211,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
   <h2 id="roomLabel"></h2>
   <div class="row" style="align-items:flex-start;gap:30px">
     <div style="min-width:300px"><b>참가자</b><ul id="plist"></ul>
-      <div style="margin-top:8px"><b>내 역할</b><div class="row" id="roleRow" style="margin-top:6px"><button data-r="archer">궁수</button><button data-r="militia">의병</button><button data-r="monk">승병</button><button data-r="gunner">화포수</button></div>
+      <div style="margin-top:8px"><b>내 역할</b><div class="row" id="roleRow" style="margin-top:6px"><button data-r="archer">궁수</button><button data-r="militia">의병</button><button data-r="monk">승병</button><button data-r="gunner">화포수</button><button data-r="admiral" id="roleHid">🔒 히든</button></div>
       <div id="roleTip" style="margin-top:6px;font-size:15px"></div></div></div>
     <div id="hostBox"><b>방장 설정</b>
       <div class="row" style="margin:10px 0">시작 챕터 <select id="selStart"></select></div>
