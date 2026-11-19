@@ -1,7 +1,8 @@
 'use strict';
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
-const VER = 'v0.19';
+const VER = 'v0.20';
 const UPDATES = [
+  { v: 'v0.20', d: '11/19', t: ['시작화면이 옆으로 밀리고 일본 장수 그림이 줄지어 보이던 문제를 고쳤어요 (태블릿·폰도 확인)', '업데이트 노트가 팝업으로 바뀌었어요 (새 버전일 때 한 번 나와요)', '창병·기마병이 거점 앞으로 나가 적을 막아요! 다치면 쓰러졌다가 잠시 뒤 다시 일어나요', '날아오는 화살·총알도 앞에 선 병사가 막아 줘요'] },
   { v: 'v0.19', d: '11/19', t: ['영웅마다 고유 무기 1개로 시작 (궁수=활, 화포수=대포 …)', '무기 12종 · 능력 12종! 무기 4개, 능력 4개까지 고를 수 있어요', '짝이 맞는 무기끼리, 능력끼리 시너지! 둘 다 Lv5면 특수 능력', '모든 라운드를 깨면 히든 영웅 이순신 등장', '탈출: 병사·곡식 없음, 쓰러지면 끝! 뒤로 처진 적은 사라져요', '밤이 더 어두워졌어요'] },
   { v: 'v0.18', d: '11/19', t: ['야간 전투가 더 어두워졌고, 지친 우리는 느려지고 적은 더 빨라져요', '탈출: 적이 앞을 막아서고, 위아래에서 몰려오고, 매복이 갑자기 나타나요 (뒤에서 오는 적은 없어요)'] },
   { v: 'v0.17', d: '11/19', t: ['무기가 다양해졌어요: 창 찌르기·환도 베기·편곤·불경 독송 (최대 4가지까지 들 수 있어요)', '징은 모두의 공격력을 올리고, 말은 달리며 적을 밀쳐요', '모든 라운드를 깨면 히든 영웅 이순신 등장', '곡식은 공명첩으로! 종묘제례악을 얻으면 흩어진 조선의 혼이 모여들어요', '최고 레벨·진화 무기는 이펙트가 더 화려해요', '카드의 교과서 쪽수 표시를 없앴어요'] },
@@ -217,7 +218,7 @@ function doMerge(a, b) {
   if (a === b) return; const A = G.units[a], B = G.units[b];
   if (!A) return;
   if (!B) { G.units[b] = A; G.units[a] = null; return; }
-  if (A.t === B.t && A.lv === B.lv && B.lv < 4) { B.lv++; G.units[a] = null; { const q = slotPos(b, G.ax, G.ay); G.fx.push([q[0], q[1], 34, 'merge']); } }
+  if (A.t === B.t && A.lv === B.lv && B.lv < 4) { B.lv++; B.hp = 1e9; G.units[a] = null; { const q = slotPos(b, G.ax, G.ay); G.fx.push([q[0], q[1], 34, 'merge']); } }
   else { G.units[a] = B; G.units[b] = A; }
 }
 function applyCard(p, id) {
@@ -374,14 +375,31 @@ function stepBattle(dt) {
   if (G.castle && G.upg > 0) { G.tt -= dt; if (G.tt <= 0) { G.tt = 1.3; for (let k = 0; k < 1 + (G.upg >> 1); k++) { const t = nearest(G.ax, G.ay, 330); if (t) { dmgEnemy(t, 14 + 9 * G.upg); G.shots.push([G.ax, G.ay - 50, t.x, t.y, 0, 'bow']); } } } }
   // 병사 (성이 없으면 영웅들을 따라다녀요)
   if (!G.castle && hs2.length) { let sx = 0, sy = 0; for (const p of hs2) { sx += p.x; sy += p.y; } sx /= hs2.length; sy /= hs2.length; G.ax += (sx - G.ax) * Math.min(1, dt * 2.5); G.ay += (sy - G.ay) * Math.min(1, dt * 2.5); }
-  G.units.forEach((u, i) => { if (!u) return; const T = UT[u.t]; u.cd -= dt; if (u.cd > 0) return; const s = slotPos(i, G.ax, G.ay); const t = nearest(s[0], s[1], T.rg); if (!t) return;
-    u.cd = 1 / T.rt; const d = T.dmg * LVM[u.lv - 1] * (G.buffAtk > 0 ? 1.4 : 1) * (1 + 0.1 * Math.max(0, ...G.order.map((id) => G.pl[id].cards.gong || 0))) * (G.castle ? 1 : 1 + 0.18 * G.upg); dmgEnemy(t, d); G.shots.push([s[0], s[1], t.x, t.y, 2 + (u.lv > 2 ? 1 : 0), u.t]); if (T.aoe) splash(t.x, t.y, T.aoe, d, t); });
+  { const umul = (G.buffAtk > 0 ? 1.4 : 1) * (1 + 0.1 * Math.max(0, ...G.order.map((id) => G.pl[id].cards.gong || 0))) * (G.castle ? 1 : 1 + 0.18 * G.upg);
+  G.units.forEach((u, i) => { if (!u) return; const T = UT[u.t], s0 = slotPos(i, G.ax, G.ay), melee = u.t === 'spear' || u.t === 'cav';
+    if (!melee) { u.cd -= dt; if (u.cd > 0) return; const t = nearest(s0[0], s0[1], T.rg); if (!t) return;
+      u.cd = 1 / T.rt; const d = T.dmg * LVM[u.lv - 1] * umul; dmgEnemy(t, d); G.shots.push([s0[0], s0[1], t.x, t.y, 2 + (u.lv > 2 ? 1 : 0), u.t]); if (T.aoe) splash(t.x, t.y, T.aoe, d, t); return; }
+    // 근접 병사(창병·기마병): 거점 앞으로 나가 적을 막고 싸워요. 다치면 쓰러졌다가 잠시 뒤 다시 일어나요
+    if (u.x === undefined) { u.x = s0[0]; u.y = s0[1]; }
+    u.mh = (u.t === 'cav' ? 90 : 80) * (1 + 0.7 * (u.lv - 1)); if (u.hp === undefined || u.hp > u.mh) u.hp = u.mh;
+    if (u.dn > 0) { u.dn -= dt; u.x = s0[0]; u.y = s0[1]; if (u.dn <= 0) { u.dn = 0; u.hp = u.mh; } return; }
+    if (u.hp <= 0) { u.dn = 15; u.hp = 0; G.fx.push([u.x, u.y, 28, 'die']); return; }
+    u.cd -= dt; let tg = null, bs = 1e12;
+    for (const e of G.en) { if (e.t === 'camp') continue; if (Math.hypot(e.x - G.ax, e.y - G.ay) > 400) continue; const d = Math.hypot(e.x - u.x, e.y - u.y) - (e.t === 'shoot' ? 150 : 0); if (d < bs) { bs = d; tg = e; } }
+    const spd = (u.t === 'cav' ? 190 : 105) * dt;
+    if (tg) { const dx = tg.x - u.x, dy = tg.y - u.y, d = Math.hypot(dx, dy) || 1; if (d > 26) { const m = Math.min(spd, d - 22); u.x += dx / d * m; u.y += dy / d * m; }
+      if (d < 40 && u.cd <= 0) { u.cd = 1 / T.rt; const dm = T.dmg * 1.3 * LVM[u.lv - 1] * umul; dmgEnemy(tg, dm); G.shots.push([u.x, u.y, tg.x, tg.y, 2 + (u.lv > 2 ? 1 : 0), u.t]);
+        if (u.t === 'cav' && tg.t !== 'boss' && tg.t !== 'camp' && tg.t !== 'tank') { const q = clampW(tg.x + dx / d * 34, tg.y + dy / d * 34); tg.x = q[0]; tg.y = q[1]; tg.st = Math.max(tg.st, 0.3); } } }
+    else { const dx = s0[0] - u.x, dy = s0[1] - u.y, d = Math.hypot(dx, dy); if (d > 4) { const m = Math.min(spd, d); u.x += dx / d * m; u.y += dy / d * m; } else u.hp = Math.min(u.mh, u.hp + u.mh * 0.03 * dt); }
+    let nc = 0; for (const e of G.en) { if (e.t === 'camp') continue; if (Math.hypot(e.x - u.x, e.y - u.y) < ET[e.t].r + 18) { e.slw = Math.max(e.slw || 0, G.t + 0.4); if (nc++ < 3) u.hp -= ET[e.t].dm * G.dif.dm * 0.35 * dt; } } // 닿은 적은 느려지고(저지), 병사는 조금씩 다쳐요
+  }); }
   // 조선인의 혼: 떨어진 자리에 남아 있다가 가까이 가면 먹어요 (자석은 전부 빨아들여요)
   { const mg = G.magT > 0; if (mg) G.magT -= dt; for (let i = G.souls.length - 1; i >= 0; i--) { const q = G.souls[i]; let bh = null, bd = 1e12; for (const h of hs2) { const d2 = (h.x - q.x) ** 2 + (h.y - q.y) ** 2; if (d2 < bd) { bd = d2; bh = h; } } if (!bh) break; const d = Math.sqrt(bd);
       if (mg && d > 20) { const v = Math.min(d, (520 + (1.6 - G.magT) * 760) * dt); q.x += (bh.x - q.x) / d * v; q.y += (bh.y - q.y) / d * v; } if (d < (mg ? 30 : 60 + 14 * ((bh.cards && bh.cards.scout) || 0))) { G.souls.splice(i, 1); gainXp(q.v); } } }
   // 적 투사체 (조총·활): 날아오는 동안 피할 수 있어요
   for (let i = G.pj.length - 1; i >= 0; i--) { const b = G.pj[i]; b.x += b.vx * dt; b.y += b.vy * dt; b.life -= dt; let hit = false;
-    for (const h of hs2) if (h.fz <= 0 && Math.hypot(h.x - b.x, h.y - 10 - b.y) < 20) { hurt(h, b.dm); G.fx.push([h.x, h.y - 20, 16, 'puff']); hit = true; break; }
+    for (const u of G.units) if (!hit && u && (u.t === 'spear' || u.t === 'cav') && !(u.dn > 0) && u.x !== undefined && Math.hypot(u.x - b.x, u.y - 14 - b.y) < 22) { u.hp -= b.dm * 0.8; G.fx.push([b.x, b.y - 8, 14, 'puff']); hit = true; }
+    if (!hit) for (const h of hs2) if (h.fz <= 0 && Math.hypot(h.x - b.x, h.y - 10 - b.y) < 20) { hurt(h, b.dm); G.fx.push([h.x, h.y - 20, 16, 'puff']); hit = true; break; }
     if (!hit && G.castle && Math.hypot(G.ax - b.x, G.ay - b.y) < CR + 12) { G.baseHp -= b.dm * 1.6; hit = true; }
     if (hit || b.life <= 0) G.pj.splice(i, 1); }
   // 정리
@@ -533,9 +551,13 @@ function openSaves(mode, rd) {
 async function loadGame(slot) {
   const d = readSave(slot); if (!d || d.rd >= R.length) return; $('nick').value = d.name || '학생'; me.role = ROLE[d.role] ? d.role : 'archer'; await startAs('single'); if (Net.mode !== 'single') return; sendProf(); hostCtl('start', { start: d.rd, dur: d.dur, diff: d.diff, wall: d.wall });
 }
-function renderUpdates() { const b = $('updBox'); if (!b) return; b.innerHTML = '<h4>📢 업데이트 노트</h4>' + UPDATES.slice(0, 1).map((u) => `<div class="up"><b>${u.v}</b> <small>${u.d}</small><ul>${u.t.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`).join(''); }
+function renderUpdates(all) { const b = $('umBody'); if (!b) return; const L = all ? UPDATES : UPDATES.slice(0, 2); b.innerHTML = L.map((u) => `<div class="up"><b>${u.v}</b> <small>${u.d}</small><ul>${u.t.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`).join(''); $('umSub').textContent = all ? '지금까지의 업데이트예요.' : '최근 업데이트 ' + L.length + '개만 보여 드려요.'; $('umAll').style.display = all || UPDATES.length <= 2 ? 'none' : 'inline-block'; $('umAll').textContent = '이전 업데이트 모두 보기 (' + UPDATES.length + '개)'; }
+function openUpd(all) { renderUpdates(all); $('updModal').classList.add('on'); }
+function closeUpd() { $('updModal').classList.remove('on'); try { localStorage.setItem('jd_upd_seen', VER); } catch (e) {} }
+function initUpd() { $('umClose').onclick = closeUpd; $('umAll').onclick = () => openUpd(true); $('btnUpdL').onclick = () => openUpd(false); let seen = ''; try { seen = localStorage.getItem('jd_upd_seen') || ''; } catch (e) {} if (seen !== VER && !FAST) setTimeout(() => openUpd(false), 1800); }
 function initLobby() {
-  renderUpdates(); $('btnLoad').onclick = () => openSaves('load'); $('svClose').onclick = () => $('saveBox').classList.remove('on'); $('pSave').onclick = () => openSaves('save', V ? V.rd : 0); $('rsSave').onclick = () => openSaves('save', V && V.res && V.res.win ? V.rd + 1 : V.rd);
+  try { matchMedia('(orientation: portrait) and (pointer: coarse)').addEventListener('change', (e) => { if (e.matches && V && V.ph === 'battle' && !V.paused) sendHost({ k: 'pause', v: true }); }); } catch (e) {}
+  initUpd(); $('btnLoad').onclick = () => openSaves('load'); $('svClose').onclick = () => $('saveBox').classList.remove('on'); $('pSave').onclick = () => openSaves('save', V ? V.rd : 0); $('rsSave').onclick = () => openSaves('save', V && V.res && V.res.win ? V.rd + 1 : V.rd);
   $('relayUrl').value = localStorage.getItem('hdg_relay') || DEFAULT_RELAY; $('nick').value = localStorage.getItem('hdg_nick') || '';
   const sc = $('selStart'); sc.innerHTML = CH.map((c, i) => `<option value="${i * (i < 2 ? 10 : 5) + (i === 3 ? 0 : 0)}">${i + 1}. ${c.n}</option>`).join('');
   sc.innerHTML = [0, 10, 20, 25].map((v, i) => `<option value="${v}">${i + 1}. ${CH[i].n}</option>`).join('');
@@ -889,7 +911,7 @@ function lobbyArt() {
   }
   const el = document.getElementById('lobArt'); if (!el || !window.SPR) return;
   const L = [['gate', 360, 110, 0.55], ['jp_boss', 20, 150, 1], ['h_militia', 80, 215, 1], ['h_archer', 175, 262, 1], ['h_monk', 285, 228, 1], ['h_cannon', 372, 205, 1]];
-  L.forEach(([n, x, h, o], i) => { const S = SPR[n]; if (!S) return; const im = document.createElement('img'); im.src = S.p || S.d; im.style.left = x + 'px'; im.style.height = h + 'px'; im.style.opacity = o; im.style.animationDelay = (i * 0.5) + 's'; if (n === 'gate') { im.style.bottom = '140px'; im.style.left = '395px'; im.style.animation = 'none'; } el.appendChild(im); });
+  L.forEach(([n, x, h, o], i) => { const S = SPR[n]; if (!S) return; const im = document.createElement(S.p || !S.n ? 'img' : 'div'); if (im.tagName === 'IMG') { im.src = S.p || S.d; im.style.height = h + 'px'; } else { const k = h / S.h; im.style.width = Math.round(S.fw * k) + 'px'; im.style.height = h + 'px'; im.style.background = `url(${S.d}) 0 0 / ${Math.round(S.fw * S.n * k)}px ${h}px no-repeat`; im.style.position = 'absolute'; } im.style.left = x + 'px'; im.style.opacity = o; im.style.animationDelay = (i * 0.5) + 's'; if (n === 'gate') { im.style.bottom = '140px'; im.style.left = '395px'; im.style.animation = 'none'; } el.appendChild(im); });
 }
 function unitFig(kind, x, y, lv, c, tm) {
   const r = 12 + lv * 1.5, bob = Math.sin(tm * 4 + x) * 1.2; y += bob;
@@ -925,10 +947,11 @@ function draw() {
   const FC = { 왜군: ['#ff9a8f', '#d9453a'], 후금군: ['#d9a4ff', '#8e3fd0'], 청군: ['#8fc2ff', '#2f6fd6'] }[CH[R[V.rd].ch].foe], FP = FOEP[CH[R[V.rd].ch].foe];
   if (V !== lastGV) { lastGV = V; gvT = tm; } const gT = V.t + (V.paused ? 0 : Math.min(0.2, tm - gvT));
   const DL = []; // 깊이(y) 순서로 그리기
-  SP.forEach((s, i) => { const u = V.un && V.un[i]; if (!u) return; DL.push([s[1] + 16, () => { const T = UT[u.t], key = 'u' + i, kk = kickOf(key, tm), h = 46 + u.lv * 4, fl = FACE.has(key) ? FACE.get(key) : false;
+  SP.forEach((s0, i) => { const u = V.un && V.un[i]; if (!u) return; const s = u.x !== undefined ? [u.x, u.y] : s0; DL.push([s[1] + 16, () => { cx.globalAlpha = u.dn > 0 ? 0.35 : 1; const T = UT[u.t], key = 'u' + i, kk = kickOf(key, tm), h = 46 + u.lv * 4, fl = FACE.has(key) ? FACE.get(key) : false;
       shade(s[0], s[1] + 16, 15 + u.lv * 2); spr(USP[u.t], s[0], s[1] + 16, h, { fr: fr10(tm, i * 7), flip: fl, bob: Math.abs(Math.sin(tm * 2.2 + i)) * 1.2, dx: kk.dx, dy: kk.dy, sx: kk.sx, sy: kk.sy * (1 + Math.sin(tm * 2 + i) * 0.012) });
       if (u.lv > 1) { cx.strokeStyle = T.c; cx.globalAlpha = 0.6; cx.lineWidth = 2; cx.beginPath(); cx.ellipse(s[0], s[1] + 16, 18 + u.lv * 2, 8 + u.lv, 0, 0, 7); cx.stroke(); cx.globalAlpha = 1; }
       for (let k = 0; k < u.lv; k++) { cx.fillStyle = '#ffd34d'; cx.strokeStyle = '#8a5a00'; cx.lineWidth = 1; cx.beginPath(); cx.arc(s[0] - (u.lv - 1) * 4.5 + k * 9, s[1] + 28, 3.4, 0, 7); cx.fill(); cx.stroke(); }
+      cx.globalAlpha = 1; if (u.mh && u.hp < u.mh && !(u.dn > 0)) { cx.fillStyle = 'rgba(0,0,0,.45)'; cx.fillRect(s[0] - 14, s[1] + 34, 28, 4); cx.fillStyle = u.hp / u.mh > 0.4 ? '#7be07b' : '#ff7a6a'; cx.fillRect(s[0] - 14, s[1] + 34, 28 * Math.max(0, u.hp / u.mh), 4); } if (u.dn > 0) pill('💤 회복 중', s[0], s[1] + 16 - h - 8, '#ffffff', '#2b2440');
       if (sel === i) pill(T.n + ' Lv.' + u.lv, s[0], s[1] + 16 - h - 8, '#ffffff', '#2b2440'); }]); });
   for (const e of V.en || []) { const T = ET[e[1]], q = lerpTo('e' + e[0], e[2], e[3], 0.5), ek = 'e' + e[0], el = e[6], h = EH[e[1]] * (e[6] ? 1.25 : 1), ph = tm * (e[1] === 'cav' ? 12 : 8) + e[0] * 1.7, sn = Math.sin(ph);
     if (Math.abs(q[4] || 0) > 12) FACE.set(ek, q[4] < 0); const fl = FACE.get(ek) || false, fy = q[1] + 12;
