@@ -126,6 +126,14 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #setBox small{display:block;color:#7a6652;margin-top:6px}#setClose{display:block;margin:10px auto 0;padding:8px 26px}
 #toast{position:absolute;left:50%;top:84px;transform:translateX(-50%);background:rgba(40,30,20,.88);color:#fff;padding:9px 18px;border-radius:99px;font-size:15px;transition:opacity .4s;opacity:0;z-index:40;pointer-events:none}
 #sBattle.lefty #joyZone{left:auto;right:0}#sBattle.lefty #btnSummon{right:auto;left:134px}#sBattle.lefty #btnSkill{right:auto;left:14px}
+
+#btnUp{position:absolute;right:14px;bottom:124px;width:84px;height:84px;border-radius:50%;background:#8fd6c7;border:3px solid var(--line);box-shadow:0 5px 0 var(--line);color:var(--txt);font-size:16px;line-height:1.15;padding:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#btnUp small{font-size:12px}#btnUp.dis{filter:grayscale(.7);opacity:.7}#sBattle.lefty #btnUp{right:auto;left:14px}
+#hudArmy{left:134px;top:84px}
+#hudWeap{position:absolute;left:10px;top:126px;display:flex;flex-wrap:wrap;gap:4px;width:300px}
+#hudWeap .wc{background:rgba(252,244,224,.92);border:2px solid var(--line);border-radius:99px;padding:1px 9px;font-size:12px;font-weight:800;color:var(--txt)}#hudWeap .wc.w{background:#ffe9a0}
+#cards{bottom:10px!important;left:50%!important;right:auto!important;transform:translateX(-50%);width:520px;gap:8px}
+#cards .card{width:166px!important;min-height:0!important;padding:8px 10px!important}#cards .card b{font-size:18px!important}#cards .card span{font-size:13px!important}#cards .card small{display:none!important}#cards .clv{display:block;font-style:normal;font-size:12px;font-weight:900;color:#c25a1a}
 </style>
 </head><body>
 <div id="stage">
@@ -185,7 +193,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
  <small>저사양: 해상도를 낮추고 30프레임으로 그려요. 적 수와 효과도 줄어요. 자동은 느려지면 스스로 저사양으로 바꿔요.</small>
  <button id="setClose">닫기</button></div>
 <div class="screen" id="sBattle">
-  <button id="btnGear" title="설정">⚙</button>
+  <button id="btnGear" title="설정">⚙</button><div class="cap" id="hudArmy"></div><div id="hudWeap"></div><button id="btnUp"></button>
   <div id="me"><img id="meAv" alt=""><div class="meR"><div class="meT"><b id="hudLv">Lv.1</b><span>체력 · 경험치</span></div><div class="bar hp"><i id="barHp"></i></div><div class="bar xp"><i id="barXp"></i></div></div></div>
   <div class="cap" id="hudFoodBox"><span id="hudFood"></span></div><div class="cap" id="hudName"></div>
   <div id="hudMid"><span id="hudT">00:00</span><div id="objBar" class="cap"></div><div id="hudBase"><div class="bar"><i id="barB"></i></div></div><i id="barT" style="display:none"></i></div>
