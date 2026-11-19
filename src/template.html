@@ -149,6 +149,21 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #diffRow button{background:var(--cream2);color:var(--txt);border:2px solid var(--line);box-shadow:0 3px 0 var(--line);padding:10px 20px;font-size:18px}#diffRow button.on{background:var(--orange)}
 #me{zoom:.78;top:6px;left:8px}#hudFoodBox{top:68px!important;zoom:.85}#hudArmy{left:112px!important;top:68px!important;zoom:.85}#hudWeap{top:102px!important;zoom:.9}
 #hudMid{zoom:.85}
+.card .ci{width:48px;height:48px;image-rendering:pixelated;align-self:center;margin:-2px 0 2px}
+.card .ty{align-self:center;font-size:11px;font-weight:800;background:#e8f3d6;border:2px solid var(--line);border-radius:99px;padding:0 8px;color:#2f6b2a}
+.card .pp5{display:flex;gap:4px;justify-content:center;margin:3px 0}.card .pp5 u{width:14px;height:8px;border:2px solid var(--line);background:#fff;border-radius:2px}.card .pp5 u.f{background:#ffb73a}.card .pp5 u.nx{background:#7fe36a;animation:pu .8s infinite alternate}
+.card{position:relative}.card .bd{position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-style:normal;font-size:12px;font-weight:900;background:#ff5a4a;color:#fff;border:2px solid #fff;border-radius:99px;padding:1px 10px;white-space:nowrap}
+.card.nw{border-color:#ff5a4a!important;animation:pu .7s infinite alternate}.card.evo{border-color:#ffb300!important;background:linear-gradient(#fff6c8,#ffe08a)!important;animation:pu .5s infinite alternate}.card.evo .bd{background:#ffb300;color:#3b2a00}
+@keyframes pu{from{transform:translateY(0)}to{transform:translateY(-4px)}}
+#hudWeap .eq{display:flex;align-items:center;gap:3px;background:rgba(252,244,224,.95);border:2px solid var(--line);border-radius:10px;padding:1px 6px 1px 2px;font-size:12px;font-weight:800;color:var(--txt)}#hudWeap .eq img{width:26px;height:26px;image-rendering:pixelated}#hudWeap .eq.wp{background:#ffe9a0}#hudWeap .eq.ev{border-color:#ff9a00;box-shadow:0 0 8px #ffb300}
+#sLobby,#sRoom,#sBrief,#sResult,#sEnd{overflow-y:auto;-webkit-overflow-scrolling:touch}
+#rsHost{position:sticky;bottom:0;padding:10px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 40%);z-index:3}
+@media (max-height:620px){.screen:not(#sBattle){zoom:.74;padding:14px 20px}}
+.card.nw,.card.evo{animation:glow .8s infinite alternate!important}@keyframes glow{from{box-shadow:0 5px 0 var(--line),0 0 4px #ffb300}to{box-shadow:0 5px 0 var(--line),0 0 18px #ffb300}}
+.card .pp5 u.nx{animation:none}
+.noarmy #btnSummon,.noarmy #btnSkill,.noarmy #btnUp,.noarmy #hudArmy{display:none!important}
+#pauseTag{top:112px!important;bottom:auto!important}
+#sResult{padding-bottom:96px}
 </style>
 </head><body>
 <div id="stage">
@@ -204,6 +219,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 <div id="setBox"><h3>⚙ 설정</h3>
  <div class="sr"><b>조이스틱 크기</b><button data-k="joy" data-v="s">작게</button><button data-k="joy" data-v="m">보통</button><button data-k="joy" data-v="l">크게</button></div>
  <div class="sr"><b>쓰는 손</b><button data-k="hand" data-v="R">오른손잡이</button><button data-k="hand" data-v="L">왼손잡이</button></div>
+ <div class="sr"><b>소리</b><button data-k="snd" data-v="on">켜기</button><button data-k="snd" data-v="off">끄기</button></div>
  <div class="sr"><b>화질</b><button data-k="q" data-v="auto">자동</button><button data-k="q" data-v="high">고화질</button><button data-k="q" data-v="low">저사양</button></div>
  <small>저사양: 해상도를 낮추고 30프레임으로 그려요. 적 수와 효과도 줄어요. 자동은 느려지면 스스로 저사양으로 바꿔요.</small>
  <button id="setHelp" class="sec" style="display:block;margin:10px auto 0;padding:8px 22px">❓ 게임 방법 다시 보기</button><button id="setClose">닫기</button></div>
@@ -211,7 +227,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 <div id="tutBox"><div class="pp"><div id="tutPg"></div><h3 id="tutH"></h3><p id="tutB"></p><div class="row" style="justify-content:center;gap:10px"><button id="tutPrev" class="sec">◀ 이전</button><button id="tutNext">다음 ▶</button><button id="tutSkip" class="sec">건너뛰기</button></div></div></div>
 <div class="screen" id="sBattle">
   <button id="btnGear" title="설정">⚙</button><button id="btnPause" title="일시정지">❚❚</button><div id="pauseTag"></div><div class="cap" id="hudArmy"></div><div id="hudWeap"></div><button id="btnUp"></button>
-  <div id="me"><img id="meAv" alt=""><div class="meR"><div class="meT"><b id="hudLv">Lv.1</b><span>체력 · 경험치</span></div><div class="bar hp"><i id="barHp"></i></div><div class="bar xp"><i id="barXp"></i></div></div></div>
+  <div id="me"><img id="meAv" alt=""><div class="meR"><div class="meT"><b id="hudLv">Lv.1</b><span>체력 · 혼</span></div><div class="bar hp"><i id="barHp"></i></div><div class="bar xp"><i id="barXp"></i></div></div></div>
   <div class="cap" id="hudFoodBox"><span id="hudFood"></span></div><div class="cap" id="hudName"></div>
   <div id="hudMid"><span id="hudT">00:00</span><div id="objBar" class="cap"></div><div id="hudBase"><div class="bar"><i id="barB"></i></div></div><i id="barT" style="display:none"></i></div>
   <div id="joyZone"><div id="joyRing"></div><div id="joyKnob"></div></div>

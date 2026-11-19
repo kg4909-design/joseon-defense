@@ -1,0 +1,21 @@
+const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwright');
+(async () => {
+  const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
+  const p = await b.newPage({ viewport: { width: 1280, height: 720 } }); await p.addInitScript(() => { try { localStorage.setItem('jd_tut', '1'); } catch (e) {} }); const errs = []; p.on('pageerror', (e) => errs.push(e.message));
+  await p.goto('file:///home/claude/work/game/dist/index.html?fast=60'); await p.waitForSelector('#bwj-intro', { state: 'detached' });
+  await p.screenshot({ path: 'test/v1_lobby.png' });
+  await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on'); await p.screenshot({ path: 'test/v2_room.png' });
+  await p.selectOption('#selStart', '10'); await p.click('#btnStart'); await p.waitForSelector('#sBrief.on'); await p.screenshot({ path: 'test/v3_brief.png' });
+  await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
+  await p.evaluate(() => { const G = __dbg.G; G.food = 999; for (let i = 0; i < 9; i++) doSummon(false); doMerge(0, 6); G.pl.me.x = 560; G.pl.me.y = 270; });
+  await p.waitForTimeout(16000);
+  await p.evaluate(() => { __dbg.G.pl.me.offer = ['horse', 'hwacha', 'gun']; __dbg.G.pl.me.offT = 30; });
+  await p.waitForTimeout(700); await p.screenshot({ path: 'test/v4_battle.png' });
+  await p.click('.card[data-i="0"]');
+  await p.evaluate(() => { __dbg.G.t = __dbg.G.dur * 0.36; });
+  await p.waitForTimeout(900); await p.screenshot({ path: 'test/v5_event.png' });
+  await p.evaluate(() => { __dbg.G.t = __dbg.G.dur * 0.86; });
+  await p.waitForTimeout(2500); await p.screenshot({ path: 'test/v6_boss.png' });
+  await p.evaluate(() => { __dbg.G.t = __dbg.G.dur; }); await p.waitForSelector('#sResult.on'); await p.screenshot({ path: 'test/v7_result.png' });
+  console.log('errors', errs); await b.close();
+})().catch((e) => { console.error('FAIL', e.message); process.exit(1); });
