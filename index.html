@@ -216,6 +216,10 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 .bk-c b{display:block;font-size:17px}.bk-c span{display:block}.bk-c small{display:block;opacity:.75;margin-top:2px}.bk-c em{display:block;font-style:normal;font-size:12px;font-weight:800;color:#2f6b2a;margin-top:3px}
 .bk-c.lk{filter:grayscale(1);opacity:.65}.bk-i{display:flex;align-items:center;gap:6px;margin-bottom:2px}.bk-i img{width:34px;height:34px;image-rendering:pixelated}
 .bk-t{width:100%;border-collapse:collapse;background:#fffaf0;color:#3b2a1c;font-size:15px;border-radius:12px;overflow:hidden}.bk-t th,.bk-t td{padding:6px 8px;border-bottom:1px solid #d9c9a8;text-align:center}.bk-t th{background:#ffe9b8}
+
+#sLobby>#lobBtns{left:50px;bottom:14px;display:flex;gap:8px;flex-wrap:nowrap}
+#lobBtns button{position:static!important;font-size:15px;padding:8px 14px;white-space:nowrap}
+@media (max-height:620px){#sLobby>#lobBtns{left:16px;bottom:6px;gap:5px}#lobBtns button{font-size:12px;padding:5px 9px}}
 </style>
 </head><body>
 <div id="stage">
@@ -226,7 +230,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
   <canvas id="lobCv" width="960" height="540"></canvas>
   <div class="mist m1"></div><div class="mist m2"></div>
   <div id="lobArt"></div>
-  <button id="btnUpdL">📢 업데이트 노트</button><button id="btnFs">⛶ 전체화면</button><button id="btnDex">📖 도감</button><button id="btnRank">🏆 랭킹</button><div id="fsTip"></div>
+  <div id="lobBtns"><button id="btnUpdL">📢 업데이트 노트</button><button id="btnFs">⛶ 전체화면</button><button id="btnDex">📖 도감</button><button id="btnRank">🏆 랭킹</button></div><div id="fsTip"></div>
   <div id="updModal"><div class="um"><h3>📜 업데이트 노트</h3><p id="umSub" class="us"></p><div id="umBody"></div><div class="row"><button id="umClose">시작하러 가기</button><button id="umAll" class="sec">이전 업데이트 모두 보기</button></div></div></div>
   <div id="lobTitle">
     <div class="lt-tag">초등 사회 · 역사 디펜스</div>
