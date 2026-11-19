@@ -220,6 +220,12 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #sLobby>#lobBtns{left:50px;bottom:14px;display:flex;gap:8px;flex-wrap:nowrap}
 #lobBtns button{position:static!important;font-size:15px;padding:8px 14px;white-space:nowrap}
 @media (max-height:620px){#sLobby>#lobBtns{left:16px;bottom:6px;gap:5px}#lobBtns button{font-size:12px;padding:5px 9px}}
+
+#updModal .um{display:flex;flex-direction:column;overflow:hidden;max-height:92%;position:relative}
+#updModal #umBody{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#updModal .row{flex:0 0 auto}
+#updModal #umX{position:absolute;left:10px;top:8px;width:38px;height:38px;padding:0;border-radius:50%;font-size:18px;line-height:1}
+#updModal h3{padding-left:44px}
 </style>
 </head><body>
 <div id="stage">
@@ -231,7 +237,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
   <div class="mist m1"></div><div class="mist m2"></div>
   <div id="lobArt"></div>
   <div id="lobBtns"><button id="btnUpdL">📢 업데이트 노트</button><button id="btnFs">⛶ 전체화면</button><button id="btnDex">📖 도감</button><button id="btnRank">🏆 랭킹</button></div><div id="fsTip"></div>
-  <div id="updModal"><div class="um"><h3>📜 업데이트 노트</h3><p id="umSub" class="us"></p><div id="umBody"></div><div class="row"><button id="umClose">시작하러 가기</button><button id="umAll" class="sec">이전 업데이트 모두 보기</button></div></div></div>
+  <div id="updModal"><div class="um"><button id="umX" aria-label="닫기">✕</button><h3>📜 업데이트 노트</h3><p id="umSub" class="us"></p><div id="umBody"></div><div class="row"><button id="umClose">시작하러 가기</button><button id="umAll" class="sec">이전 업데이트 모두 보기</button></div></div></div>
   <div id="lobTitle">
     <div class="lt-tag">초등 사회 · 역사 디펜스</div>
     <div class="lt-main"><span>조선의 위기</span><i class="seal">守</i></div>

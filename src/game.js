@@ -581,7 +581,7 @@ async function loadGame(slot) {
 function renderUpdates(all) { const b = $('umBody'); if (!b) return; const L = all ? UPDATES : UPDATES.slice(0, 2); b.innerHTML = L.map((u) => `<div class="up"><b>${u.v}</b> <small>${u.d}</small><ul>${u.t.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`).join(''); $('umSub').textContent = all ? '지금까지의 업데이트예요.' : '최근 업데이트 ' + L.length + '개만 보여 드려요.'; $('umAll').style.display = all || UPDATES.length <= 2 ? 'none' : 'inline-block'; $('umAll').textContent = '이전 업데이트 모두 보기 (' + UPDATES.length + '개)'; }
 function openUpd(all) { renderUpdates(all); $('updModal').classList.add('on'); }
 function closeUpd() { $('updModal').classList.remove('on'); try { localStorage.setItem('jd_upd_seen', VER); } catch (e) {} }
-function initUpd() { $('umClose').onclick = closeUpd; $('umAll').onclick = () => openUpd(true); $('btnUpdL').onclick = () => openUpd(false); let seen = ''; try { seen = localStorage.getItem('jd_upd_seen') || ''; } catch (e) {} if (seen !== VER && !FAST) setTimeout(() => openUpd(false), 1800); }
+function initUpd() { $('umClose').onclick = closeUpd; $('umX').onclick = closeUpd; $('updModal').addEventListener('pointerdown', (e) => { if (e.target.id === 'updModal') closeUpd(); }); $('umAll').onclick = () => openUpd(true); $('btnUpdL').onclick = () => openUpd(false); let seen = ''; try { seen = localStorage.getItem('jd_upd_seen') || ''; } catch (e) {} if (seen !== VER && !FAST) setTimeout(() => openUpd(false), 1800); }
 function initLobby() {
   try { matchMedia('(orientation: portrait) and (pointer: coarse)').addEventListener('change', (e) => { if (e.matches && V && V.ph === 'battle' && !V.paused) sendHost({ k: 'pause', v: true }); }); } catch (e) {}
   initUpd();
