@@ -8,8 +8,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
     console.log(label, JSON.stringify(await p.evaluate(() => ({ ph: G.ph, res: G.res && G.res.win })))); };
   await run(6, () => { G.en.filter((e) => e.t === 'camp').forEach((e) => (e.hp = 0)); }, 'raid win');
   await run(1, () => { G.gi = 0; G.pl.me.x = G.goals[0][0]; G.pl.me.y = G.goals[0][1]; }, 'escape step1');
-  await p.evaluate(() => { const g = G.goals[1]; G.pl.me.x = g[0]; G.pl.me.y = g[1]; }); await p.waitForTimeout(300);
-  await p.evaluate(() => { const g = G.goals[2]; G.pl.me.x = g[0]; G.pl.me.y = g[1]; }); await p.waitForTimeout(1500);
+  await p.evaluate(() => { G.t = G.dur; }); await p.waitForTimeout(1500);
   console.log('escape end', JSON.stringify(await p.evaluate(() => ({ ph: G.ph, gi: G.gi, res: G.res && G.res.win }))));
   await run(3, () => { }, 'boss'); await p.waitForTimeout(7000); await p.screenshot({ path: 'test/o_boss.png' });
   await p.evaluate(() => { G.en.filter((e) => e.t === 'boss').forEach((e) => (e.hp = 0)); }); await p.waitForTimeout(1200);
