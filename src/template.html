@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>조선의 위기 디펜스</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:none}
+html,body{margin:0;height:100%;background:#0d0f22;overflow:hidden;font-family:'Noto Sans CJK KR','Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#fff}
+#stage{position:absolute;left:50%;top:50%;width:960px;height:540px;transform-origin:0 0;background:#000;overflow:hidden;border-radius:0}
+canvas{position:absolute;inset:0;width:960px;height:540px}
+.screen{position:absolute;inset:0;display:none;padding:20px 30px;background:radial-gradient(circle at 12% 18%,#3b2f7a 0,transparent 38%),radial-gradient(circle at 90% 85%,#7a2f6a 0,transparent 36%),linear-gradient(160deg,#1a1d3d,#251a44)}
+.screen::before{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.05)}
+.screen.on{display:block}
+#sBattle.on{background:none;pointer-events:none}#sBattle.on::before{display:none}
+#sBattle *{pointer-events:auto}
+h1{margin:6px 0 4px;font-size:38px;letter-spacing:1px;text-shadow:0 4px 0 rgba(0,0,0,.3)}h2{margin:0 0 6px;font-size:30px}h3{margin:0 0 4px}
+button{font-family:inherit;font-size:19px;border:0;border-radius:99px;padding:12px 24px;background:linear-gradient(#6f8cff,#4a62e8);color:#fff;font-weight:800;box-shadow:0 5px 0 #2e3fb0,0 8px 14px rgba(0,0,0,.35);transition:transform .08s,box-shadow .08s;margin:0 8px 8px 0}
+button:active{transform:translateY(4px);box-shadow:0 1px 0 #2e3fb0}
+button.sec{background:linear-gradient(#7d8499,#5a6178);box-shadow:0 5px 0 #3b4054,0 8px 14px rgba(0,0,0,.35)}
+button:disabled,.dis{opacity:.5}
+input,select{font-family:inherit;font-size:18px;padding:10px 16px;border-radius:99px;border:3px solid #4a4f86;background:#14172f;color:#fff;user-select:text;outline:none}input:focus,select:focus{border-color:#8fa3ff}
+.tag{display:inline-block;padding:3px 12px;border-radius:99px;font-size:14px;font-weight:800;color:#1c1b2e}
+small{opacity:.8}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#err{color:#ff9aa6;min-height:22px;margin:6px 0}
+#roleRow button{background:linear-gradient(#4a4f86,#363a6e);box-shadow:0 4px 0 #23264d;padding:10px 18px;font-size:17px}#roleRow button.on{background:linear-gradient(#ffd96b,#ffb73a);color:#3b2a00;box-shadow:0 4px 0 #b57a10}
+#plist{font-size:20px;line-height:1.8;padding-left:22px}
+.panel{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.12);border-radius:22px;padding:14px 20px;margin:10px 0;font-size:19px;line-height:1.55;white-space:pre-line;backdrop-filter:blur(2px)}
+/* 전투 HUD: 떠 있는 둥근 캡슐 */
+.cap{background:rgba(18,18,44,.78);border:2px solid rgba(255,255,255,.18);border-radius:99px;padding:5px 14px;font-weight:800;font-size:17px;box-shadow:0 4px 10px rgba(0,0,0,.35);position:absolute}
+#hudLvBox{left:10px;top:8px}#hudFoodBox{left:10px;top:46px}#hudName{right:10px;top:8px;font-size:15px;background:rgba(122,68,200,.85)}
+#hudMid{position:absolute;left:50%;top:6px;transform:translateX(-50%);width:300px;text-align:center}
+#hudT{display:inline-block;min-width:150px;font-size:30px;font-weight:900;letter-spacing:2px;padding:0 20px;background:rgba(18,18,44,.82);border:3px solid #fff;border-radius:99px;box-shadow:0 5px 0 rgba(0,0,0,.3)}
+.bar{height:14px;background:rgba(0,0,0,.45);border:2px solid rgba(255,255,255,.35);border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;border-radius:99px;transition:width .15s}
+#barB{background:linear-gradient(#ff9aa6,#ff4f6d)}#barHp{background:linear-gradient(#a5ffbd,#35d672)}#barXp{background:linear-gradient(#ffe58a,#ffb92e)}
+#hudBase{margin-top:6px;position:relative}#hudBase span{position:absolute;left:0;right:0;top:-1px;font-size:11px;font-weight:800;text-shadow:0 1px 2px #000}
+#btnSummon,#btnSkill{position:absolute;right:16px;width:108px;height:80px;font-size:22px;line-height:1.15;border-radius:30px;padding:6px;margin:0;border:3px solid rgba(255,255,255,.75)}
+#btnSummon{bottom:98px;background:linear-gradient(#5ee59a,#26b86a);box-shadow:0 6px 0 #167a46,0 10px 16px rgba(0,0,0,.4)}
+#btnSkill{bottom:14px;background:linear-gradient(#ffa066,#f0622b);box-shadow:0 6px 0 #a83c12,0 10px 16px rgba(0,0,0,.4)}
+#btnSummon:active,#btnSkill:active{transform:translateY(5px);box-shadow:0 1px 0 rgba(0,0,0,.4)}
+#joyZone{position:absolute;left:0;top:90px;width:430px;height:450px}
+#joyRing,#joyKnob{position:absolute;display:none;border-radius:50%;pointer-events:none}
+#joyRing{width:110px;height:110px;border:3px solid rgba(255,255,255,.45);background:rgba(255,255,255,.08)}
+#joyKnob{width:50px;height:50px;background:radial-gradient(circle at 35% 30%,#fff,#cfd6ff);box-shadow:0 3px 8px rgba(0,0,0,.4)}
+#me{position:absolute;left:12px;bottom:12px;width:230px;font-size:14px;font-weight:800;pointer-events:none;background:rgba(18,18,44,.7);border:2px solid rgba(255,255,255,.15);border-radius:20px;padding:8px 12px}
+#me .bar{height:11px;margin:3px 0 5px}
+#cards{position:absolute;left:255px;bottom:12px;gap:12px;display:none}
+.card{width:148px;padding:12px;border-radius:24px;background:linear-gradient(#ffffff,#f1edff);color:#2b2440;display:flex;flex-direction:column;gap:5px;border:4px solid #ffcf4a;font-size:14px;box-shadow:0 6px 0 #c28a10,0 12px 20px rgba(0,0,0,.4)}
+.card:active{transform:translateY(4px)}.card b{font-size:22px;color:#5a3bd0}.card small{color:#6a6580;font-size:11px;line-height:1.25}
+#evBox{position:absolute;left:150px;top:62px;width:520px;padding:10px 16px;border-radius:28px;background:rgba(22,20,52,.94);border:3px solid #8fa3ff;display:none;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#evBox p{margin:4px 0}#evBox div{display:flex;gap:10px}.evo{flex:1;background:linear-gradient(#5b6aa8,#44518c);box-shadow:0 4px 0 #2b3566;font-size:17px;border-radius:22px;margin:0}.evo small{display:block;font-weight:500}.evo.on{background:linear-gradient(#ffd96b,#ffb73a);color:#3b2a00;box-shadow:0 4px 0 #b57a10}
+.qo{display:block;width:100%;margin:8px 0;text-align:left;background:linear-gradient(#4a4f86,#363a6e);box-shadow:0 4px 0 #23264d;font-size:19px;border-radius:24px}.qo.ok{background:linear-gradient(#5ee59a,#26b86a);box-shadow:0 4px 0 #167a46}.qo.no{background:linear-gradient(#ff8a8a,#d9454f);box-shadow:0 4px 0 #8f1f2a}
+#bkMap{width:150px;height:90px;border-radius:22px;float:right;margin:0 0 8px 14px;overflow:hidden;border:3px solid rgba(255,255,255,.4)}
+</style><style id="cute">
+:root{--cream:#fbf3df;--cream2:#efe0b8;--line:#5b4636;--txt:#4a3a2c;--sub:#7a6650;--teal:#7ccdbd;--teal2:#4a9d8f;--orange:#f6a94f;--yellow:#f8cd5c;--red:#e0634d;--navy:rgba(48,66,88,.9)}
+html,body{background:#26323d}
+body{font-family:'Noto Sans CJK KR','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic','Samsung One UI Sans',sans-serif;font-weight:700}
+.screen{color:var(--txt);background:radial-gradient(circle at 14% 16%,rgba(255,255,255,.75) 0 38px,transparent 39px),radial-gradient(circle at 19% 19%,rgba(255,255,255,.75) 0 30px,transparent 31px),radial-gradient(circle at 9% 19%,rgba(255,255,255,.75) 0 26px,transparent 27px),radial-gradient(circle at 80% 10%,rgba(255,255,255,.65) 0 34px,transparent 35px),radial-gradient(circle at 85% 13%,rgba(255,255,255,.65) 0 26px,transparent 27px),linear-gradient(#cfe8e4,#efe6c8)}
+.screen::before,.screen::after{display:none}
+h1,h2{color:var(--txt);text-shadow:none;font-weight:900;letter-spacing:1px;border:0}
+button{border-radius:16px;border:2px solid var(--line);background:var(--yellow);color:var(--txt);box-shadow:0 4px 0 var(--line);text-shadow:none;letter-spacing:0;font-weight:900}
+button:active{box-shadow:0 1px 0 var(--line);transform:translateY(3px)}
+button.sec{background:var(--teal);box-shadow:0 4px 0 var(--line)}
+input,select{border-radius:14px;border:2px solid var(--line);background:#fffaf0;color:var(--txt);font-weight:800}input:focus,select:focus{border-color:var(--teal2)}
+.panel{background:#fffaf0;border:2px solid var(--line);border-radius:18px;color:var(--txt);box-shadow:0 4px 0 rgba(91,70,54,.28);backdrop-filter:none}
+.tag{border-radius:99px;color:#fff!important;background:var(--teal2)!important;border:2px solid var(--line);text-shadow:none}
+small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
+#roleRow button{background:var(--cream2);color:var(--txt);border:2px solid var(--line);box-shadow:0 3px 0 var(--line)}
+#roleRow button.on{background:var(--orange);color:var(--txt);border:2px solid var(--line);box-shadow:0 3px 0 var(--line)}
+/* 전투 HUD */
+#me{left:10px;top:8px;bottom:auto;width:252px;display:flex;gap:10px;align-items:center;padding:8px 12px;background:var(--cream);border:2px solid var(--line);border-radius:20px;box-shadow:0 4px 0 rgba(91,70,54,.55);color:var(--txt);font-size:13px;position:absolute;pointer-events:none}
+#meAv{width:54px;height:54px;border-radius:50%;object-fit:cover;object-position:50% 6%;background:#fff6dc;border:2px solid var(--line);flex:none}
+.meR{flex:1}.meT{display:flex;justify-content:space-between;align-items:baseline}.meT b{font-size:19px}.meT span{font-size:11px;color:var(--sub)}
+#me .bar{height:11px;margin:4px 0 0}
+.cap{background:var(--cream);border:2px solid var(--line);border-radius:99px;color:var(--txt);box-shadow:0 3px 0 rgba(91,70,54,.5)}
+#hudFoodBox{left:10px;top:84px}
+#hudName{right:10px;top:8px;background:var(--navy);color:#fff;border:2px solid rgba(255,255,255,.7);border-radius:14px;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+#hudT{background:var(--cream);border:3px solid var(--line);border-radius:99px;color:var(--txt);font-size:28px;font-weight:900;letter-spacing:2px;box-shadow:0 4px 0 rgba(91,70,54,.55)}
+.bar{border-radius:99px;border:2px solid var(--line);background:rgba(91,70,54,.22)}.bar>i{border-radius:99px}
+#barB{background:linear-gradient(#f5a091,#e0634d)}#barHp{background:linear-gradient(#f5a091,#e0634d)}#barXp{background:linear-gradient(#a6e6d9,#4a9d8f)}
+#btnSummon,#btnSkill{border-radius:50%;padding:0;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--txt)}
+#btnSummon{right:134px;bottom:14px;width:84px;height:84px;font-size:19px;background:var(--orange);border:3px solid var(--line);box-shadow:0 5px 0 var(--line)}
+#btnSkill{right:14px;bottom:12px;width:104px;height:104px;font-size:25px;background:var(--cream);border:4px solid var(--line);box-shadow:0 6px 0 var(--line),inset 0 0 0 5px #e9d9ae}
+#btnSummon small,#btnSkill small{font-size:12px;font-weight:800;color:var(--sub)}
+#btnSummon:active,#btnSkill:active{box-shadow:0 1px 0 var(--line);transform:translateY(5px)}
+#joyRing{border:3px solid rgba(91,70,54,.45);background:rgba(255,255,255,.35)}#joyKnob{background:var(--cream);border:3px solid var(--line);box-shadow:0 3px 0 rgba(91,70,54,.5)}
+#cards{left:262px;bottom:12px}
+.card{background:var(--cream);color:var(--txt);border:3px solid var(--line);border-radius:22px;box-shadow:0 5px 0 var(--line)}
+.card b{color:#c4572f;font-size:22px}.card small{color:var(--sub)}
+#evBox{background:var(--cream);border:3px solid var(--line);border-radius:26px;color:var(--txt);box-shadow:0 6px 0 var(--line),0 12px 24px rgba(0,0,0,.25);padding-top:16px}
+#evBox::before,#lobMenu::before{content:"";position:absolute;left:18px;right:18px;top:7px;height:6px;border-radius:99px;background:linear-gradient(90deg,#d9534a 0 20%,#f2c14e 20% 40%,#3f7fb5 40% 60%,#fffaf0 60% 80%,#3a3a3a 80%);border:1px solid var(--line);opacity:.9}
+.evo{background:var(--yellow);color:var(--txt);border:2px solid var(--line);border-radius:18px;box-shadow:0 4px 0 var(--line)}.evo small{color:var(--sub)}
+.qo{background:#fffaf0;color:var(--txt);border:2px solid var(--line);border-radius:18px;box-shadow:0 3px 0 rgba(91,70,54,.55)}
+.qo.ok{background:var(--teal);color:#143a33;box-shadow:0 3px 0 var(--line)}.qo.no{background:#f4a094;color:#5a1d12;box-shadow:0 3px 0 var(--line)}
+#bkMap{border-radius:16px;border:2px solid var(--line)}
+/* 시작 화면 */
+#sLobby{background:#cfe8e4;padding:0}
+#lobCv{position:absolute;inset:0;width:960px;height:540px;z-index:0}
+#sLobby>*:not(canvas){position:absolute;z-index:2}
+.mist{left:-200px!important;width:1400px;height:90px;z-index:1!important;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(255,255,255,.6),transparent 70%);filter:blur(8px)}
+.m1{top:250px;animation:drift 38s linear infinite alternate}.m2{top:330px;opacity:.7;animation:drift 52s linear infinite alternate-reverse}
+@keyframes drift{from{transform:translateX(-90px)}to{transform:translateX(90px)}}
+#lobTitle{left:50px;top:30px}
+.lt-tag{display:inline-block;background:var(--teal2);color:#fff;border:2px solid var(--line);border-radius:99px;padding:4px 16px;font-size:15px;font-weight:900;box-shadow:0 3px 0 var(--line);animation:rise .8s .1s both}
+.lt-main{display:flex;align-items:center;gap:16px;margin:8px 0 4px;animation:rise .9s .25s both}
+.lt-main span{font-size:80px;font-weight:900;letter-spacing:4px;color:#ffe27a;line-height:1.1;text-shadow:4px 0 0 var(--line),-4px 0 0 var(--line),0 4px 0 var(--line),0 -4px 0 var(--line),3px 3px 0 var(--line),-3px 3px 0 var(--line),3px -3px 0 var(--line),-3px -3px 0 var(--line),0 9px 0 var(--line)}
+.seal{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:62px;height:62px;background:var(--red);color:#fff6dc;font-size:40px;font-weight:900;border-radius:16px;border:3px solid var(--line);transform:rotate(-6deg);box-shadow:0 4px 0 var(--line);margin-top:6px}
+.lt-sub{font-size:21px;font-weight:900;letter-spacing:2px;color:var(--txt);text-shadow:0 0 8px #fffaf0,0 0 8px #fffaf0,0 0 8px #fffaf0;animation:rise .9s .45s both}
+.lt-line{font-size:17px;color:var(--txt);margin-top:3px;text-shadow:0 0 8px #fffaf0,0 0 8px #fffaf0;animation:rise .9s .6s both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#lobMenu{left:50px;top:226px;width:430px;padding:22px 22px 12px;background:var(--cream);border:3px solid var(--line);border-radius:26px;box-shadow:0 6px 0 var(--line),0 14px 26px rgba(40,50,60,.25);animation:rise .9s .75s both}
+#btnSingle{font-size:22px;padding:12px 28px;background:var(--orange)}#btnCreate{font-size:22px;padding:12px 24px}#lobMenu .row{flex-wrap:nowrap}
+#lobSet{left:50px;bottom:16px;font-size:14px;color:var(--txt);background:var(--cream);border:2px solid var(--line);padding:6px 12px;border-radius:99px}
+#lobArt{right:10px!important;bottom:6px!important;width:520px;height:330px;pointer-events:none}
+#lobArt img{position:absolute;bottom:0;filter:saturate(.8) contrast(1.03) drop-shadow(2px 0 0 #3a2a1c) drop-shadow(-2px 0 0 #3a2a1c) drop-shadow(0 2px 0 #3a2a1c) drop-shadow(0 -2px 0 #3a2a1c);animation:br 3.6s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes br{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.014)}}
+#bwj-badge button{background:var(--cream)!important;color:var(--txt)!important;border:2px solid var(--line)!important;box-shadow:0 3px 0 var(--line)!important;font-weight:900!important;padding:7px 12px!important}
+#bwj-badge a.lg{border:2px solid var(--line);box-shadow:0 3px 0 var(--line)!important}
+#evBox{left:276px!important;top:72px!important;width:470px!important}
+#sBrief .panel{font-size:17px!important;padding:10px 18px!important;margin:6px 0!important;line-height:1.45!important}#sBrief h2{margin:2px 0 0!important}#sBrief #bkGoal{margin:6px 0!important;font-size:16px}
+#objBar{position:static;display:inline-block;margin-top:4px;font-size:14px;font-weight:800;padding:3px 14px}
+</style>
+</head><body>
+<div id="stage">
+<canvas id="cv" width="960" height="540"></canvas>
+
+<div class="screen" id="sLobby">
+  <canvas id="lobCv" width="960" height="540"></canvas>
+  <div class="mist m1"></div><div class="mist m2"></div>
+  <div id="lobArt"></div>
+  <div id="lobTitle">
+    <div class="lt-tag">초등 사회 5-2 · 역사 디펜스</div>
+    <div class="lt-main"><span>조선의 위기</span><i class="seal">守</i></div>
+    <div class="lt-sub">임진왜란 · 정유재란 · 정묘호란 · 병자호란</div>
+    <div class="lt-line">친구들과 힘을 합쳐 거점을 지켜 내요!</div>
+  </div>
+  <div id="lobMenu">
+    <div class="row" style="margin-bottom:10px"><label style="font-weight:800">이름 <input id="nick" maxlength="8" placeholder="닉네임" style="width:150px"></label></div>
+    <div class="row"><button id="btnSingle">혼자 하기</button><button id="btnCreate">방 만들기</button></div>
+    <div class="row" style="margin-top:10px"><input id="roomCode" maxlength="6" placeholder="방 코드" style="width:150px;text-transform:uppercase"><button id="btnJoin" class="sec">방 입장</button></div>
+    <div id="err"></div>
+  </div>
+  <details id="lobSet"><summary>선생님 설정 (온라인 릴레이 주소)</summary><div class="row" style="margin-top:8px"><input id="relayUrl" style="width:520px" placeholder="wss://내-워커.workers.dev/ws"></div><small>한 번만 넣으면 이 기기에 저장돼요. 배포 방법은 README 참고.</small></details>
+</div>
+
+<div class="screen" id="sRoom">
+  <h2 id="roomLabel"></h2>
+  <div class="row" style="align-items:flex-start;gap:30px">
+    <div style="min-width:300px"><b>참가자</b><ul id="plist"></ul>
+      <div style="margin-top:8px"><b>내 역할</b><div class="row" id="roleRow" style="margin-top:6px"><button data-r="archer">궁수</button><button data-r="militia">의병</button><button data-r="monk">승병</button><button data-r="gunner">화포수</button></div>
+      <small>궁수·화포수: 멀리서 / 의병·승병: 가까이서 단단하게</small></div></div>
+    <div id="hostBox"><b>방장 설정</b>
+      <div class="row" style="margin:10px 0">시작 챕터 <select id="selStart"></select></div>
+      <div class="row" style="margin:10px 0">전투 시간 <select id="selDur"><option value="300">5분 (기본)</option><option value="180">3분</option><option value="120">2분 (짧게)</option></select></div>
+      <div class="row" style="margin:10px 0">난이도 <select id="selDiff"><option value="1">쉬움</option><option value="1.6" selected>보통</option><option value="2.4">어려움</option></select></div>
+      <button id="btnStart">게임 시작</button></div>
+    <div id="guestBox" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div>
+  </div>
+  <div style="position:absolute;left:28px;bottom:16px"><button id="btnLeave" class="sec">나가기</button></div>
+</div>
+
+<div class="screen" id="sBrief">
+  <div id="bkChap" class="tag" style="background:#e0a030"></div>
+  <h2 id="bkName" style="margin-top:8px"></h2>
+  <div id="bkPlace" style="opacity:.85"></div><div id="bkSrc" style="margin:6px 0"></div>
+  <div id="bkMap"></div>
+  <div class="panel" id="bkText"></div>
+  <div class="panel" id="bkClue"></div>
+  <div id="bkGoal" style="margin:8px 0"></div>
+  <button id="btnFight">전투 시작!</button><div id="bkWait" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div>
+</div>
+
+<div class="screen" id="sBattle">
+  <div id="me"><img id="meAv" alt=""><div class="meR"><div class="meT"><b id="hudLv">Lv.1</b><span>체력 · 경험치</span></div><div class="bar hp"><i id="barHp"></i></div><div class="bar xp"><i id="barXp"></i></div></div></div>
+  <div class="cap" id="hudFoodBox"><span id="hudFood"></span></div><div class="cap" id="hudName"></div>
+  <div id="hudMid"><span id="hudT">00:00</span><div id="objBar" class="cap"></div><div id="hudBase"><div class="bar"><i id="barB"></i></div></div><i id="barT" style="display:none"></i></div>
+  <div id="joyZone"><div id="joyRing"></div><div id="joyKnob"></div></div>
+  <button id="btnSummon">소집</button><button id="btnSkill">함성</button>
+  <div id="cards"></div><div id="evBox"></div>
+</div>
+
+<div class="screen" id="sResult">
+  <h2 id="rsTitle"></h2>
+  <div class="panel" id="rsHist"></div>
+  <div id="qBox"><div class="panel" id="qText" style="margin-bottom:0"></div><div id="qOpts"></div><div id="qWhy" style="margin:6px 0;min-height:22px"></div></div>
+  <div id="rsHost" class="row"><button id="btnNext">다음 라운드</button><button id="btnRetry">다시 도전</button><button id="btnSkip" class="sec">역사 확인했으니 다음으로</button><button id="btnHome" class="sec">처음으로</button></div>
+  <div id="rsWait" style="display:none">방장이 다음으로 넘어가길 기다려요…</div>
+</div>
+
+<div class="screen" id="sEnd"><h2>끝까지 지켜 냈어요! 🎉</h2><div class="panel" id="endText" style="font-size:16px;white-space:normal"></div><button onclick="location.reload()">처음으로</button></div>
+</div>
+<script>
+function fit(){var s=Math.min(innerWidth/960,innerHeight/540),st=document.getElementById('stage');st.style.transform='scale('+s+')';st.style.left=(innerWidth-960*s)/2+'px';st.style.top=(innerHeight-540*s)/2+'px'}
+addEventListener('resize',fit);fit();
+</script>
+<script>
+/*SPR*/
+/*BRAND*/
+</script>
+<script>
+/*DATA*/
+</script>
+<script>
+/*GAME*/
+</script>
+</body></html>
