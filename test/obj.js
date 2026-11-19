@@ -5,7 +5,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   await p.goto('file:///home/claude/work/game/dist/index.html?fast=60'); await p.waitForSelector('#bwj-intro', { state: 'detached' });
   await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on');
   await p.click('#btnStart'); await p.waitForSelector('#sBrief.on'); await p.screenshot({ path: 'test/o_brief.png' });
-  await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
+  await p.click('#bqOpts .qo'); await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
   // [round idx, label]
   const modes = [[0, 'd'], [1, 'e'], [2, 's'], [3, 'b'], [6, 'r']];
   for (const [i, l] of modes) {

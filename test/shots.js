@@ -6,7 +6,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   await p.screenshot({ path: 'test/v1_lobby.png' });
   await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on'); await p.screenshot({ path: 'test/v2_room.png' });
   await p.selectOption('#selStart', '10'); await p.click('#btnStart'); await p.waitForSelector('#sBrief.on'); await p.screenshot({ path: 'test/v3_brief.png' });
-  await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
+  await p.click('#bqOpts .qo'); await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
   await p.evaluate(() => { const G = __dbg.G; G.food = 999; for (let i = 0; i < 9; i++) doSummon(false); doMerge(0, 6); G.pl.me.x = 560; G.pl.me.y = 270; });
   await p.waitForTimeout(16000);
   await p.evaluate(() => { __dbg.G.pl.me.offer = ['horse', 'hwacha', 'gun']; __dbg.G.pl.me.offT = 30; });

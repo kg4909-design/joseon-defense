@@ -6,7 +6,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on'); await p.click('#btnStart'); await p.waitForSelector('#sBrief.on');
   await p.evaluate(() => { startRound(1); });
   await p.waitForSelector('#sBrief.on'); await p.screenshot({ path: 'test/e_brief.png' });
-  await p.click('#btnFight'); await p.waitForSelector('#sBattle.on'); await p.waitForTimeout(1500); await p.screenshot({ path: 'test/e_start.png' });
+  await p.click('#bqOpts .qo'); await p.click('#btnFight'); await p.waitForSelector('#sBattle.on'); await p.waitForTimeout(1500); await p.screenshot({ path: 'test/e_start.png' });
   // 오른쪽으로 달리는 봇 (카드 즉시 선택)
   let last = null;
   for (let i = 0; i < 75; i++) {

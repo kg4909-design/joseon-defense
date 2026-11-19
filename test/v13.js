@@ -3,7 +3,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const p = await b.newPage({ viewport: { width: 1280, height: 720 } }); await p.addInitScript(() => { try { localStorage.setItem('jd_tut', '1'); } catch (e) {} }); const errs = []; p.on('pageerror', (e) => errs.push(e.message)); p.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
   await p.goto('file:///home/claude/work/game/dist/index.html?fast=300'); await p.waitForSelector('#bwj-intro', { state: 'detached' });
-  await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on'); await p.click('#diffRow button[data-d="hard"]'); await p.click('#btnStart'); await p.waitForSelector('#sBrief.on'); await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
+  await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on'); await p.click('#diffRow button[data-d="hard"]'); await p.click('#btnStart'); await p.waitForSelector('#sBrief.on'); await p.click('#bqOpts .qo'); await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
   await p.evaluate(() => { const G = __dbg.G; G.food = 300; for (let i = 0; i < 6; i++) doSummon(false); G.evDone = [true, true]; const me = G.pl.me; me.cards = { spear: 5, armor: 2, gong: 3, powder: 1, bow: 2 }; me.hp = 1e6; me.mx = 1e6; G.t = G.dur * 0.34; });
   await p.waitForTimeout(6000); await p.screenshot({ path: 'test/x_night.png' });
   console.log('souls', await p.evaluate(() => __dbg.G.souls.length), 'pj', await p.evaluate(() => __dbg.G.pj.length), 'nl', await p.evaluate(() => __dbg.G.nl));

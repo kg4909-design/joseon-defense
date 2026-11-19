@@ -7,7 +7,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
     await p.screenshot({ path: `test/d_${name}_1lobby.png` });
     await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on'); await p.screenshot({ path: `test/d_${name}_2room.png` });
     await p.click('#btnStart'); await p.waitForSelector('#sBrief.on'); await p.screenshot({ path: `test/d_${name}_3brief.png` });
-    await p.click('#btnFight', { timeout: 3000 }).catch(async () => { await p.evaluate(() => document.querySelector('#btnFight').scrollIntoView()); await p.click('#btnFight'); });
+    await p.click('#btnFight', { timeout: 3000 }).catch(async () => { await p.evaluate(() => document.querySelector('#btnFight').scrollIntoView()); await p.click('#bqOpts .qo'); await p.click('#btnFight'); });
     await p.waitForSelector('#sBattle.on'); await p.waitForTimeout(1200); await p.screenshot({ path: `test/d_${name}_4battle.png` });
     await p.evaluate(() => { __dbg.G.t = __dbg.G.dur; }); await p.waitForSelector('#sResult.on'); await p.waitForTimeout(600);
     const r = await p.evaluate(() => { const q = (s) => { const e = document.querySelector(s); if (!e) return null; const b = e.getBoundingClientRect(); return [Math.round(b.top), Math.round(b.bottom), e.offsetParent !== null]; }; return { vh: innerHeight, next: q('#btnNext'), skip: q('#btnSkip'), retry: q('#btnRetry') }; });

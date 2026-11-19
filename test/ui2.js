@@ -4,7 +4,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const c = await b.newContext({ viewport: { width: 1280, height: 800 }, hasTouch: true }); const p = await c.newPage(); const errs = []; p.on('pageerror', (e) => errs.push(e.message));
   await p.goto('file:///home/claude/work/game/dist/index.html?fast=40');
   await p.fill('#nick', '테스트'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on'); await p.selectOption('#selStart', '10'); await p.click('#btnStart');
-  await p.waitForSelector('#sBrief.on'); await p.screenshot({ path: 'test/t1_brief.png' }); await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
+  await p.waitForSelector('#sBrief.on'); await p.screenshot({ path: 'test/t1_brief.png' }); await p.click('#bqOpts .qo'); await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
   // 터치 조이스틱: 왼쪽 영역 드래그
   const st = await p.$eval('#stage', (e) => { const r = e.getBoundingClientRect(); return [r.left, r.top, r.width / 960]; });
   const X = (x) => st[0] + x * st[2], Y = (y) => st[1] + y * st[2];
