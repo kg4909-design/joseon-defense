@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#1f2a36"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>조선의 위기 디펜스</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:none}
@@ -191,6 +191,31 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #rotWarn b{font-size:26px;display:block;margin:10px 0}#rotWarn p{font-size:16px;line-height:1.5;opacity:.85}
 .rw-ph{font-size:84px;animation:rwr 2.2s ease-in-out infinite}}
 @keyframes rwr{0%,25%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+
+.rv{font-size:16px;line-height:1.5;white-space:normal}.rvh{font-size:20px;font-weight:900;margin-bottom:4px}.rvh small{font-size:14px;opacity:.75;margin-left:6px}.rvs{margin-bottom:6px}.rvt{margin:6px 0}.rvq{margin-top:8px;padding:8px 12px;border-radius:12px;background:rgba(255,200,80,.25)}.rvn{margin-top:8px;opacity:.85}
+#rsHost button:disabled{opacity:.55;filter:grayscale(.4)}
+
+#cards.qz{width:640px!important;left:50%!important;transform:translateX(-50%)}
+.qzb{background:#fffaf0;border:3px solid #5b4636;border-radius:18px;padding:10px 16px;color:#3b2a1c;width:100%;box-shadow:0 4px 0 rgba(91,70,54,.35)}
+.qzb em{display:block;font-style:normal;font-size:12px;font-weight:800;color:#2f6b2a}.qzb b{display:block;font-size:16px;margin:4px 0 8px;line-height:1.35}
+.qzo{display:flex;gap:8px}.qzo button{flex:1;font-size:15px;padding:8px 6px;border-radius:12px;border:2px solid #5b4636;background:#ffe9b8;font-weight:800;color:#3b2a1c}
+#cards.c4{width:700px!important}#cards.c4 .card{width:160px!important}
+.qres{position:absolute;bottom:100%;left:0;right:0;margin-bottom:6px;border-radius:12px;padding:6px 12px;font-size:13px;font-weight:800;color:#fff;background:#2f6b2a}.qres.no{background:#a8322a}
+
+#btnFs{left:196px;bottom:14px;font-size:15px;padding:8px 14px}
+#fsTip{display:none;left:50px;bottom:56px;max-width:420px;background:#fffaf0;border:2px solid #5b4636;border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.4;color:#3b2a1c;font-weight:700}
+#fsTip.on{display:block!important}
+@media (max-height:620px){#btnFs{font-size:12px;padding:5px 10px;bottom:6px;left:150px}#fsTip{bottom:40px;font-size:12px}}
+
+#btnDex{left:340px;bottom:14px;font-size:15px;padding:8px 14px}#btnRank{left:450px;bottom:14px;font-size:15px;padding:8px 14px}
+@media (max-height:620px){#btnDex{left:250px;bottom:6px;font-size:12px;padding:5px 10px}#btnRank{left:322px;bottom:6px;font-size:12px;padding:5px 10px}}
+#sBook{overflow:hidden}#bookBody{height:560px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px}
+#bookTabs button{font-size:16px;padding:6px 16px;opacity:.7}#bookTabs button.on{opacity:1;outline:3px solid #5b4636}
+.bk-n{font-size:14px;margin:4px 0 8px;font-weight:700}.bk-g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.bk-c{background:#fffaf0;border:2px solid #5b4636;border-radius:14px;padding:8px 12px;color:#3b2a1c;box-shadow:0 3px 0 rgba(91,70,54,.28);font-size:13px;line-height:1.4}
+.bk-c b{display:block;font-size:17px}.bk-c span{display:block}.bk-c small{display:block;opacity:.75;margin-top:2px}.bk-c em{display:block;font-style:normal;font-size:12px;font-weight:800;color:#2f6b2a;margin-top:3px}
+.bk-c.lk{filter:grayscale(1);opacity:.65}.bk-i{display:flex;align-items:center;gap:6px;margin-bottom:2px}.bk-i img{width:34px;height:34px;image-rendering:pixelated}
+.bk-t{width:100%;border-collapse:collapse;background:#fffaf0;color:#3b2a1c;font-size:15px;border-radius:12px;overflow:hidden}.bk-t th,.bk-t td{padding:6px 8px;border-bottom:1px solid #d9c9a8;text-align:center}.bk-t th{background:#ffe9b8}
 </style>
 </head><body>
 <div id="stage">
@@ -201,7 +226,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
   <canvas id="lobCv" width="960" height="540"></canvas>
   <div class="mist m1"></div><div class="mist m2"></div>
   <div id="lobArt"></div>
-  <button id="btnUpdL">📢 업데이트 노트</button>
+  <button id="btnUpdL">📢 업데이트 노트</button><button id="btnFs">⛶ 전체화면</button><button id="btnDex">📖 도감</button><button id="btnRank">🏆 랭킹</button><div id="fsTip"></div>
   <div id="updModal"><div class="um"><h3>📜 업데이트 노트</h3><p id="umSub" class="us"></p><div id="umBody"></div><div class="row"><button id="umClose">시작하러 가기</button><button id="umAll" class="sec">이전 업데이트 모두 보기</button></div></div></div>
   <div id="lobTitle">
     <div class="lt-tag">초등 사회 · 역사 디펜스</div>
@@ -228,7 +253,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
       <div class="row" style="margin:10px 0">시작 챕터 <select id="selStart"></select></div>
       <div class="row" style="margin:10px 0">전투 시간 <select id="selDur"><option value="300">5분 (기본)</option><option value="180">3분</option><option value="120">2분 (짧게)</option></select></div>
       <div class="row" style="margin:10px 0">난이도 <div class="row" id="diffRow" style="gap:6px"><button data-d="easy">쉬움</button><button data-d="normal" class="on">보통</button><button data-d="hard">어려움</button></div></div><small id="diffTip"></small>
-      <button id="btnStart">게임 시작</button></div>
+      <button id="btnStart">게임 시작</button> <button id="btnStartE" class="sec">♾ 무한 모드로 시작</button></div>
     <div id="guestBox" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div>
   </div>
   <div style="position:absolute;left:28px;bottom:16px"><button id="btnLeave" class="sec">나가기</button></div>
@@ -274,7 +299,8 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
   <div id="rsWait" style="display:none">방장이 다음으로 넘어가길 기다려요…</div>
 </div>
 
-<div class="screen" id="sEnd"><h2>끝까지 지켜 냈어요! 🎉</h2><div class="panel" id="endText" style="font-size:16px;white-space:normal"></div><button onclick="location.reload()">처음으로</button></div>
+<div class="screen" id="sBook"><h2 style="margin:0">📖 도감 · 🏆 랭킹</h2><div id="bookTabs" class="row" style="margin:8px 0"><button data-t="syn">시너지</button><button data-t="hero">영웅</button><button data-t="boss">적장</button><button data-t="rank">랭킹</button><button id="bookBack" class="sec">← 처음으로</button></div><div id="bookBody"></div></div>
+<div class="screen" id="sEnd"><h2 id="endH">끝까지 지켜 냈어요! 🎉</h2><div class="panel" id="endText" style="font-size:16px;white-space:normal"></div><button id="btnEndless" style="display:none">♾ 무한 모드 시작!</button> <button onclick="location.reload()">처음으로</button></div>
 </div>
 <div id="rotWarn"><div><div class="rw-ph">📱</div><b>화면을 가로로 돌려 주세요</b><p>이 게임은 가로 화면에서 가장 잘 보여요.<br>자동 회전이 꺼져 있다면 켜 주세요!</p></div></div>
 <script>

@@ -1,7 +1,8 @@
 'use strict';
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
-const VER = 'v0.20';
+const VER = 'v0.21';
 const UPDATES = [
+  { v: 'v0.21', d: '11/19', t: ['♾ 무한 모드! 30라운드를 깨면 끝없이 이어져요 (방에서 바로 시작할 수도 있어요). 버틴 시간·처치 수·퀴즈 정답으로 점수를 매겨요', '📖 도감과 🏆 랭킹이 생겼어요 (시작 화면 아래 버튼): 시너지·영웅·적장 도감', '레벨 업 때 퀴즈가 나와요! 이번 시대·지난 시대·더 먼저 배운 시대 문제가 섞여 나오고, 맞히면 보너스 카드 1장', '라운드가 끝나면 복기 카드를 10초 동안 읽어야 다음으로 넘어갈 수 있어요', '무기를 Lv.5까지 키우면 공격 이펙트가 금빛으로 빛나요', '⛶ 전체화면 버튼 추가 (카카오톡 안 브라우저는 막혀 있어서 크롬·삼성 인터넷으로 열어야 해요)'] },
   { v: 'v0.20', d: '11/19', t: ['시작화면이 옆으로 밀리고 일본 장수 그림이 줄지어 보이던 문제를 고쳤어요 (태블릿·폰도 확인)', '업데이트 노트가 팝업으로 바뀌었어요 (새 버전일 때 한 번 나와요)', '창병·기마병이 거점 앞으로 나가 적을 막아요! 다치면 쓰러졌다가 잠시 뒤 다시 일어나요', '날아오는 화살·총알도 앞에 선 병사가 막아 줘요'] },
   { v: 'v0.19', d: '11/19', t: ['영웅마다 고유 무기 1개로 시작 (궁수=활, 화포수=대포 …)', '무기 12종 · 능력 12종! 무기 4개, 능력 4개까지 고를 수 있어요', '짝이 맞는 무기끼리, 능력끼리 시너지! 둘 다 Lv5면 특수 능력', '모든 라운드를 깨면 히든 영웅 이순신 등장', '탈출: 병사·곡식 없음, 쓰러지면 끝! 뒤로 처진 적은 사라져요', '밤이 더 어두워졌어요'] },
   { v: 'v0.18', d: '11/19', t: ['야간 전투가 더 어두워졌고, 지친 우리는 느려지고 적은 더 빨라져요', '탈출: 적이 앞을 막아서고, 위아래에서 몰려오고, 매복이 갑자기 나타나요 (뒤에서 오는 적은 없어요)'] },
@@ -184,7 +185,7 @@ function roadY(x, ww, wh) { return wh * 0.5 + Math.sin(x / ww * Math.PI * 4) * 1
 const ESHIFT = 1600; // 탈출: 영웅이 오른쪽 끝에 가까워지면 세상을 통째로 왼쪽으로 옮겨 끝없이 달리게 해요
 function startRound(i) {
   const rd = R[i], P = G.sel.dur, i0 = i - (i < 10 ? 0 : i < 20 ? 10 : i < 25 ? 20 : 25), ob = ROUND_OBJ[i];
-  G.rd = i; G.paused = false; G.ph = 'brief'; G.res = null; G.ans = {}; G.ev = null; G.obj = ob; G.castle = ob === 'd' || ob === 'b';
+  G.rd = i; G.sc = i + (G.cyc || 0) * R.length; G.paused = false; G.ph = 'brief'; G.res = null; G.ans = {}; G.ev = null; G.obj = ob; G.castle = ob === 'd' || ob === 'b';
   G.path = rd.th; G.t = 0; G.dur = P; G.fl = 0; G.sf = 0; G.en = []; G.shots = []; G.fx = [];
   const [ww, wh] = WORLD[ob]; G.ww = ww; G.wh = wh; G.ax = ob === 'e' ? 160 : ob === 'r' ? 300 : ww / 2; G.ay = ob === 'e' ? roadY(160, ww, wh) : ob === 'r' ? wh / 2 + 150 : wh / 2;
   const k = 2 + (i >= 13 ? 1 : 0) + (i >= 22 ? 1 : 0), b0 = rnd(0, 6.283); G.dirs = []; for (let j = 0; j < k; j++) G.dirs.push(b0 + j * 6.283 / k);
@@ -193,12 +194,12 @@ function startRound(i) {
   G.info = null; G.ambT = 8; G.runX = 0; G.souls = []; G.pj = []; G.magT = 0; G.nl = 0; G.nIn = false; G.evR = null; G.evShow = 0; G.units = new Array(SLOTN).fill(null); G.sumN = 0; G.sumMiss = 0; G.buffAtk = 0; G.slowT = 0; G.evDone = [false, false];
   G.baseMax = Math.round(600 * (1 + 0.2 * (G.wallN || 0))); G.baseHp = G.baseMax;
   G.food = 110 + G.bonus + G.dif.fd; G.bonus = 0; G.foodMul = 1; G.spawnT = 1.5; G.bossDone = false; G.xp = 0; G.need = 8; G.crates = []; G.crateT = 5; G.upg = 0; G.tt = 1;
-  const hs = (1 + 0.09 * i) * (rd.df ? 1.1 : 1) * G.dif.hp;
+  const hs = (1 + 0.09 * G.sc) * (rd.df ? 1.1 : 1) * G.dif.hp;
   if (ob === 'r') { const n = 3 + (i >= 16 ? 1 : 0), pos = [[ww * 0.42, wh * 0.26], [ww * 0.72, wh * 0.7], [ww * 0.88, wh * 0.28], [ww * 0.55, wh * 0.88]]; for (let j = 0; j < n; j++) { G.campPos.push(pos[j]); spawn('camp', hs * 0.9, pos[j]); } G.campTotal = n; }
   if (ob !== 'e') for (let j = 0; j < Math.min(5, Math.floor(i0 / 4)); j++) doSummon(true);
   G.order.forEach((id, n) => { const p = G.pl[id]; p.cards = startCards(p.role); p.sn = {}; p.rv = 0; calcSyn(p); p.lv = 1; p.mx = Math.round(ROLE[p.role].hp * G.dif.hh); p.hp = p.mx; p.down = 0; p.cd = 0; p.offer = null; p.fz = 3; const a = n * 1.2; if (G.castle) { p.x = G.ax - 120 + Math.cos(a) * 30; p.y = G.ay + 70 + Math.sin(a) * 40; } else { p.x = G.ax + Math.cos(a) * 60; p.y = G.ay + 110 + Math.sin(a) * 40; } });
 }
-function beginBattle() { G.ph = 'battle'; const ok = Object.keys(G.ans).filter((id) => G.ans[id] === R[G.rd].q[2]).length; G.food += ok * 15; }
+function beginBattle() { G.ph = 'battle'; const ok = Object.keys(G.ans).filter((id) => G.ans[id] === R[G.rd].q[2]).length; G.food += ok * 15; if (G.es) G.es.q += ok; }
 function summonCost() { return Math.round(40 * (1 + 0.1 * G.sumN)); }
 function doSummon(free) {
   let slot = -1; for (let i = 0; i < slotsOpen(G.upg); i++) if (!G.units[i]) { slot = i; break; } if (slot < 0) return false;
@@ -231,6 +232,15 @@ function applyCard(p, id) {
   if (id === 'heal') for (const q of G.order) { const h = G.pl[q]; h.hp = Math.min(h.mx, h.hp + h.mx * 0.5); }
 }
 const POOL = {}; for (const k in WEAP) if (k !== 'turtle') POOL[k] = 1; for (const k in ABIL) POOL[k] = 1;
+function pickQuiz(p) {
+  const ch = R[G.rd].ch, bk = [[], [], ER.map((x, i) => ['e' + i, x, x[4]])];
+  R.forEach((r, i) => { const it = ['r' + i, r.q, CH[r.ch].n]; if (r.ch === ch) bk[0].push(it); else if (r.ch < ch) bk[1].push(it); });
+  if (!p.qseen) p.qseen = {};
+  let b = Math.random() < 0.4 ? 0 : Math.random() < 0.5 ? 1 : 2; if (!bk[b].length) b = bk[1].length ? 1 : 2;
+  let c = bk[b].filter((x) => !p.qseen[x[0]]); if (!c.length) { for (const x of bk[b]) delete p.qseen[x[0]]; c = bk[b]; }
+  const it = c[rint(c.length)]; p.qseen[it[0]] = 1; const q = it[1], idx = q[1].map((_, i) => i).sort(() => Math.random() - 0.5);
+  p.qz = { q: q[0], o: idx.map((i) => q[1][i]), a: idx.indexOf(q[2]), w: q[3], tag: b === 0 ? '이번 시대 문제' : b === 1 ? '지난 시대 문제' : '더 먼저 배운 시대 · ' + it[2] }; p.qs = 0;
+}
 function offerCards(p) {
   const c = p.cards, wn = Object.keys(WEAP).filter((k) => c[k]).length, an = Object.keys(ABIL).filter((k) => c[k]).length;
   const ok = (id) => POOL[id] && (c[id] || 0) < 5 && !(WEAP[id] && !c[id] && wn >= WMAX) && !(ABIL[id] && !c[id] && an >= AMAX);
@@ -252,7 +262,7 @@ function applyEvent(k) {
 }
 function spawn(type, hs, pos) {
   const T = ET[type], np = G.order.length, sc = hs * (type === 'boss' ? (1 + 0.5 * (np - 1)) : 1);
-  const el = type !== 'boss' && type !== 'camp' && Math.random() < Math.min(0.14, 0.015 + 0.004 * G.rd + 0.06 * (G.t / G.dur)), hm = el ? 2.8 : 1;
+  const el = type !== 'boss' && type !== 'camp' && Math.random() < Math.min(0.14, 0.015 + 0.004 * G.sc + 0.06 * (G.t / G.dur)), hm = el ? 2.8 : 1;
   const e = { el: el ? 1 : 0, id: G.nid++, t: type, hp: T.hp * sc * hm, mx: T.hp * sc * hm, sp: T.sp * 1.2 * rnd(0.9, 1.1), st: 0, x: pos[0], y: pos[1], ef: 0, ox: rnd(-34, 34), oy: rnd(-26, 26), ro: rnd(0, 36), gt: rnd(2, 5) };
   if (type === 'shoot') { const gf = CH[R[G.rd].ch].foe === '왜군'; e.rg = gf ? 380 : 260; e.pk = gf ? 'gun' : 'bow'; e.gt = rnd(1, 3); }
   G.en.push(e); return e;
@@ -268,10 +278,11 @@ function spawnPos() {
 }
 function pickType(rd) { const r = Math.random(), cvw = rd.cl === 'cav' ? 0.2 : 0.1, prog = G.t / G.dur; return r < 0.5 - cvw ? 'grunt' : r < 0.72 ? 'shoot' : r < 0.72 + cvw ? 'cav' : (prog > 0.25 && r < 0.97) ? 'tank' : 'grunt'; }
 function gainXp(v) {
-  G.xp += v * xpMul(); while (G.xp >= G.need) { G.xp -= G.need; G.need = Math.round(G.need * 1.28 + 3); for (const id of G.order) { const p = G.pl[id]; p.lv++; G.fx.push([p.x, p.y, 60, 'lvl']); if (!p.offer) offerCards(p); } }
+  G.xp += v * xpMul(); while (G.xp >= G.need) { G.xp -= G.need; G.need = Math.round(G.need * 1.28 + 3); for (const id of G.order) { const p = G.pl[id]; p.lv++; G.fx.push([p.x, p.y, 60, 'lvl']); if (!p.offer) { offerCards(p); pickQuiz(p); p.offT = 30; } } }
 }
 function nearestHero(x, y, rg) { let b = null, bd = rg * rg; for (const p of aliveHeroes()) { const d = (p.x - x) ** 2 + (p.y - y) ** 2; if (d < bd) { bd = d; b = p; } } return b; }
 function enemyDeath(e) {
+  if (G.es) G.es.k++;
   const T = ET[e.t]; if (e.t === 'boss') G.bossDead = true; if (e.t === 'camp') G.fx.push([e.x, e.y, 60, 'boom']); if (G.obj !== 'e') G.food += Math.round(T.f * 0.35 * G.foodMul * (e.t === 'boss' ? 3 : 1)) + (Math.random() < 0.3 ? 1 : 0); G.souls.push({ x: e.x + rnd(-8, 8), y: e.y + rnd(-8, 8), v: T.xp * (e.el ? 4 : 1) }); if (G.souls.length > 300) gainXp(G.souls.shift().v); if (e.el && Math.random() < 0.4 && G.crates.length < 5) G.crates.push({ x: e.x, y: e.y, k: Math.random() < 0.3 ? 'gmc' : 'chest' });
   G.fx.push([e.x, e.y, T.r + 6, 'die', e.t]);
 }
@@ -309,11 +320,11 @@ function stepBattle(dt) {
   // 야간 전투 (보통·어려움)
   { const nw = G.dif === DIFF.easy ? [] : G.dif === DIFF.hard ? [[0.3, 0.46], [0.7, 0.86]] : [[0.46, 0.62]], tg = nw.some((w) => prog >= w[0] && prog < w[1]) ? 1 : 0; if (tg && !G.nIn) { G.nIn = true; G.fx.push([G.ax, G.ay, 10, 'night']); } if (!tg) G.nIn = false; G.nl += Math.sign(tg - G.nl) * Math.min(Math.abs(tg - G.nl), dt / 3); }
   // 스폰
-  const hs = (1 + 0.09 * G.rd) * (rd.df ? 1.1 : 1) * G.dif.hp, hs2 = aliveHeroes();
-  const rate = G.dif.sp * (0.55 + 0.9 * prog + 0.018 * G.rd) * (1 + 0.5 * (np - 1)) * (rd.df ? 1.12 : 1) * (G.obj === 'r' ? 0.45 : G.obj === 'e' ? 1.25 : 1);
+  const hs = (1 + 0.09 * G.sc) * (rd.df ? 1.1 : 1) * G.dif.hp, hs2 = aliveHeroes();
+  const rate = G.dif.sp * (0.55 + 0.9 * prog + 0.018 * G.sc) * (1 + 0.5 * (np - 1)) * (rd.df ? 1.12 : 1) * (G.obj === 'r' ? 0.45 : G.obj === 'e' ? 1.25 : 1);
   G.spawnT -= dt * rate * 1.6 * (1 + 1.5 * prog) * (1 + 0.3 * G.nl); while (G.spawnT <= 0) { G.spawnT += 1; if (G.en.length >= (isLow() ? 130 : 260)) continue; const q = spawnPos(); if (q) spawn(pickType(rd), hs, q); }
   if (G.obj === 'e' && hs2.length) { G.ambT = (G.ambT === undefined ? 8 : G.ambT) - dt; if (G.ambT <= 0) { G.ambT = Math.max(5, 11 - 5 * prog); const h = hs2[rint(hs2.length)], ax0 = h.x + rnd(300, 440), ay0 = h.y + rnd(-190, 190), n = 4 + Math.round(prog * 5); for (let k = 0; k < n && G.en.length < (isLow() ? 130 : 260); k++) spawn(k % 4 === 3 ? 'cav' : pickType(rd), hs, clampW(ax0 + rnd(-60, 60), ay0 + rnd(-60, 60))); G.fx.push([ax0, ay0, 70, 'amb']); } }
-  G.waveT -= dt; if (G.waveT <= 0 && G.obj !== 'e') { G.waveT = 14; const q = spawnPos(); if (q) { const n = 14 + Math.floor(G.rd / 2) * 2 + Math.round(prog * 12); for (let k = 0; k < n && G.en.length < (isLow() ? 130 : 260); k++) spawn(pickType(rd), hs, clampW(q[0] + rnd(-110, 110), q[1] + rnd(-110, 110))); G.fx.push([q[0], q[1], 40, 'warn']); } }
+  G.waveT -= dt; if (G.waveT <= 0 && G.obj !== 'e') { G.waveT = 14; const q = spawnPos(); if (q) { const n = 14 + Math.floor(G.sc / 2) * 2 + Math.round(prog * 12); for (let k = 0; k < n && G.en.length < (isLow() ? 130 : 260); k++) spawn(pickType(rd), hs, clampW(q[0] + rnd(-110, 110), q[1] + rnd(-110, 110))); G.fx.push([q[0], q[1], 40, 'warn']); } }
   if (G.obj === 'b' && !G.bossOut && G.t >= Math.max(6, G.dur - 70)) { G.bossOut = true; const q = spawnPos() || [G.ax + 500, G.ay]; spawn('boss', hs * 0.8, q); G.fx.push([q[0], q[1], 60, 'boss']); }
   else if ((G.obj === 'd' || G.obj === 's') && !G.bossDone && G.t >= Math.max(G.dur * 0.5, G.dur - 60)) { G.bossDone = true; const q = spawnPos(); if (q) { spawn('boss', hs * 0.8, q); G.fx.push([q[0], q[1], 60, 'boss']); } }
   // 탈출 지점
@@ -333,7 +344,7 @@ function stepBattle(dt) {
   // 영웅
   for (const id of G.order) { const p = G.pl[id], S = heroStats(p), b = ROLE[p.role];
     if (p.fz > 0) p.fz -= dt; if (p.cd > 0) p.cd -= dt;
-    if (p.offer) { p.offT -= dt; if (p.offT <= 0) { applyCard(p, p.offer[rint(p.offer.length)]); p.offer = null; } }
+    if (p.offer) { p.offT -= dt; if (p.offT <= 0) { applyCard(p, p.offer[rint(p.offer.length)]); p.offer = null; p.qz = null; } }
     if (p.down > 0) { p.down -= dt; if (p.down <= 0) { p.down = 0; p.hp = p.mx * (G.castle ? 0.5 : 0.6); p.fz = 3; } continue; }
     if (p.hp <= 0 && p.sa && p.sa.armor_guard === 2 && !p.rv && G.obj !== 'e') { p.rv = 1; p.hp = p.mx * 0.5; p.fz = 3; G.fx.push([p.x, p.y, 70, 'lvl']); G.info = { id: Date.now() + Math.random(), tt: '🛡 철벽 수비! ' + p.name + ' 다시 일어났어요', tx: '갑옷과 방패의 힘으로 한 번 되살아나요' }; }
     if (p.hp <= 0) { if (G.castle) p.down = 10; else if (G.lives > 0) { G.lives--; p.down = 6; } else p.down = 1e9; p.hp = 0; G.fx.push([p.x, p.y, 30, 'die']); continue; }
@@ -412,28 +423,33 @@ function stepBattle(dt) {
 function endRound(win) {
   G.baseHp = Math.max(0, G.baseHp); G.ph = 'result'; G.res = { win, rd: G.rd }; G.en = []; G.ev = null;
   for (const id of G.order) { const p = G.pl[id]; p.offer = null; }
-  saveGame('auto', win ? G.rd + 1 : G.rd);
+  if (G.es) { G.es.tot += win ? G.dur : G.t; if (!win) { G.es.over = true; G.ph = 'end'; } }
+  else saveGame('auto', win ? G.rd + 1 : G.rd);
 }
 function nextRound() {
   G.bonus = 0;
-  if (G.rd + 1 >= R.length) { G.ph = 'end'; return; } startRound(G.rd + 1);
+  if (G.rd + 1 >= R.length) { if (!G.endless) { G.ph = 'end'; return; } G.cyc = (G.cyc || 0) + 1; startRound(0); return; } startRound(G.rd + 1);
 }
 function hostMsg(from, m) {
   if (!G || !G.pl[from] && m.k !== 'prof') return;
   const p = G.pl[from];
   if (m.k === 'prof') { if (G.ph !== 'lobby' && !p) return; if (!p) addPlayer(from, m.name, m.role); else { p.name = String(m.name || p.name).slice(0, 8); if (ROLE[m.role]) p.role = m.role; } return; }
   if (m.k === 'in') { const l = Math.hypot(m.mx, m.my) || 1, s = l > 1 ? 1 / l : 1; p.mvx = m.mx * s; p.mvy = m.my * s; }
-  else if (m.k === 'skill' && G.ph === 'battle' && p.cd <= 0 && !p.down) { p.cd = 15; for (const e of G.en) if (Math.hypot(e.x - p.x, e.y - p.y) < 125) { dmgEnemy(e, 70 + 8 * G.rd); e.st = 1.6; } G.fx.push([p.x, p.y, 125, 'roar']); }
+  else if (m.k === 'skill' && G.ph === 'battle' && p.cd <= 0 && !p.down) { p.cd = 15; for (const e of G.en) if (Math.hypot(e.x - p.x, e.y - p.y) < 125) { dmgEnemy(e, 70 + 8 * G.sc); e.st = 1.6; } G.fx.push([p.x, p.y, 125, 'roar']); }
   else if (m.k === 'pause' && G.ph === 'battle' && (G.order.length === 1 || from === G.order[0])) G.paused = !!m.v;
   else if (m.k === 'summon' && G.ph === 'battle' && G.obj !== 'e') doSummon(false);
   else if (m.k === 'upg' && G.ph === 'battle' && G.obj !== 'e' && G.upg < 5 && G.food >= UPC[G.upg]) { G.food -= UPC[G.upg]; G.upg++; if (G.castle) { G.baseMax = Math.round(G.baseMax * 1.25); G.baseHp = Math.min(G.baseMax, G.baseHp + G.baseMax * 0.3); } else for (const q of G.order) { const h = G.pl[q]; h.hp = Math.min(h.mx, h.hp + h.mx * 0.3); } G.fx.push([G.ax, G.ay, 110, 'merge']); }
   else if (m.k === 'merge' && G.ph === 'battle') { if (m.a >= 0 && m.a < SLOTN && m.b >= 0 && m.b < SLOTN) doMerge(m.a | 0, m.b | 0); }
-  else if (m.k === 'card' && p.offer && m.i >= 0 && m.i < 3) { applyCard(p, p.offer[m.i | 0]); p.offer = null; }
+  else if (m.k === 'qa' && p.offer && p.qz && p.qs === 0 && m.i >= 0 && m.i < p.qz.o.length) {
+    if ((m.i | 0) === p.qz.a) { p.qs = 1; p.qok = (p.qok || 0) + 1; if (G.es) G.es.q++; G.qokT = (G.qokT || 0) + 1; const keep = p.offer.slice(), t = p.offT; offerCards(p); const ex = p.offer.filter((x) => !keep.includes(x)); p.offer = ex.length ? keep.concat(ex[0]) : keep; p.offT = t; } else p.qs = 2;
+  }
+  else if (m.k === 'card' && p.offer && p.qs !== 0 && m.i >= 0 && m.i < p.offer.length) { applyCard(p, p.offer[m.i | 0]); p.offer = null; p.qz = null; }
   else if (m.k === 'vote' && G.ev && (m.i === 0 || m.i === 1)) G.ev.votes[from] = m.i;
   else if (m.k === 'ans' && (G.ph === 'result' || G.ph === 'brief') && G.ans[from] == null) G.ans[from] = m.i | 0;
 }
 function hostCtl(c, v) { // 방장 전용 조작
-  if (c === 'start') { G.sel.start = v.start; G.sel.dur = FAST || v.dur; G.dif = DIFF[v.diff] || DIFF.normal; G.sel.diff = v.diff; G.bonus = 0; G.wallN = v.wall | 0; for (const id of G.order) G.pl[id].cards = {}; startRound(v.start); }
+  if (c === 'start') { G.sel.start = v.start; G.sel.dur = FAST || v.dur; G.dif = DIFF[v.diff] || DIFF.normal; G.sel.diff = v.diff; G.bonus = 0; G.wallN = v.wall | 0; G.endless = !!v.endless; G.cyc = 0; G.es = G.endless ? { tot: 0, k: 0, q: 0, from: v.start, over: false } : null; for (const id of G.order) G.pl[id].cards = {}; startRound(v.start); }
+  else if (c === 'endless' && G.ph === 'end' && !G.endless) { G.endless = true; G.cyc = 1; G.bonus = 0; G.es = { tot: 0, k: 0, q: 0, from: 0, over: false }; G.ph = 'brief'; startRound(0); }
   else if (c === 'fight' && G.ph === 'brief') beginBattle();
   else if (c === 'next' && G.ph === 'result') { if (G.res.win) nextRound(); else startRound(G.rd); }
   else if (c === 'retry' && G.ph === 'result') startRound(G.rd);
@@ -442,9 +458,12 @@ function hostCtl(c, v) { // 방장 전용 조작
 }
 function makeSnap() {
   const g = G; const s = { ph: g.ph, rd: g.rd, t: g.t, dur: g.dur, sel: g.sel, order: g.order,
-    pl: g.order.map((id) => { const p = g.pl[id]; return { id, name: p.name, role: p.role, x: p.x, y: p.y, hp: p.hp, mx: p.mx, lv: p.lv, down: p.down, cd: p.cd, offer: p.offer, offT: p.offT, cards: p.cards, fz: p.fz, rg: Math.round(heroStats(p).rg) }; }) };
+    pl: g.order.map((id) => { const p = g.pl[id]; return { id, name: p.name, role: p.role, x: p.x, y: p.y, hp: p.hp, mx: p.mx, lv: p.lv, down: p.down, cd: p.cd, offer: p.offer, offT: p.offT, qz: p.qz ? { q: p.qz.q, o: p.qz.o, tag: p.qz.tag, ...(p.qs ? { a: p.qz.a, w: p.qz.w } : {}) } : null, qs: p.qs | 0, qok: p.qok | 0, cards: p.cards, fz: p.fz, rg: Math.round(heroStats(p).rg) }; }) };
   if (g.ph === 'battle' || g.ph === 'result' || g.ph === 'brief') { s.ww = g.ww; s.wh = g.wh; s.ax = g.ax; s.ay = g.ay; s.obj = g.obj; s.castle = g.castle; s.lives = g.lives; s.gi = g.gi; s.goals = g.goals; s.dirs = g.dirs; s.cpos = g.campPos; s.cpn = g.en.filter((e) => e.t === 'camp').length; s.cpt = g.campTotal || 0; s.bh = g.baseHp; s.bm = g.baseMax; s.food = Math.floor(g.food); s.cost = summonCost(); s.un = g.units; s.xp = g.xp; s.need = g.need;
-    s.en = g.en.slice(0, 220).map((e) => [e.id, e.t, e.x, e.y, e.hp / e.mx, e.ef > 0 ? 1 : 0, e.el]); s.paused = g.paused; s.fl = g.fl || 0; s.sf = g.sf || 0; s.so = g.souls.slice(-260).map((q) => [Math.round(q.x), Math.round(q.y), q.v]); s.pj = g.pj.slice(0, 90).map((b) => [Math.round(b.x), Math.round(b.y), Math.round(b.vx), Math.round(b.vy), b.k]); s.mg = g.magT > 0; s.info = g.info; s.nl = Math.round(g.nl * 100) / 100; s.nd = g.dif === DIFF.hard ? 0.96 : 0.9; s.vp = !!g.ev; s.cp = g.order.length === 1 && !!g.pl[g.order[0]].offer; s.cr = g.crates.map((c) => [c.x, c.y, c.k]); s.upg = g.upg; s.ucost = UPC[g.upg] || 0; s.slots = slotsOpen(g.upg); s.sh = g.shots; s.fx = g.fx; s.ev = g.ev ? { t: g.ev.t, q: g.ev.q, o: g.ev.o, votes: g.ev.votes, left: g.ev.left } : null; s.evR = g.evR ? g.evR.done : null; s.buff = g.buffAtk > 0; s.slow = g.slowT > 0; }
+    s.en = g.en.slice(0, 220).map((e) => [e.id, e.t, e.x, e.y, e.hp / e.mx, e.ef > 0 ? 1 : 0, e.el]); s.paused = g.paused; s.fl = g.fl || 0; s.sf = g.sf || 0; s.so = g.souls.slice(-260).map((q) => [Math.round(q.x), Math.round(q.y), q.v]); s.pj = g.pj.slice(0, 90).map((b) => [Math.round(b.x), Math.round(b.y), Math.round(b.vx), Math.round(b.vy), b.k]); s.mg = g.magT > 0; s.info = g.info; s.nl = Math.round(g.nl * 100) / 100; s.nd = g.dif === DIFF.hard ? 0.96 : 0.9; s.vp = !!g.ev; s.cp = g.order.length === 1 && !!g.pl[g.order[0]].offer; s.cr = g.crates.map((c) => [c.x, c.y, c.k]); s.upg = g.upg; s.ucost = UPC[g.upg] || 0; s.slots = slotsOpen(g.upg); { const WM = { archer: 'bow', bow: 'bow', cannon: 'cannon', gun: 'musket', hwa: 'hwacha', stone: 'stone', thrust: 'spear', slash: 'sword' };
+      for (const sh of g.shots) { if (sh[9] != null) continue; for (const id of g.order) { const p = g.pl[id], w = WM[sh[5]]; if (w && sh[0] === p.x && sh[1] === p.y - 20) { if ((p.cards[w] || 0) >= 5 || p.cards['evo_' + w]) sh[9] = 1; break; } } } }
+    s.sh = g.shots; s.fx = g.fx; s.ev = g.ev ? { t: g.ev.t, q: g.ev.q, o: g.ev.o, votes: g.ev.votes, left: g.ev.left } : null; s.evR = g.evR ? g.evR.done : null; s.buff = g.buffAtk > 0; s.slow = g.slowT > 0; }
+  s.endless = !!g.endless; s.es = g.es ? { tot: Math.round(g.es.tot + (g.ph === 'battle' ? g.t : 0)), k: g.es.k, q: g.es.q, over: !!g.es.over } : null; s.cyc = g.cyc | 0; s.rd = g.rd;
   if (g.ph === 'result') { s.res = g.res; } if (g.ph === 'result' || g.ph === 'brief') s.ans = g.ans;
   return s;
 }
@@ -557,7 +576,21 @@ function closeUpd() { $('updModal').classList.remove('on'); try { localStorage.s
 function initUpd() { $('umClose').onclick = closeUpd; $('umAll').onclick = () => openUpd(true); $('btnUpdL').onclick = () => openUpd(false); let seen = ''; try { seen = localStorage.getItem('jd_upd_seen') || ''; } catch (e) {} if (seen !== VER && !FAST) setTimeout(() => openUpd(false), 1800); }
 function initLobby() {
   try { matchMedia('(orientation: portrait) and (pointer: coarse)').addEventListener('change', (e) => { if (e.matches && V && V.ph === 'battle' && !V.paused) sendHost({ k: 'pause', v: true }); }); } catch (e) {}
-  initUpd(); $('btnLoad').onclick = () => openSaves('load'); $('svClose').onclick = () => $('saveBox').classList.remove('on'); $('pSave').onclick = () => openSaves('save', V ? V.rd : 0); $('rsSave').onclick = () => openSaves('save', V && V.res && V.res.win ? V.rd + 1 : V.rd);
+  initUpd();
+  { // 전체화면 버튼 (앱 안 브라우저는 막혀 있어서 안내를 보여 줘요)
+    const ua = navigator.userAgent, inApp = /KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|Line\/|DaumApps/i.test(ua), de = document.documentElement;
+    const can = !!(de.requestFullscreen || de.webkitRequestFullscreen), isFs = () => !!(document.fullscreenElement || document.webkitFullscreenElement), tip = $('fsTip');
+    const note = () => { tip.textContent = inApp ? '지금은 카카오톡 같은 앱 안의 브라우저라 전체화면이 안 돼요. 오른쪽 아래 ⋮ 메뉴에서 "다른 브라우저로 열기"를 눌러 크롬이나 삼성 인터넷에서 열어 주세요.' : /iPhone|iPad/.test(ua) ? '아이폰/아이패드는 전체화면 기능이 막혀 있어요. 공유 버튼 → "홈 화면에 추가"로 앱처럼 열면 주소창이 사라져요.' : '이 브라우저에서는 전체화면을 쓸 수 없어요. 크롬이나 삼성 인터넷으로 열어 보세요.'; tip.classList.add('on'); clearTimeout(note.t); note.t = setTimeout(() => tip.classList.remove('on'), 9000); };
+    $('btnFs').onclick = async () => {
+      if (isFs()) { try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} return; }
+      if (inApp || !can) { note(); return; }
+      try { await (de.requestFullscreen || de.webkitRequestFullscreen).call(de); try { await screen.orientation.lock('landscape'); } catch (e) {} } catch (e) { note(); }
+    };
+    const sync = () => { $('btnFs').textContent = isFs() ? '⛶ 전체화면 끄기' : '⛶ 전체화면'; };
+    document.addEventListener('fullscreenchange', sync); document.addEventListener('webkitfullscreenchange', sync);
+    if (inApp && matchMedia('(pointer:coarse)').matches) setTimeout(() => { if (!isFs()) note(); }, 2500);
+  }
+  $('btnLoad').onclick = () => openSaves('load'); $('svClose').onclick = () => $('saveBox').classList.remove('on'); $('pSave').onclick = () => openSaves('save', V ? V.rd : 0); $('rsSave').onclick = () => openSaves('save', V && V.res && V.res.win ? V.rd + 1 : V.rd);
   $('relayUrl').value = localStorage.getItem('hdg_relay') || DEFAULT_RELAY; $('nick').value = localStorage.getItem('hdg_nick') || '';
   const sc = $('selStart'); sc.innerHTML = CH.map((c, i) => `<option value="${i * (i < 2 ? 10 : 5) + (i === 3 ? 0 : 0)}">${i + 1}. ${c.n}</option>`).join('');
   sc.innerHTML = [0, 10, 20, 25].map((v, i) => `<option value="${v}">${i + 1}. ${CH[i].n}</option>`).join('');
@@ -568,6 +601,7 @@ function initLobby() {
   const setDiff = (d) => { diffSel = d; document.querySelectorAll('#diffRow button').forEach((x) => x.classList.toggle('on', x.dataset.d === d)); $('diffTip').textContent = DT_[d]; }; document.querySelectorAll('#diffRow button').forEach((b) => (b.onclick = () => setDiff(b.dataset.d))); setDiff('normal');
   const roleTip = (r) => { const R0 = ROLE[r]; $('roleTip').innerHTML = `<b>${R0.n}</b> — ${R0.d}<br>` + R0.tag.map((x) => `<span class="tg">${x}</span>`).join(''); }; roleTip('archer'); refreshHid();
   $('btnStart').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel }; hostCtl('start', draftSel); };
+  $('btnStartE').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel, endless: true }; hostCtl('start', draftSel); };
   $('btnLeave').onclick = () => location.reload();
   document.querySelectorAll('#roleRow button').forEach((b) => { b.onclick = () => { if (b.dataset.r === 'admiral' && !hidOK()) { $('roleTip').innerHTML = '🔒 <b>히든 영웅</b> — 모든 라운드를 끝까지 깨면 열려요!'; return; } me.role = b.dataset.r; sendProf(); roleTip(b.dataset.r); document.querySelectorAll('#roleRow button').forEach((x) => x.classList.toggle('on', x === b)); }; });
   document.querySelector('#roleRow button').classList.add('on');
@@ -622,7 +656,7 @@ function setupInput() {
   $('cv').addEventListener('pointerdown', (e) => { if (!V || V.ph !== 'battle') return; const [px, py] = pt(e), x = px / Z + cam.x, y = py / Z + cam.y; let hit = -1, bd = 34; for (let i = 0; i < (V.slots || 8); i++) { const s = slotPos(i, V.ax, V.ay), d = Math.hypot(s[0] - x, s[1] - 6 - y); if (d < bd) { bd = d; hit = i; } }
     if (hit < 0) { sel = -1; return; }
     if (sel < 0) { if (V.un && V.un[hit]) sel = hit; } else { if (sel !== hit) sendHost({ k: 'merge', a: sel, b: hit }); sel = -1; } });
-  $('btnNext').onclick = () => hostCtl('next'); $('btnRetry').onclick = () => hostCtl('retry'); $('btnSkip').onclick = () => hostCtl('skip');
+  $('btnDex').onclick = () => buildBook('syn'); $('btnRank').onclick = () => buildBook('rank'); $('bookBack').onclick = () => show('sLobby'); document.querySelectorAll('#bookTabs button[data-t]').forEach((b) => b.onclick = () => buildBook(b.dataset.t)); $('btnEndless').onclick = () => hostCtl('endless'); $('btnNext').onclick = () => hostCtl('next'); $('btnRetry').onclick = () => hostCtl('retry'); $('btnSkip').onclick = () => hostCtl('skip');
   $('btnFight').onclick = () => hostCtl('fight'); $('btnHome').onclick = () => location.reload();
 }
 function sendMove() {
@@ -664,7 +698,7 @@ function tutGo(d) { tutI += d; if (tutI >= TUT.length) { closeTut(); return; } i
 function buildBrief() {
   const r = R[V.rd], ch = CH[r.ch], s = SRC[r.src]; const first = r.ch !== (V.rd ? R[V.rd - 1].ch : -1);
   const idx = R.filter((x, i) => x.ch === r.ch && i <= V.rd).length, tot = R.filter((x) => x.ch === r.ch).length;
-  $('bkChap').textContent = `${ch.n} (${ch.y}) · ${idx}/${tot}라운드`;
+  $('bkChap').textContent = V.endless ? `♾ 무한 모드 · ${V.cyc * R.length + V.rd + 1}번째 라운드 (난이도 계속 상승)` : `${ch.n} (${ch.y}) · ${idx}/${tot}라운드`;
   $('bkName').textContent = r.nm; $('bkPlace').textContent = `${r.pl} · ${r.yr}년`;
   $('bkSrc').innerHTML = '';
   $('bkText').textContent = (first ? ch.sum + '\n\n' : '') + r.b;
@@ -680,7 +714,13 @@ function buildResult() {
   const r = R[V.rd], win = V.res.win; show('sResult');
   $('rsTitle').textContent = win ? (r.df ? '버텨 냈어요!' : '승리!') : '거점이 무너졌어요…';
   $('rsTitle').style.color = win ? '#2f6b2a' : '#a8322a';
-  $('rsHist').innerHTML = `<b>역사 이야기</b><br>${esc(r.r)}` + (win && r.df ? `<br><small>※ 실제 역사에서 이 전투는 조선에게 어려운 싸움이었어요. 게임에서는 '시간 벌기'로 표현했어요.</small>` : '');
+  { const nx = R[V.rd + 1], ch = CH[r.ch];
+    $('rsHist').innerHTML = `<div class="rv"><div class="rvh">📜 복기 카드 <small>${esc(r.pl)} · ${r.yr}년</small></div>`
+      + `<div class="rvs"><b>${esc(r.nm)}</b> — ${esc(ch.n)}(${esc(ch.y)})</div>`
+      + `<div class="rvt">${esc(r.r)}</div>`
+      + (win && r.df ? `<small>※ 실제 역사에서 이 전투는 조선에게 어려운 싸움이었어요. 게임에서는 '시간 벌기'로 표현했어요.</small>` : '')
+      + `<div class="rvq"><b>🔑 꼭 기억해요</b><br>${esc(r.q[0])}<br>👉 <b>${esc(r.q[1][r.q[2]])}</b> — ${esc(r.q[3])}</div>`
+      + (win && nx ? `<div class="rvn">▶ 다음 전투: <b>${esc(nx.nm)}</b> (${esc(nx.pl)} · ${nx.yr}년)</div>` : '') + `</div>`; }
   $('qText').textContent = '퀴즈! ' + r.q[0];
   $('qOpts').innerHTML = r.q[1].map((o, i) => `<button class="qo" data-i="${i}">${esc(o)}</button>`).join('');
   document.querySelectorAll('.qo').forEach((b) => b.onclick = () => { if (b.disabled) return; sendHost({ k: 'ans', i: +b.dataset.i }); });
@@ -690,7 +730,12 @@ function buildResult() {
   $('btnNext').style.display = win ? 'inline-block' : 'none'; $('btnRetry').style.display = win ? 'none' : 'inline-block';
   $('btnSkip').style.display = (!win && r.df) ? 'inline-block' : 'none';
   $('rsWait').style.display = Net.host ? 'none' : 'block';
+  // 읽기 시간 강제: 10초 동안 버튼이 잠겨요
+  clearInterval(rvTm); let left = FAST ? 1 : 10; const L = [['btnNext', '다음 라운드'], ['btnRetry', '다시 도전'], ['btnSkip', '역사 확인했으니 다음으로']];
+  const paint = () => { for (const [id, tx] of L) { const b = $(id); b.disabled = left > 0; b.textContent = left > 0 ? `📖 읽는 중… ${left}` : tx; } };
+  paint(); rvTm = setInterval(() => { left--; paint(); if (left <= 0) clearInterval(rvTm); }, 1000);
 }
+let rvTm = 0;
 function updateBrief() {
   const r = R[V.rd], mine = V.ans ? V.ans[Net.id] : null, n = Object.keys(V.ans || {}).length;
   document.querySelectorAll('#bqOpts .qo').forEach((b) => { const i = +b.dataset.i; if (mine != null) { b.disabled = true; b.classList.toggle('ok', i === r.q[2]); b.classList.toggle('no', i === mine && i !== r.q[2]); } });
@@ -704,13 +749,52 @@ function updateResult() {
 }
 function hidOK() { try { return localStorage.getItem('jd_hid') === '1'; } catch (e) { return false; } }
 function refreshHid() { const hb = $('roleHid'); if (hb) hb.textContent = hidOK() ? '⭐ 이순신' : '🔒 히든'; }
+function rankLoad() { try { return JSON.parse(localStorage.getItem('jd_rank') || '[]'); } catch (e) { return []; } }
+function fmtT(t) { return String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); }
 function buildEnd() {
+  show('sEnd'); const hostOnly = (id, on) => { $(id).style.display = on && Net.host ? 'inline-block' : 'none'; };
+  if (V.endless && V.es && V.es.over) {
+    const e = V.es, score = e.tot + e.k + e.q * 30, nm = (V.pl.find((x) => x.id === Net.id) || {}).name || '학생';
+    let rk = rankLoad(); rk.push({ n: nm, s: score, t: e.tot, k: e.k, q: e.q, r: V.cyc * R.length + V.rd + 1, d: Date.now() }); rk.sort((a, b) => b.s - a.s); rk = rk.slice(0, 30); try { localStorage.setItem('jd_rank', JSON.stringify(rk)); } catch (x) {}
+    const pos = rk.findIndex((x) => x.s === score && x.t === e.tot && x.k === e.k) + 1;
+    $('endH').textContent = '♾ 무한 모드 종료!';
+    $('endText').innerHTML = `<p><b>${V.cyc * R.length + V.rd + 1}번째 라운드</b>까지 버텼어요!</p><p>⏱ 버틴 시간 <b>${fmtT(e.tot)}</b> · ⚔ 처치 <b>${e.k}</b>마리 · 🧠 퀴즈 정답 <b>${e.q}</b>개</p><p>점수 = 버틴 초 + 처치 수 + 퀴즈 정답×30 → <b>${score}점</b>${pos ? ` (내 기기 기록 ${pos}위)` : ''}</p><small>랭킹은 이 기기에만 저장돼요. 시작 화면의 🏆 랭킹에서 볼 수 있어요.</small>`;
+    hostOnly('btnEndless', false); return;
+  }
   try { localStorage.setItem('jd_hid', '1'); } catch (e) {} refreshHid();
-  show('sEnd'); $('endText').innerHTML = CH.map((c) => `<p><b>${c.n}</b> — ${esc(c.sum)} <small>(${c.pg})</small></p>`).join('') + '<p><b>⭐ 히든 영웅 이순신 해금!</b> 방에서 역할을 고를 때 이순신을 고를 수 있어요. 거북선의 포로 싸워요.</p>';
+  $('endH').textContent = '끝까지 지켜 냈어요! 🎉';
+  $('endText').innerHTML = CH.map((c) => `<p><b>${c.n}</b> — ${esc(c.sum)} <small>(${c.pg})</small></p>`).join('') + '<p><b>⭐ 히든 영웅 이순신 해금!</b> 방에서 역할을 고를 때 이순신을 고를 수 있어요. 거북선의 포로 싸워요.</p><p><b>이제 무한 모드로 돌입합니다!</b> 30라운드가 끝없이 이어지고 적이 계속 강해져요. 버틴 시간·처치 수·퀴즈 정답으로 랭킹을 겨뤄 보세요.</p>';
+  hostOnly('btnEndless', true);
 }
 
 // HUD
+let dexT = 0;
+function dexLoad() { try { return Object.assign({ s: {}, h: {}, b: {} }, JSON.parse(localStorage.getItem('jd_dex') || '{}')); } catch (e) { return { s: {}, h: {}, b: {} }; } }
+function dexRec() { // 도감: 이 기기에서 만난 시너지·영웅·적장을 기록해요
+  if (++dexT % 20) return; const me = V.pl.find((x) => x.id === Net.id); if (!me) return; const d = dexLoad(); let ch = false;
+  if (!d.h[me.role]) { d.h[me.role] = 1; ch = true; }
+  for (const y of SYN) { const lv = me.cards[y.a] && me.cards[y.b] ? ((me.cards[y.a] >= 5 && me.cards[y.b] >= 5) ? 2 : 1) : 0; if (lv > (d.s[y.k] || 0)) { d.s[y.k] = lv; ch = true; } }
+  if (V.ph === 'battle' && (V.en || []).some((e) => e[1] === 'boss') && !d.b[V.rd]) { d.b[V.rd] = 1; ch = true; }
+  if (ch) try { localStorage.setItem('jd_dex', JSON.stringify(d)); } catch (e) {}
+}
+const HERO_BLURB = { archer: '활을 쏘는 사수예요. 멀리서 일직선의 적을 꿰뚫어요.', militia: '나라를 지키려고 스스로 일어난 백성 군대, 의병이에요. 환도로 앞의 적을 베어요.', monk: '임진왜란 때 서산대사 휴정, 사명대사 유정 같은 스님들이 승병을 이끌고 싸웠어요.', gunner: '화약 무기인 화포(대포)를 다루는 병사예요. 한 방에 무리를 날려요.', admiral: '이순신(1545~1598)은 조선 수군을 이끈 장수예요. 한산도 대첩을 이끌었고 노량 해전에서 전사했어요.' };
+function buildBook(tab) {
+  tab = tab || 'syn'; show('sBook'); document.querySelectorAll('#bookTabs button[data-t]').forEach((b) => b.classList.toggle('on', b.dataset.t === tab));
+  const d = dexLoad(), B = $('bookBody'); let h = '';
+  if (tab === 'syn') {
+    const got = SYN.filter((y) => d.s[y.k]).length; h = `<p class="bk-n">발견한 시너지 ${got}/${SYN.length} — 두 카드를 함께 가지면 보너스, 둘 다 Lv.5면 특별 효과가 열려요!</p><div class="bk-g">` + SYN.map((y) => { const lv = d.s[y.k] | 0; return `<div class="bk-c${lv ? '' : ' lk'}"><div class="bk-i"><img src="${ICON(y.a)}"><span>+</span><img src="${ICON(y.b)}"></div><b>${lv ? esc(y.n) : '???'}</b><span>${lv ? esc(y.d) : '아직 못 찾았어요'}</span><small>${lv ? esc(y.t) : (WEAP[y.a] ? '무기 + 무기' : '능력 + 능력') + ' 조합'}</small><em>${lv === 2 ? '⭐ 특별 효과 발견: ' + esc(y.sd) : lv ? '🔒 둘 다 Lv.5 → ' + esc(y.sd) : ''}</em></div>`; }).join('') + '</div>';
+  } else if (tab === 'hero') {
+    h = '<div class="bk-g">' + Object.keys(ROLE).map((k) => { const r = ROLE[k], ok = k === 'admiral' ? hidOK() : d.h[k]; return `<div class="bk-c${ok ? '' : ' lk'}"><b>${ok ? esc(r.n) : '???'}</b><span>${ok ? esc(HERO_BLURB[k]) : (k === 'admiral' ? '모든 라운드를 깨면 열려요' : '아직 써 보지 않았어요')}</span><small>${ok ? esc(r.tag.join(' · ')) : ''}</small></div>`; }).join('') + '</div>';
+  } else if (tab === 'boss') {
+    const seen = {}; BOSSN.forEach((b, i) => { if (!b) return; (seen[b[0]] = seen[b[0]] || { d: b[1], r: [], ok: 0 }).r.push(i); if (d.b[i]) seen[b[0]].ok = 1; });
+    const ks = Object.keys(seen); h = `<p class="bk-n">만난 적장 ${ks.filter((k) => seen[k].ok).length}/${ks.length} — 적장 설명은 교과서 밖 보충이라 선생님 확인이 필요해요.</p><div class="bk-g">` + ks.map((k) => { const x = seen[k]; return `<div class="bk-c${x.ok ? '' : ' lk'}"><b>${x.ok ? esc(k) : '???'}</b><span>${x.ok ? esc(x.d) : '아직 만나지 못했어요'}</span><small>${x.ok ? '출현: ' + x.r.map((i) => esc(R[i].nm)).join(', ') : ''}</small></div>`; }).join('') + '</div>';
+  } else {
+    const rk = rankLoad(); h = '<p class="bk-n">🏆 무한 모드 랭킹 (이 기기에만 저장돼요) · 점수 = 버틴 초 + 처치 수 + 퀴즈 정답×30</p>' + (rk.length ? '<table class="bk-t"><tr><th>순위</th><th>이름</th><th>점수</th><th>버틴 시간</th><th>처치</th><th>퀴즈</th><th>라운드</th></tr>' + rk.map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.n)}</td><td><b>${x.s}</b></td><td>${fmtT(x.t)}</td><td>${x.k}</td><td>${x.q}</td><td>${x.r}</td></tr>`).join('') + '</table>' : '<p>아직 기록이 없어요. 방에서 ♾ 무한 모드로 시작해 보세요!</p>');
+  }
+  B.innerHTML = h; B.scrollTop = 0;
+}
 function updateHUD() {
+  dexRec();
   const p = myP(); if (!p) return; const r = R[V.rd]; $('sBattle').classList.toggle('noarmy', V.obj === 'e');
   $('hudName').textContent = r.nm; const rem = Math.max(0, Math.ceil(V.dur - V.t)); $('hudT').textContent = String(Math.floor(rem / 60)).padStart(2, '0') + ':' + String(rem % 60).padStart(2, '0');
   $('barT').style.width = Math.min(100, V.t / V.dur * 100) + '%'; $('barB').style.width = (V.castle ? Math.max(0, V.bh / V.bm * 100) : Math.min(100, (V.obj === 'e' ? V.t / V.dur : V.obj === 'r' ? (V.cpt - V.cpn) / Math.max(1, V.cpt) : V.t / V.dur) * 100)) + '%'; { const OI = OBJINFO[V.obj]; let extra = ''; if (V.obj === 'e') extra = ` 🚩${V.fl || 0}`; else if (V.obj === 'r') extra = ` ${V.cpt - V.cpn}/${V.cpt}`; if (!V.castle) extra += `  ❤️×${Math.max(0, V.lives)}`; $('objBar').textContent = OI.ic + ' ' + OI.n + extra; }
@@ -720,7 +804,8 @@ function updateHUD() {
     const bu = $('btnUp'); bu.innerHTML = (V.castle ? '성 강화' : '진영 강화') + (V.upg >= 5 ? '<br><small>최대</small>' : `<br><small>Lv.${V.upg} · 🌾${V.ucost}</small>`); bu.classList.toggle('dis', V.upg >= 5 || V.food < V.ucost); } $('btnSummon').innerHTML = `소집<br><small>군량 ${V.cost}</small>`; $('btnSummon').classList.toggle('dis', V.food < V.cost || !V.un.includes(null));
   $('btnSkill').innerHTML = p.cd > 0 ? `함성<br><small>${Math.ceil(p.cd)}초</small>` : '함성<br><small>준비!</small>'; $('btnSkill').classList.toggle('dis', p.cd > 0 || p.down > 0);
   $('barHp').style.width = Math.max(0, p.hp / p.mx * 100) + '%'; $('barXp').style.width = Math.min(100, V.xp / V.need * 100) + '%'; $('hudLv').textContent = 'Lv.' + p.lv; { const av = $('meAv'); if (av.dataset.r !== p.role && window.SPR && SPR[RSP[p.role]]) { av.dataset.r = p.role; av.src = SPR[RSP[p.role]].p || SPR[RSP[p.role]].d; } }
-  const ok = p.offer ? p.offer.join() : ''; if (ok !== lastOffer) { lastOffer = ok; const box = $('cards'); if (!p.offer) box.style.display = 'none'; else { box.style.display = 'flex'; box.innerHTML = p.offer.map((id, i) => { const c = CARDS.find((x) => x.id === id), evo = id.startsWith('evo_'), base = evo ? id.slice(4) : id, cur = p.cards[id] || 0, pips = [1, 2, 3, 4, 5].map((n) => `<u class="${n <= cur ? 'f' : n === cur + 1 ? 'nx' : ''}"></u>`).join(''); const syn = SYN.filter((y) => (y.a === id && p.cards[y.b]) || (y.b === id && p.cards[y.a])).map((y) => `<i class="sy">🔗 ${y.n}</i>`).join(''); return `<div class="card${evo ? ' evo' : ''}${!cur && !evo ? ' nw' : ''}" data-i="${i}">${evo ? '<em class="bd">★ 진화!</em>' : !cur ? '<em class="bd">NEW!</em>' : ''}<img class="ci" src="${ICON(base)}"><b>${c.n}</b><span class="ty">${WEAP[base] ? '무기' : ABIL[base] ? '능력' : '보급'}</span>${syn}<span>${c.d}</span>${evo ? '' : `<div class="pp5">${pips}</div>`}<small>${c.t}</small></div>`; }).join(''); box.querySelectorAll('.card').forEach((d) => d.onpointerdown = () => { sendHost({ k: 'card', i: +d.dataset.i }); box.style.display = 'none'; lastOffer = ''; }); } }
+  const ok = p.offer ? p.offer.join() + '|' + (p.qz ? p.qz.q : '') + p.qs : ''; if (ok !== lastOffer) { lastOffer = ok; const box = $('cards'); if (!p.offer) box.style.display = 'none'; else if (p.qz && !p.qs) { box.style.display = 'flex'; box.className = 'qz'; box.innerHTML = `<div class="qzb"><em>🧠 레벨 업! 문제를 맞히면 보너스 카드 1장 · ${esc(p.qz.tag)}</em><b>${esc(p.qz.q)}</b><div class="qzo">${p.qz.o.map((o, i) => `<button data-i="${i}">${esc(o)}</button>`).join('')}</div></div>`; box.querySelectorAll('button').forEach((d) => d.onpointerdown = () => sendHost({ k: 'qa', i: +d.dataset.i })); }
+  else { box.style.display = 'flex'; box.className = p.offer.length > 3 ? 'c4' : ''; box.innerHTML = (p.qz ? `<div class="qres ${p.qs === 1 ? 'ok' : 'no'}">${p.qs === 1 ? '⭕ 정답! 보너스 카드가 생겼어요!' : '❌ 아쉬워요!'} ${esc(p.qz.w || '')}</div>` : '') + p.offer.map((id, i) => { const c = CARDS.find((x) => x.id === id), evo = id.startsWith('evo_'), base = evo ? id.slice(4) : id, cur = p.cards[id] || 0, pips = [1, 2, 3, 4, 5].map((n) => `<u class="${n <= cur ? 'f' : n === cur + 1 ? 'nx' : ''}"></u>`).join(''); const syn = SYN.filter((y) => (y.a === id && p.cards[y.b]) || (y.b === id && p.cards[y.a])).map((y) => `<i class="sy">🔗 ${y.n}</i>`).join(''); return `<div class="card${evo ? ' evo' : ''}${!cur && !evo ? ' nw' : ''}" data-i="${i}">${evo ? '<em class="bd">★ 진화!</em>' : !cur ? '<em class="bd">NEW!</em>' : ''}<img class="ci" src="${ICON(base)}"><b>${c.n}</b><span class="ty">${WEAP[base] ? '무기' : ABIL[base] ? '능력' : '보급'}</span>${syn}<span>${c.d}</span>${evo ? '' : `<div class="pp5">${pips}</div>`}<small>${c.t}</small></div>`; }).join(''); box.querySelectorAll('.card').forEach((d) => d.onpointerdown = () => { sendHost({ k: 'card', i: +d.dataset.i }); box.style.display = 'none'; lastOffer = ''; }); } }
   if (V.info && V.info.id !== lastInfoId) { lastInfoId = V.info.id; const ib = $('infoBox'); ib.innerHTML = `<b>${esc(V.info.tt)}</b><span>${esc(V.info.tx)}</span>`; ib.classList.add('on'); clearTimeout(infoTm); infoTm = setTimeout(() => ib.classList.remove('on'), V.info.tx.length > 40 ? 8000 : 3500); }
   const ek = V.ev ? V.ev.t + V.ev.q : ''; const evb = $('evBox');
   if (ek !== lastEvKey) { lastEvKey = ek; if (!V.ev) evb.style.display = 'none'; else { evb.style.display = 'block'; evb.innerHTML = `<h3>${V.ev.t}</h3><p>${V.ev.q} <small>(친구들과 투표!)</small></p><div>${V.ev.o.map((o, i) => `<button class="evo" data-i="${i}"><b>${o.n}</b><small>${o.d}</small></button>`).join('')}</div><p id="evV"></p>`; evb.querySelectorAll('.evo').forEach((b) => b.onpointerdown = () => { sendHost({ k: 'vote', i: +b.dataset.i }); evb.querySelectorAll('.evo').forEach((x) => x.classList.toggle('on', x === b)); }); } }
@@ -1006,6 +1091,7 @@ function draw() {
   const dt = DT;
   for (let i = effects.length - 1; i >= 0; i--) { const f = effects[i]; f.life -= dt; if (f.life <= 0) { effects.splice(i, 1); continue; } const t = 1 - f.life / f.mx;
     if (f.k === 'sh') { const a = f.a, kd = a[5] || ''; const dx = a[2] - a[0], dy = a[3] - a[1], L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+      if (a[9] === 1) { const tt = Math.min(1, t * 1.6); cx.save(); cx.globalAlpha = 0.55 * (1 - tt); cx.strokeStyle = '#ffe27a'; cx.lineWidth = 7 * (1 - tt * 0.6); cx.lineCap = 'round'; cx.beginPath(); cx.moveTo(a[0], a[1]); cx.lineTo(a[2], a[3]); cx.stroke(); cx.globalAlpha = 0.9 * (1 - tt); cx.lineWidth = 3; cx.beginPath(); cx.arc(a[2], a[3], 8 + tt * 30, 0, 7); cx.stroke(); if (!LOW) { cx.fillStyle = '#fff6c0'; for (let k = 0; k < 5; k++) { const an = k * 1.26 + tt * 2; cx.beginPath(); cx.arc(a[2] + Math.cos(an) * (10 + tt * 26), a[3] + Math.sin(an) * (10 + tt * 26), 2.4 * (1 - tt), 0, 7); cx.fill(); } } cx.restore(); }
       if (kd === 'bow' || kd === 'archer' || kd === 'hwa' || kd === 'ebow') { const p = Math.min(1, t * 1.25), x = a[0] + dx * p, y = a[1] + dy * p; cx.strokeStyle = 'rgba(255,255,255,.35)'; cx.lineWidth = 1.5; cx.beginPath(); cx.moveTo(x - ux * 22, y - uy * 22); cx.lineTo(x, y); cx.stroke(); cx.strokeStyle = kd === 'ebow' ? '#ff9a8a' : '#f3e1b0'; cx.lineWidth = 2.5; cx.beginPath(); cx.moveTo(x - ux * 12, y - uy * 12); cx.lineTo(x, y); cx.stroke(); cx.fillStyle = '#fff'; cx.beginPath(); cx.moveTo(x + ux * 5, y + uy * 5); cx.lineTo(x - uy * 3, y + ux * 3); cx.lineTo(x + uy * 3, y - ux * 3); cx.fill(); }
       else if (kd === 'gun' || kd === 'gunner') { const p = Math.min(1, t * 2.2), x = a[0] + dx * p, y = a[1] + dy * p; if (t < 0.3) { cx.fillStyle = 'rgba(255,230,120,' + (1 - t * 3) + ')'; cx.beginPath(); cx.arc(a[0] + ux * 12, a[1] + uy * 12, 8 * (1 - t * 2), 0, 7); cx.fill(); } cx.strokeStyle = 'rgba(255,240,170,.5)'; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(x - ux * 26, y - uy * 26); cx.lineTo(x, y); cx.stroke(); cx.fillStyle = '#fff'; cx.beginPath(); cx.arc(x, y, 3.2, 0, 7); cx.fill(); }
       else if (kd === 'stone') { const p = Math.min(1, t * 1.5), x = a[0] + dx * p, y = a[1] + dy * p - Math.sin(Math.PI * p) * 22; cx.fillStyle = '#9aa0a8'; cx.strokeStyle = '#3b3f46'; cx.lineWidth = 1.5; cx.beginPath(); cx.arc(x, y, 3.8, 0, 7); cx.fill(); cx.stroke(); }
@@ -1068,7 +1154,7 @@ function draw() {
   if (V.evR) { cx.fillStyle = 'rgba(20,16,40,.85)'; rr(250, 214, 460, 66, 33); cx.fill(); cx.fillStyle = '#fff'; cx.font = 'bold 22px sans-serif'; cx.textAlign = 'center'; cx.fillText('결정: ' + V.evR, 480, 255); }
   cx.restore();
 }
-function boot() { initLobby(); setupInput(); applySt(); show('sLobby'); window.__dbg = { get G() { return G; }, get V() { return V; }, Net, R, hostCtl, hostMsg, stepBattle, makeSnap }; }
+function boot() { initLobby(); setupInput(); applySt(); show('sLobby'); window.__dbg = { get G() { return G; }, get V() { return V; }, Net, R, hostCtl, hostMsg, stepBattle, makeSnap, ER, pickQuiz, gainXp }; }
 boot();
 lobbyArt();
 if (window.BWJ) BWJ.init({ game: '조선의 위기 디펜스', ver: VER, parent: '#stage' });
