@@ -132,3 +132,5 @@
 - 끊긴 뒤 이어하기: localStorage jd_last(15분), 로비 btnResume. test/resume36.js
 - 영웅 꾸미기 강화: drawAura/trailTick(src/game.js), AUR 후광18+흔적7, 미리보기 cwPv. test/fx36.js fxui36.js
 - 업적 보상 꾸미기: LVF(레벨업 연출 8)·BRD(이름표 테두리 10)·ACHRW, 설정 fxs(친구·봇 이펙트 작게). test/ach36.js
+
+- 알림 정리(v0.33): 전투 중 상단 알림은 최대 3개만 보여요(일시정지·연결 안내 > 새 안내 > 진행 중 서브미션 > 협동 목표 > 습격 15초 전 > 날씨 6초 > 서브미션 대기). 안내/토스트 표시 시간도 단축. test/notes37.js
