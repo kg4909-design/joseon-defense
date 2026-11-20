@@ -1310,7 +1310,7 @@ function initLobby() {
     if (inApp && matchMedia('(pointer:coarse)').matches) setTimeout(() => { if (!isFs()) note(); }, 2500);
   }
   $('btnLoad').onclick = () => openSaves('load'); $('svClose').onclick = () => $('saveBox').classList.remove('on'); $('pSave').onclick = () => openSaves('save', V ? V.rd : 0); $('rsSave').onclick = () => openSaves('save', V && V.res && V.res.win ? V.rd + 1 : V.rd);
-  $('relayUrl').value = localStorage.getItem('hdg_relay') || DEFAULT_RELAY; { const rc = (Q.get('room') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); if (rc) $('roomCode').value = rc; if (Q.get('relay')) { $('relayUrl').value = Q.get('relay'); } } $('nick').value = localStorage.getItem('hdg_nick') || '';
+  { const sv = (localStorage.getItem('hdg_relay') || '').trim(); $('relayUrl').value = sv && !sv.includes('YOUR-WORKER') && /^wss?:\/\//.test(sv) ? sv : DEFAULT_RELAY; } { const rc = (Q.get('room') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); if (rc) $('roomCode').value = rc; if (Q.get('relay')) { $('relayUrl').value = Q.get('relay'); } } $('nick').value = localStorage.getItem('hdg_nick') || '';
   const sc = $('selStart'); sc.innerHTML = CH.map((c, i) => `<option value="${i * (i < 2 ? 10 : 5) + (i === 3 ? 0 : 0)}">${i + 1}. ${c.n}</option>`).join('');
   sc.innerHTML = [0, 10, 20, 25].map((v, i) => `<option value="${v}">${i + 1}. ${CH[i].n}</option>`).join('');
   $('btnSingle').onclick = () => startAs('single');
@@ -1332,8 +1332,9 @@ async function startAs(mode) {
   try {
     if (mode === 'single') { Net.mode = 'single'; Net.host = true; Net.id = 'me'; }
     else {
-      const url = $('relayUrl').value.trim(); localStorage.setItem('hdg_relay', url);
-      if (!/^wss?:\/\//.test(url) || url.includes('YOUR-WORKER')) throw '릴레이 주소를 먼저 넣어 주세요(선생님이 한 번만 설정)';
+      let url = $('relayUrl').value.trim(); if (!url || url.includes('YOUR-WORKER')) { url = DEFAULT_RELAY; $('relayUrl').value = url; }
+      if (url !== DEFAULT_RELAY && /^wss?:\/\//.test(url)) localStorage.setItem('hdg_relay', url); else if (url === DEFAULT_RELAY) localStorage.removeItem('hdg_relay');
+      if (!/^wss?:\/\//.test(url)) throw '릴레이 주소를 먼저 넣어 주세요(선생님이 한 번만 설정)';
       let code = ($('roomCode').value || '').trim().toUpperCase();
       if (mode === 'create') code = Array.from({ length: 4 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[rint(32)]).join('');
       else if (!code) throw '방 코드를 입력해 주세요';
