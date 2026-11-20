@@ -302,6 +302,7 @@ input[type=range]{touch-action:pan-x!important}
 #wxOv.night{background:radial-gradient(ellipse at 50% 50%,rgba(10,14,40,.2),rgba(8,10,34,.7))}
 #sBattle.duel #notes,#sBattle.duel #wxOv,#sBattle.duel #evBox,#sBattle.duel #escGo{display:none!important}
 #cwPv{position:static!important;inset:auto!important;display:block;margin:0 auto;width:300px!important;height:120px!important;max-width:100%;pointer-events:none}
+#achPv{position:static!important;inset:auto!important;display:block;margin:0 auto;width:300px!important;height:130px!important;max-width:100%;pointer-events:none}
 </style>
 </head><body>
 <div id="stage">
@@ -366,6 +367,7 @@ input[type=range]{touch-action:pan-x!important}
  <div class="sr"><b>배경음</b><button data-k="bgm" data-v="on">켜기</button><button data-k="bgm" data-v="off">끄기</button></div>
  <div class="sr"><b>효과음 크기</b><input type="range" id="volSfx" min="0" max="100" step="5"><span id="volSfxN" class="vn"></span></div>
  <div class="sr"><b>배경음 크기</b><input type="range" id="volBgm" min="0" max="100" step="5"><span id="volBgmN" class="vn"></span></div>
+ <div class="sr"><b>친구·봇 이펙트</b><button data-k="fxs" data-v="small">작게</button><button data-k="fxs" data-v="big">크게</button></div>
  <div class="sr"><b>화질</b><button data-k="q" data-v="auto">자동</button><button data-k="q" data-v="high">고화질</button><button data-k="q" data-v="low">저사양</button></div>
  <small>저사양: 해상도를 낮추고 30프레임으로 그려요. 적 수와 효과도 줄어요. 자동은 느려지면 스스로 저사양으로 바꿔요.</small>
  <button id="setHelp" class="sec" style="display:block;margin:10px auto 0;padding:8px 22px">❓ 게임 방법 다시 보기</button><button id="setClose">닫기</button></div>
