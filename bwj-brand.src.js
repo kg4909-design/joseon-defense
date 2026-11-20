@@ -46,6 +46,7 @@
     var key = 'bwj-fb-day:' + game, sent = false; try { sent = localStorage.getItem(key) === today(); } catch (e) {}
     var info = game + (ver ? ' ' + ver : '') + ' / ' + today();
     var m = el('div', { id: 'bwj-fb' }, '<div class="bx"><h3>💬 오류 신고·건의</h3>' +
+      '<div style="background:#fff3c4;color:#4a3410;border-radius:10px;padding:8px 10px;margin-bottom:8px;font-size:14px">📌 폼의 첫 질문 <b>“어떤 게임인가요?”</b>에 <b>' + game + '</b> 라고 적어 주세요!</div>' +
       '<ul><li><b>버그 신고</b>: 어디서 무엇을 하다가 어떻게 됐는지 적어 주세요.</li><li><b>건의</b>: 바라는 점이나 아이디어를 적어 주세요.</li></ul>' +
       '<div style="font-size:13px;color:#cbd">⚠ 이름·학교·연락처 같은 <b>개인정보는 쓰지 마세요</b>. 보호자나 선생님과 함께 보내 주세요. 답장은 못 드리지만 모아서 고칠게요.</div>' +
       '<div style="font-size:13px;margin-top:8px;color:#9fb">' + (sent ? '오늘은 이미 보냈어요. 내일 또 보내 주세요 😊' : '하루에 한 번만 보내 주세요.') + '</div>' +
