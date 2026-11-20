@@ -3,7 +3,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   for (const role of ['archer', 'militia', 'gunner']) for (const bhp of [3000, 5200]) {
     const p = await b.newPage({ viewport: { width: 1280, height: 720 } }); const errs = []; p.on('pageerror', (e) => errs.push(e.message));
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.32'); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.33'); });
     await p.goto('file:///home/claude/work/game/dist/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.waitForTimeout(3200);
     await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForTimeout(300); await p.click(`#roleRow button[data-r=${role}]`); await p.click('#btnStart'); await p.waitForTimeout(500);
     await p.click('#bqOpts .qo'); await p.click('#btnFight'); await p.waitForTimeout(500);

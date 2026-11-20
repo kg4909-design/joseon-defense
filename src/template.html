@@ -174,7 +174,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #lobSet{max-width:calc(100vw - 24px);box-sizing:border-box}#lobSet[open]{position:fixed;left:12px;right:12px;bottom:10px;z-index:35;background:var(--cream);border:3px solid var(--line);border-radius:16px;padding:8px 12px}#relayUrl{width:100%!important;max-width:520px;box-sizing:border-box}
 @media (min-width:900px){#sRoom>.row{flex-wrap:nowrap!important}#sRoom>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}#hostBox{flex:0 0 490px;width:490px;max-width:46vw;min-width:320px;margin-top:30px}#hostBox>.row{margin:4px 0!important}#hostBox>b{display:block;margin-bottom:2px}}
 #rsHost{position:sticky;bottom:0;padding:10px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 40%);z-index:3}
-@media (max-height:620px){.screen:not(#sBattle):not(#sLobby){zoom:.74;padding:14px 20px}}
+@media (max-height:620px){.screen:not(#sBattle):not(#sLobby){padding:14px 20px}}
 .card.nw,.card.evo{animation:glow .8s infinite alternate!important}@keyframes glow{from{box-shadow:0 5px 0 var(--line),0 0 4px #ffb300}to{box-shadow:0 5px 0 var(--line),0 0 18px #ffb300}}
 .card .pp5 u.nx{animation:none}
 .noarmy #btnSummon,.noarmy #btnSkill,.noarmy #btnUp,.noarmy #btnRep,.noarmy #hudArmy{display:none!important}
@@ -187,7 +187,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #saveBox{display:none;position:absolute;inset:0;background:rgba(30,24,16,.55);z-index:40;align-items:center;justify-content:center}#saveBox.on{display:flex}
 #saveBox .pp,#pauseBox .pp{display:flex;flex-direction:column;max-height:92%;box-sizing:border-box}#svList{overflow-y:auto;min-height:0;flex:1 1 auto;-webkit-overflow-scrolling:touch}#svClose{flex:0 0 auto}
 #svList{display:flex;flex-direction:column;gap:8px}.svb{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:8px 16px;font-size:18px;background:var(--cream2);color:var(--txt);border:2px solid var(--line);box-shadow:0 3px 0 var(--line)}.svb small{font-size:13px;color:var(--sub)}.svb:disabled{opacity:.5}
-@media (min-width:700px){.screen#sBrief{zoom:.64!important}}
+@media (min-width:700px){.screen#sBrief{zoom:.86!important}}
 #bfBar{position:sticky;bottom:0;padding:8px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 35%);z-index:3}@media (min-width:700px){#bqOpts{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}#bqOpts .qo{margin:0}}
 #sBrief{padding-bottom:12px}#bQ{margin:6px 0}#bQ .qo{display:block;width:100%;text-align:left;margin:4px 0;padding:8px 14px;font-size:17px}
 #btnSingle,#btnLoad,#btnCreate{white-space:nowrap;font-size:18px;padding:11px 10px;flex:1 1 auto}
@@ -255,6 +255,25 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #rsHost .row{gap:8px}@media (min-width:700px){#rsHost .row{flex-wrap:nowrap}#rsHost button{min-width:132px;white-space:nowrap}}
 
 #dropBox{display:none;position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:99990;background:rgba(168,50,42,.95);color:#fff;font-weight:800;font-size:16px;padding:8px 18px;border-radius:99px;border:2px solid rgba(255,255,255,.4);box-shadow:0 3px 0 rgba(0,0,0,.3);pointer-events:none}
+
+/* v0.33 UI 정리: 겹침 방지 + 폰/태블릿 가독성 */
+#notes{left:53%;max-width:min(400px,44%)}
+#hudWeap{width:240px}
+#cards{z-index:25;width:min(700px,96%)!important;bottom:8px!important}
+#cards .card{width:156px!important}#cards.c4 .card{width:150px!important}
+#cards.qz{width:min(640px,86%)!important}
+#sBattle.pick #btnSummon,#sBattle.pick #btnSkill,#sBattle.pick #btnCr,#sBattle.pick #btnUp,#sBattle.pick #btnRep{opacity:.15;pointer-events:none;filter:grayscale(1);transition:opacity .2s}
+#evBox{z-index:26}
+.sm #raidTag,.sm #coopTag,.sm #pauseTag,.sm #toast,.sm #waitTag,.sm #lagTag{font-size:18px;padding:6px 16px}
+.sm #infoBox b{font-size:20px}.sm #infoBox span{font-size:17px}
+.sm #hudWeap .eq,.sm #hudWeap .wc{font-size:15px}
+.sm #me{font-size:15px}.sm #cards .card b{font-size:19px!important}.sm #cards .card span{font-size:15px!important}
+.sm .qzb b{font-size:19px}.sm .qzo button{font-size:18px}
+.sm .screen:not(#sBattle) button{min-height:40px}
+#escGo{display:none;position:absolute;right:10px;top:178px;align-items:center;gap:6px;background:rgba(200,50,40,.9);color:#fff;border:3px solid #fff;border-radius:18px;padding:6px 12px;z-index:11;pointer-events:none;box-shadow:0 4px 0 rgba(0,0,0,.35);animation:escp .7s infinite alternate}
+#escGo b{font-size:17px;line-height:1.2;text-align:center}#escGo i{font-style:normal;font-size:34px;font-weight:900}
+@keyframes escp{from{transform:translateX(0)}to{transform:translateX(8px)}}
+.sm #escGo b{font-size:19px}
 </style>
 </head><body>
 <div id="stage">
@@ -333,7 +352,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
   <div id="hudMid"><span id="hudT">00:00</span><div id="objBar" class="cap"></div><div id="hudBase"><div class="bar"><i id="barB"></i></div></div><i id="barT" style="display:none"></i></div>
   <div id="joyZone"><div id="joyRing"></div><div id="joyKnob"></div></div>
   <button id="btnSummon">소집</button><button id="btnSkill">함성</button><button id="btnCr" style="display:none"></button>
-  <div id="cards"></div><div id="evBox"></div><div id="notes"><div id="infoBox"></div><div id="raidTag" style="display:none"></div><div id="coopTag" style="display:none"></div><div id="pauseTag"></div><div id="waitTag" style="display:none"></div><div id="lagTag" style="display:none">📶 방장 화면이 멈춘 것 같아요. 잠시만 기다려 주세요…</div></div>
+  <div id="escGo"><i>➡</i><b>오른쪽으로<br>계속 달리세요!</b><i>➡</i></div><div id="cards"></div><div id="evBox"></div><div id="notes"><div id="infoBox"></div><div id="raidTag" style="display:none"></div><div id="coopTag" style="display:none"></div><div id="pauseTag"></div><div id="waitTag" style="display:none"></div><div id="lagTag" style="display:none">📶 방장 화면이 멈춘 것 같아요. 잠시만 기다려 주세요…</div></div>
 </div>
 
 <div class="screen" id="sResult">
@@ -354,7 +373,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 addEventListener('pointerdown',go,{once:true});})();
 </script>
 <script>
-function fit(){var s=Math.min(innerWidth/960,innerHeight/540),st=document.getElementById('stage');st.style.transform='scale('+s+')';st.style.left=(innerWidth-960*s)/2+'px';st.style.top=(innerHeight-540*s)/2+'px'}
+function fit(){var s=Math.min(innerWidth/960,innerHeight/540),st=document.getElementById('stage');st.style.transform='scale('+s+')';st.className=s<.85?'sm':'';st.style.left=(innerWidth-960*s)/2+'px';st.style.top=(innerHeight-540*s)/2+'px'}
 addEventListener('resize',fit);fit();
 </script>
 <script>
