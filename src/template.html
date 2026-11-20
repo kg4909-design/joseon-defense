@@ -288,7 +288,8 @@ input[type=range]{touch-action:pan-x!important}
 #hostBox{flex:0 0 470px!important;width:470px!important;max-width:none!important;min-width:0!important;margin-top:0!important}
 #rsStart{position:sticky;bottom:0;z-index:5;padding:8px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 30%);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 #rsStart button{margin:0}
-#stage[data-scr=sBrief] #bwj-badge,#stage[data-scr=sResult] #bwj-badge,#stage[data-scr=sEnd] #bwj-badge,#stage[data-scr=sRoom] #bwj-badge{top:6px!important}
+#stage[data-scr=sBrief] #bwj-badge,#stage[data-scr=sResult] #bwj-badge,#stage[data-scr=sEnd] #bwj-badge,#stage[data-scr=sRoom] #bwj-badge,#stage[data-scr=sBook] #bwj-badge{top:6px!important}
+#bookTabs{padding-right:210px;flex-wrap:wrap}
 #sBrief,#sResult,#sEnd{padding-right:20px}
 #roleRow{gap:6px!important;margin-top:4px!important}#roleRow button{font-size:15px!important;padding:4px 11px!important}
 #sRoom h2{margin:0 0 4px!important;font-size:26px}#sRoom>.row:first-of-type{margin:0 0 4px!important}#coopInfo{margin-bottom:4px!important;font-size:14px!important}
@@ -309,7 +310,7 @@ input[type=range]{touch-action:pan-x!important}
   <canvas id="lobCv" width="960" height="540"></canvas>
   <div class="mist m1"></div><div class="mist m2"></div>
   <div id="lobArt"></div>
-  <div id="lobBtns"><button id="btnUpdL">📢 업데이트 노트</button><button id="btnFs">⛶ 전체화면</button><button id="btnDex">📖 도감</button><button id="btnCw">🎁 보관함·뽑기</button><button id="btnRank">🏆 랭킹</button></div><div id="fsTip"></div>
+  <div id="lobBtns"><button id="btnUpdL">📢 업데이트 노트</button><button id="btnFs">⛶ 전체화면</button><button id="btnDex">📖 도감</button><button id="btnCw">🎁 보관함·뽑기</button><button id="btnRank">🏅 도전·업적</button></div><div id="fsTip"></div>
   <div id="updModal"><div class="um"><button id="umX" aria-label="닫기">✕</button><h3>📜 업데이트 노트</h3><p id="umSub" class="us"></p><div id="umBody"></div><div class="row"><button id="umClose">시작하러 가기</button><button id="umAll" class="sec">이전 업데이트 모두 보기</button></div></div></div>
   <div id="lobTitle">
     <div class="lt-tag">초등 사회 · 역사 디펜스</div>
@@ -381,7 +382,7 @@ input[type=range]{touch-action:pan-x!important}
 </div>
 
 <div class="screen" id="sResult">
-  <h2 id="rsTitle"></h2><div id="rsReward"></div>
+  <h2 id="rsTitle"></h2><div id="rsReward"></div><div class="panel" id="dailyRes" style="display:none"></div>
   <div class="panel" id="merBox" style="display:none"></div>
   <div class="panel" id="rsHist"></div>
   <div id="qBox"><div class="panel" id="qText" style="margin-bottom:0"></div><div id="qOpts"></div><div id="qWhy" style="margin:6px 0;min-height:22px"></div></div>
@@ -389,7 +390,7 @@ input[type=range]{touch-action:pan-x!important}
   <div id="rsWait" style="display:none">방장이 다음으로 넘어가길 기다려요…</div>
 </div>
 
-<div class="screen" id="sBook"><h2 style="margin:0">📖 도감 · 🏆 랭킹</h2><div id="bookTabs" class="row" style="margin:8px 0"><button data-t="syn">시너지</button><button data-t="hero">영웅</button><button data-t="boss">적장</button><button data-t="rank">랭킹</button><button id="bookBack" class="sec">← 처음으로</button></div><div id="bookBody"></div></div>
+<div class="screen" id="sBook"><h2 style="margin:0">📖 도감 · 🏅 도전·업적 · 🏆 랭킹</h2><div id="bookTabs" class="row" style="margin:8px 0"><button data-t="syn">시너지</button><button data-t="hero">영웅</button><button data-t="boss">적장</button><button data-t="rank">랭킹</button><button data-t="daily">일일 도전</button><button data-t="ach">업적·칭호</button><button id="bookBack" class="sec">← 처음으로</button></div><div id="bookBody"></div></div>
 <div class="screen" id="sEnd"><h2 id="endH">끝까지 지켜 냈어요! 🎉</h2><div class="panel" id="endText" style="font-size:16px;white-space:normal"></div><button id="btnEndless" style="display:none">♾ 무한 모드 시작!</button> <button onclick="location.reload()">처음으로</button></div>
 </div>
 <div id="rotWarn"><div><div class="rw-ph">📱</div><b>화면을 가로로 돌려 주세요</b><p>이 게임은 가로 화면에서 가장 잘 보여요.<br>자동 회전이 꺼져 있다면 켜 주세요!</p></div></div>

@@ -2,7 +2,7 @@
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
 const VER = 'v0.33';
 const UPDATES = [
-  { v: 'v0.33', d: '11/20', t: ['🎯 혼자 하기(게임 시작)에서도 서브미션이 나와요! 40초쯤마다 제한시간 30초 미션 — 성공하면 이득, 실패하면 페널티 (무한 모드는 제외)', '📱 폰에서 방 화면을 못 내려 게임을 시작할 수 없던 문제를 고쳤어요! (시작 버튼은 항상 아래에 보여요) 방 화면·업데이트 노트에서 로고가 글자를 가리던 것도 정리했어요', '⏩ 탈출에서 한 친구가 오래(25초) 못 오면 늦은 친구를 앞으로 데려가 함께 이동해요', '🚩 탈출: 살아있는 친구 모두가 오른쪽 끝에 닿아야 다음 구간으로 넘어가요! 늦은 친구가 있으면 "OO 친구가 아직 도착하지 못했습니다!" 라고 알려줘요 (봇은 제외)', '🎯 서브미션은 40초마다, 제한시간 30초로 모든 목표(성 수비·버티기·적장·기습·탈출)에서 나와요', '🎵 장마다 다른 전투 음악(임진·정유·정묘·병자) + 로비·준비·브리핑·결과 화면 음악이 생겼어요', '🔉 배경음을 전체적으로 작게 줄였어요 (설정에서 더 키우거나 줄일 수 있어요)', '🎵 일기토(보스전)에 전용 음악이 생겼어요! 끝나면 원래 배경음으로 돌아와요', '📖 퀴즈를 틀리면 정답과 설명을 7초 동안 보여 준 뒤에 카드가 열려요', '🎯 서브미션이 한 판 안에서 계속 이어져요 (성공 → 10초 뒤 다음 미션 · 실패하면 페널티 · 3연속 성공하면 지원군!)', '⚔ 일기토에서 못 이기면 적장이 병력을 휘몰아치거나(대규모 웨이브), 성에 큰 타격을 줘요', '🃏 퀴즈 푸는 친구가 카드를 골라요! 능력 카드는 모두에게, 무기 카드는 고른 친구만(다른 친구는 가진 무기가 +1). 다른 친구는 카드를 눌러 추천해요', '🎯 협동 서브미션 7종: 보급기지 습격 · 식량 수송대 차단 · 피난민 호위 · 쌍둥이 봉화 · 약초 수집 · 돌격 막아내기 · 빠른 처치 경쟁 (성공하면 우리 편에 유리!)', '🎲 협동전은 5분 단판! 어떤 시나리오가 걸릴지는 시작해야 알 수 있어요 (탈출은 ➡ 오른쪽으로 계속 달리세요! 안내, 적도 오른쪽에서 많이 나와요)', '⚔ 보스전에서 얻은 무기가 모두 나가고, 활 사거리를 대포보다 짧게 조정했어요', '📱 폰·태블릿에서 버튼/글자/카드가 겹치지 않게 화면을 정리했어요', '🧠 레벨 업 퀴즈가 바뀌었어요! 같이 하기에서는 한 판에 한 친구(랜덤)가 문제를 풀고, 다른 친구들도 같은 문제를 보며 힌트를 줄 수 있어요.', '맞히면 모두에게 카드 4장이 열리고, 틀리면 카드 2장만 열려요. 혼자 할 때도 똑같아요.', '문제를 크게 늘렸어요! 선사 시대부터 지금 싸우는 전쟁 시대까지의 문제가 섞여 나와요 (임진왜란 판은 임진왜란까지, 병자호란 판은 병자호란까지).'] },
+  { v: 'v0.33', d: '11/20', t: ['📅 일일 도전(하루 한 판, 날마다 새 규칙)과 🏅 업적·칭호가 생겼어요! 도감 화면의 「도전·업적」에서 볼 수 있어요', '🌧 협동 이벤트 3종: 성 위험하면 🏰 성벽 수리 작전, 🌧🌫🌙 날씨 변화, 연속 실패하면 😞 사기 하락', '🔥 어려움에서는 적 장수 난입 · 양쪽 습격 · 갑옷 입은 적(스킬로 깨기)이 나와요', '🎯 혼자 하기(게임 시작)에서도 서브미션이 나와요! 40초쯤마다 제한시간 30초 미션 — 성공하면 이득, 실패하면 페널티 (무한 모드는 제외)', '📱 폰에서 방 화면을 못 내려 게임을 시작할 수 없던 문제를 고쳤어요! (시작 버튼은 항상 아래에 보여요) 방 화면·업데이트 노트에서 로고가 글자를 가리던 것도 정리했어요', '⏩ 탈출에서 한 친구가 오래(25초) 못 오면 늦은 친구를 앞으로 데려가 함께 이동해요', '🚩 탈출: 살아있는 친구 모두가 오른쪽 끝에 닿아야 다음 구간으로 넘어가요! 늦은 친구가 있으면 "OO 친구가 아직 도착하지 못했습니다!" 라고 알려줘요 (봇은 제외)', '🎯 서브미션은 40초마다, 제한시간 30초로 모든 목표(성 수비·버티기·적장·기습·탈출)에서 나와요', '🎵 장마다 다른 전투 음악(임진·정유·정묘·병자) + 로비·준비·브리핑·결과 화면 음악이 생겼어요', '🔉 배경음을 전체적으로 작게 줄였어요 (설정에서 더 키우거나 줄일 수 있어요)', '🎵 일기토(보스전)에 전용 음악이 생겼어요! 끝나면 원래 배경음으로 돌아와요', '📖 퀴즈를 틀리면 정답과 설명을 7초 동안 보여 준 뒤에 카드가 열려요', '🎯 서브미션이 한 판 안에서 계속 이어져요 (성공 → 10초 뒤 다음 미션 · 실패하면 페널티 · 3연속 성공하면 지원군!)', '⚔ 일기토에서 못 이기면 적장이 병력을 휘몰아치거나(대규모 웨이브), 성에 큰 타격을 줘요', '🃏 퀴즈 푸는 친구가 카드를 골라요! 능력 카드는 모두에게, 무기 카드는 고른 친구만(다른 친구는 가진 무기가 +1). 다른 친구는 카드를 눌러 추천해요', '🎯 협동 서브미션 7종: 보급기지 습격 · 식량 수송대 차단 · 피난민 호위 · 쌍둥이 봉화 · 약초 수집 · 돌격 막아내기 · 빠른 처치 경쟁 (성공하면 우리 편에 유리!)', '🎲 협동전은 5분 단판! 어떤 시나리오가 걸릴지는 시작해야 알 수 있어요 (탈출은 ➡ 오른쪽으로 계속 달리세요! 안내, 적도 오른쪽에서 많이 나와요)', '⚔ 보스전에서 얻은 무기가 모두 나가고, 활 사거리를 대포보다 짧게 조정했어요', '📱 폰·태블릿에서 버튼/글자/카드가 겹치지 않게 화면을 정리했어요', '🧠 레벨 업 퀴즈가 바뀌었어요! 같이 하기에서는 한 판에 한 친구(랜덤)가 문제를 풀고, 다른 친구들도 같은 문제를 보며 힌트를 줄 수 있어요.', '맞히면 모두에게 카드 4장이 열리고, 틀리면 카드 2장만 열려요. 혼자 할 때도 똑같아요.', '문제를 크게 늘렸어요! 선사 시대부터 지금 싸우는 전쟁 시대까지의 문제가 섞여 나와요 (임진왜란 판은 임진왜란까지, 병자호란 판은 병자호란까지).'] },
   { v: 'v0.32', d: '11/20', t: ['🌟 전설 영웅 4명 더 등장! 곽재우(홍의장군) · 휴정(서산대사) · 유정(사명대사) · 진린(명나라 수군 도독, 교과서 밖 보충)', '곽재우: 이동이 빠르고, 스킬 \'홍의 분신\'으로 적을 잠깐 멈춰 세워요 · 휴정: 근처 동료가 천천히 회복하고, 스킬 \'격문\'으로 동료 공격력을 올려요', '유정: 단단하고, 스킬 \'호국 결계\'로 6초 동안 사라지지 않는 결계를 펼쳐 적을 느리게 하고 다치게 해요 · 진린: 스킬 \'명군 지원 포격\'으로 여러 곳에 포탄을 떨어뜨려요', '전설 영웅 조각은 권율 → 김시민 → 곽재우 → 휴정 → 유정 → 진린 순서로 모여요. 영웅 그림도 새로 바뀌었어요.'] },
   { v: 'v0.31', d: '11/20', t: ['🌟 전설 영웅 김시민 등장! 진주대첩의 수성 명장 — 성 근처에서 받는 피해가 줄고, 스킬 \'진주성 철벽\'으로 성을 고치고 동료에게 방패막을 쳐 줘요', '영웅마다 고유 패시브와 스킬 이펙트가 생겼어요: 권율(주변 동료 공격력↑ · 돌이 쏟아지는 행주 돌비), 이순신(체력이 낮을수록 강해짐 · 학의 날개 모양 학익진), 김시민', '협동 보상 조각은 권율 → 김시민 순서로 모여요 (다음 패치마다 전설 영웅이 늘어요)', '전설·히든 영웅은 자기만의 색 후광이 둘러요'] },
   { v: 'v0.30', d: '11/20', t: ['🎁 협동전을 깨면 🎟 뽑기권과 🧩 전설 영웅 조각을 받아요! 로비의 "보관함·뽑기"에서 확인해요.', '🌟 전설 영웅 권율 등장! 조각 10개를 모으면 열려요 (행주대첩의 명장 · 시작 무기 화차 · 스킬 행주 돌비). 패치마다 전설 영웅이 늘어날 예정이에요.', '✨ 뽑기로 영웅 발밑 꾸미기(기운)를 얻어요. 확률은 화면에 적혀 있고, 10번째엔 희귀 이상·30번째엔 전설이 확정! 돈은 전혀 들지 않아요.', '🔥 새 협동 미션: 쌍둥이 봉화(두 발판에 한 명씩 동시에 서기)·속전속결(시간 안에 기지 격파). 성 방어 라운드는 이중 전선이에요.', '🏁 협동 난이도 1 연습 · 2 도전(기본) · 3 극한. 높을수록 적이 강하고 제한 시간이 짧지만 보상이 커요.'] },
@@ -234,9 +234,9 @@ function startRound(i) {
   const k = 2 + (i >= 13 ? 1 : 0) + (i >= 22 ? 1 : 0), b0 = rnd(0, 6.283); G.dirs = []; for (let j = 0; j < k; j++) G.dirs.push(b0 + j * 6.283 / k);
   G.lives = G.castle ? 99 : G.obj === 'e' ? 0 : G.order.length + 2; G.waveT = G.endless ? 22 : 40; G.firstRaid = !G.endless; G.ambN = 0; G.bm = [false, false]; G.bInv = 0; G.bInvHp = 0; G.repCd = 0; G.gi = 0; G.bossOut = false; G.bossDead = false; G.finalDead = false; G.campPos = []; G.dmx = 1; G.er = -1; G.nightRd = false; G.bpi0 = rint(5); G.bossI = 0; G.bossTimes = (ob === 'd' || ob === 's') ? (P >= 170 ? [120, 240].filter((x) => x < P - 15) : [Math.max(P * 0.5, P - 60)]) : []; if ((ob === 'd' || ob === 's') && coopOf().gen) { const ex = coopOf().gen, at = [Math.max(35, P * 0.3), Math.max(60, P * 0.68)]; for (let q = 0; q < ex; q++) G.bossTimes.push(at[q]); G.bossTimes.sort((a, b) => a - b); }
   G.goals = ob === 'e' ? [[ww * 0.3, roadY(ww * 0.3, ww, wh)]] : [];
-  G.wx = null; G.wxEm = 1; G.wxHm = 1; G.wxSp = 1; G.wxNext = 60; G.moraleT = 0; G.skUntil = 0; G.hdT = 45; G.hd2 = null; G.info = null; G.sm = null; G.spSlow = 0; G.spFast = 0; G.kc = 0; G.ambT = G.endless ? 8 : 34; G.runX = 0; G.souls = []; G.pj = []; G.magT = 0; G.nl = 0; G.nIn = false; G.evR = null; G.evShow = 0; G.units = new Array(SLOTN).fill(null); G.sumN = 0; G.sumMiss = 0; G.buffAtk = 0; G.slowT = 0; G.evDone = [false, false];
+  G.s3 = 0; G.wx = null; G.wxEm = 1; G.wxHm = 1; G.wxSp = 1; G.wxNext = 60; G.moraleT = 0; G.skUntil = 0; G.hdT = 45; G.hd2 = null; G.info = null; G.sm = null; G.spSlow = 0; G.spFast = 0; G.kc = 0; G.ambT = G.endless ? 8 : 34; G.runX = 0; G.souls = []; G.pj = []; G.magT = 0; G.nl = 0; G.nIn = false; G.evR = null; G.evShow = 0; G.units = new Array(SLOTN).fill(null); G.sumN = 0; G.sumMiss = 0; G.buffAtk = 0; G.slowT = 0; G.evDone = [false, false];
   G.baseMax = Math.round((G.cm ? CLV[G.cl || 2].bs : 1) * 600 * G.dif.bs * (1 + 0.2 * (G.wallN || 0)) * (1 + 0.12 * Math.max(0, ...G.order.map((id) => (G.pl[id].mer && G.pl[id].mer.wall) || 0)))); G.baseHp = G.baseMax;
-  G.mod = (G.endless || i === 0) ? null : [null, 'rich', 'vol', 'haste'][(i * 7 + 3) % 4]; G.co = coopOf(); G.dmx = (i < 6 && !G.endless ? 0.85 : 1) * G.co.dm * (G.cm ? CLV[G.cl || 2].dm : 1);
+  G.mod = (G.endless || i === 0) ? null : [null, 'rich', 'vol', 'haste'][(i * 7 + 3) % 4]; if (G.daily && G.dailyMod) G.mod = G.dailyMod; G.co = coopOf(); G.dmx = (i < 6 && !G.endless ? 0.85 : 1) * G.co.dm * (G.cm ? CLV[G.cl || 2].dm : 1);
   G.food = 110 + G.bonus + G.dif.fd + 20 * Math.max(0, ...G.order.map((id) => (G.pl[id].mer && G.pl[id].mer.fd) || 0)); G.bonus = 0; G.foodMul = G.mod === 'rich' ? 1.3 : 1; G.spawnT = 1.5; G.bossDone = false; G.xp = 0; G.need = 4; G.lvC = 0; G.crates = ob === 'e' ? [{ x: 760, y: roadY(760, ww, wh), k: 'gmc' }] : []; G.crateT = 5; G.upg = 0; G.tt = 1;
   if (G.endless) G.dur = 1e9;
   const hs = (1 + 0.09 * G.dif.sc * G.sc) * (rd.df ? 1.1 : 1) * G.dif.hp * (i < 6 && !G.endless ? 0.88 : 1) * (G.cm ? CLV[G.cl || 2].hp : 1);
@@ -322,7 +322,7 @@ function smPenalty(k) {
   if (k === 'rep') { G.baseHp = Math.max(1, G.baseHp - G.baseMax * 0.1); waveAround(8, 560); return '성 체력 -10% · 적이 습격해요'; }
   return '';
 }
-function smStreak(S) { S.stk = (S.stk | 0) + 1; if (S.stk >= 3) { S.stk = 0; doSummon(true); doSummon(true); return ' 🎉 3연속 성공! 지원군 합류!'; } return ''; }
+function smStreak(S) { S.stk = (S.stk | 0) + 1; if (S.stk >= 3) { S.stk = 0; G.s3 = (G.s3 | 0) + 1; doSummon(true); doSummon(true); return ' 🎉 3연속 성공! 지원군 합류!'; } return ''; }
 function smInfo(tt, tx) { G.info = { id: Date.now() + Math.random(), tt, tx }; }
 function smEnd(S, ok, msg) { const m = S.cur; if (ok) { S.ok++; S.fl = 0; if (G.t < (G.moraleT || 0)) { G.moraleT = 0; msg += ' · 😊 사기 회복!'; } msg += smStreak(S); } else { S.no++; S.stk = 0; S.fl = (S.fl | 0) + 1; msg = msg + ' · ' + smPenalty(m.k); if (S.fl >= 2) { G.moraleT = G.t + 25; msg += ' · 😞 사기 하락! 25초 동안 공격력 -15% (미션 성공하면 회복)'; } } smInfo((ok ? '✅ 미션 성공! ' : '⌛ 미션 실패… ') + SMD[m.k][0], msg); if (m.e) { const i = G.en.indexOf(m.e); if (i >= 0 && m.e.hp > 0) G.en.splice(i, 1); } for (const c of m.cv || []) { const i = G.en.indexOf(c); if (i >= 0) G.en.splice(i, 1); } S.cur = null; S.nt = Math.max(4, 40 - (G.t - m.t0)); }
 function smStart(S, hs2, hs) {
@@ -504,6 +504,7 @@ function beginDuel(e) {
   G.info = { id: Date.now() + Math.random(), tt: '⚔ 일기토! ' + bnm(e) + '의 도전', tx: styOf(e).n + ' — ' + styOf(e).h + ' (스킬 버튼 = 구르기)' };
 }
 function endDuel(win) {
+  if (win) G.duWins = (G.duWins | 0) + 1;
   const D = G.du, b = D.b; G.du = null;
   for (const [id, x, y] of D.saved) { const p = G.pl[id]; p.x = x; p.y = y; p.mvx = p.mvy = 0; if (win) { if (p.hp <= 0) p.hp = p.mx * 0.4; p.hp = Math.min(p.mx, p.hp + p.mx * 0.35); } else p.hp = p.mx * 0.5; p.down = 0; p.fz = 3; }
   G.en = D.enSaved;
@@ -729,7 +730,7 @@ function stepBattle(dt) {
   else if (!G.endless && G.t >= G.dur) { const fl = (G.cmOn && camps > 0) ? 'c' : (G.cmS && !G.cmD) ? 'b' : (G.cmR && camps > 0) ? 'r' : ''; if (fl) { endRound(false); G.res.cmf = camps || 1; G.res.cmk = fl; } else endRound(G.obj === 'd' || G.obj === 's' || G.obj === 'e'); }
 }
 function endRound(win) {
-  G.baseHp = Math.max(0, G.baseHp); G.ph = 'result'; G.res = { win, rd: G.rd, id: Date.now() + '' + rint(1000) }; if (win && G.cm && !G.endless) { const m = G.cmM ? 1 : 0; G.res.rw = { sh: (G.cl || 1) + m, tk: 1 + m + ((G.cl || 1) >= 2 ? 1 : 0) }; } G.en = []; G.ev = null;
+  G.baseHp = Math.max(0, G.baseHp); G.ph = 'result'; G.res = { win, rd: G.rd, id: Date.now() + '' + rint(1000) }; if (win && G.cm && !G.endless) { const m = G.cmM ? 1 : 0; G.res.rw = { sh: (G.cl || 1) + m, tk: 1 + m + ((G.cl || 1) >= 2 ? 1 : 0) }; } G.en = []; G.ev = null; if (!G.endless) { G.res.rs = { sm: G.sm ? G.sm.ok | 0 : 0, s3: G.s3 | 0, du: G.duWins | 0, cm: G.cm ? 1 : 0, hd: G.dif === DIFF.hard ? 1 : 0, ch: win ? [9, 19, 24, 29].indexOf(G.rd) : -1 }; if (G.daily && !G.dailyDone) { G.dailyDone = 1; G.res.dl = { sc: (win ? 1000 : 0) + (G.kc | 0) * 4 + (G.sm ? G.sm.ok | 0 : 0) * 200 + (G.castle ? Math.round(Math.max(0, G.baseHp) / G.baseMax * 300) : 0) + (G.qokT | 0) * 30 }; } }
   G.lvq = 0; for (const id of G.order) { const p = G.pl[id]; p.offer = null; p.qz = null; p.mo = null; if (win && !G.endless) { const ks = Object.keys(MER).filter((k) => ((p.mer || {})[k] || 0) < 5); p.mo = ks.sort(() => Math.random() - 0.5).slice(0, 3); } }
   if (G.es) { G.es.tot = Math.floor(G.t); G.es.r = G.er + 1; G.es.over = true; G.es.clear = !!win; G.ph = 'end'; }
   else saveGame('auto', win ? G.rd + 1 : G.rd);
@@ -762,7 +763,7 @@ function hostMsg(from, m) {
   else if (m.k === 'ans' && (G.ph === 'result' || G.ph === 'brief') && G.ans[from] == null) G.ans[from] = m.i | 0;
 }
 function hostCtl(c, v) { // 방장 전용 조작
-  if (c === 'start') { G.sel.start = v.start; G.sel.dur = FAST || v.dur; G.dif = DIFF[v.diff] || DIFF.normal; G.sel.diff = v.diff; G.bonus = 0; G.wallN = v.wall | 0; G.endless = !!v.endless; G.cm = !!v.coop && !v.endless; G.cl = Math.min(3, Math.max(1, (v.cl | 0) || 2)); fillBots(G.cm ? (v.bots | 0) : 0); G.cyc = 0; G.bpi = 0; G.esw = null; G.es = G.endless ? { tot: 0, k: 0, q: 0, from: v.start, over: false, r: 1, clear: false } : null; for (const id of G.order) { G.pl[id].cards = {}; G.pl[id].mer = {}; } if (G.cm && !v.fix) { G.sel.dur = FAST || 300; v.start = rint(R.length); G.cmObj = ['d', 'e', 's', 'b', 'r'][rint(5)]; } else G.cmObj = v.obj || null; { let st = v.start; if (G.endless) { st = 0; for (let i = v.start; i < R.length; i++) if (ROUND_OBJ[i] === 'd') { st = i; break; } } startRound(st); } }
+  if (c === 'start') { G.daily = v.daily ? 1 : 0; G.dailyMod = v.daily ? v.mod : null; G.dailyDone = 0; G.duWins = 0; G.sel.start = v.start; G.sel.dur = FAST || v.dur; G.dif = DIFF[v.diff] || DIFF.normal; G.sel.diff = v.diff; G.bonus = 0; G.wallN = v.wall | 0; G.endless = !!v.endless; G.cm = !!v.coop && !v.endless; G.cl = Math.min(3, Math.max(1, (v.cl | 0) || 2)); fillBots(G.cm ? (v.bots | 0) : 0); G.cyc = 0; G.bpi = 0; G.esw = null; G.es = G.endless ? { tot: 0, k: 0, q: 0, from: v.start, over: false, r: 1, clear: false } : null; for (const id of G.order) { G.pl[id].cards = {}; G.pl[id].mer = {}; } if (G.cm && !v.fix) { G.sel.dur = FAST || 300; v.start = rint(R.length); G.cmObj = ['d', 'e', 's', 'b', 'r'][rint(5)]; } else G.cmObj = v.obj || null; { let st = v.start; if (G.endless) { st = 0; for (let i = v.start; i < R.length; i++) if (ROUND_OBJ[i] === 'd') { st = i; break; } } startRound(st); } }
   else if (c === 'endless' && G.ph === 'end' && !G.endless) { G.endless = true; G.cyc = 0; G.bpi = 0; G.bonus = 0; G.es = { tot: 0, k: 0, q: 0, from: 0, over: false, r: 1, clear: false }; G.ph = 'brief'; startRound(0); }
   else if (c === 'fight' && G.ph === 'brief') beginBattle();
   else if (c === 'next' && G.ph === 'result' && G.cm) { for (const id of G.order) { G.pl[id].cards = {}; G.pl[id].mer = {}; } G.cmObj = ['d', 'e', 's', 'b', 'r'][rint(5)]; startRound(rint(R.length)); }
@@ -1095,7 +1096,7 @@ function setupInput() {
   $('cv').addEventListener('pointerdown', (e) => { if (!V || V.ph !== 'battle') return; const [px, py] = pt(e), x = px / Z + cam.x, y = py / Z + cam.y; let hit = -1, bd = 34; for (let i = 0; i < (V.slots || 8); i++) { const s = slotPos(i, V.ax, V.ay), d = Math.hypot(s[0] - x, s[1] - 6 - y); if (d < bd) { bd = d; hit = i; } }
     if (hit < 0) { sel = -1; return; }
     if (sel < 0) { if (V.un && V.un[hit]) sel = hit; } else { if (sel !== hit) sendHost({ k: 'merge', a: sel, b: hit }); sel = -1; } });
-  $('btnCw').onclick = () => openCw(); $('cwClose').onclick = () => $('cwBox').classList.remove('on'); $('btnDex').onclick = () => buildBook('syn'); $('btnRank').onclick = () => buildBook('rank'); $('bookBack').onclick = () => show('sLobby'); document.querySelectorAll('#bookTabs button[data-t]').forEach((b) => b.onclick = () => buildBook(b.dataset.t)); $('btnEndless').onclick = () => hostCtl('endless'); $('btnNext').onclick = () => hostCtl('next'); $('btnRetry').onclick = () => hostCtl('retry'); $('btnSkip').onclick = () => hostCtl('skip');
+  $('btnCw').onclick = () => openCw(); $('cwClose').onclick = () => $('cwBox').classList.remove('on'); $('btnDex').onclick = () => buildBook('syn'); $('btnRank').onclick = () => buildBook('daily'); $('bookBack').onclick = () => show('sLobby'); document.querySelectorAll('#bookTabs button[data-t]').forEach((b) => b.onclick = () => buildBook(b.dataset.t)); $('btnEndless').onclick = () => hostCtl('endless'); $('btnNext').onclick = () => hostCtl('next'); $('btnRetry').onclick = () => hostCtl('retry'); $('btnSkip').onclick = () => hostCtl('skip');
   $('btnFight').onclick = () => hostCtl('fight'); $('btnHome').onclick = () => { if (confirmLeave()) location.reload(); };
 }
 function sendMove() {
@@ -1112,7 +1113,7 @@ function syncUI() {
   if (!V) return;
   const key = V.ph + ':' + V.rd + ':' + (V.res ? V.res.win : '');
   if (V.ph === 'lobby') {
-    { const n = V.pl.length, CO = COOP[Math.min(4, n) - 1]; $('coopInfo').innerHTML = n > 1 ? `👥 <b>${n}명 협동</b> · 적이 더 단단해지고(체력 ×${CO.h}) 정예${CO.gen ? '와 적장' : ''}이 더 자주 나와요` : '🙋 혼자 하기 · 사람이 늘수록 적이 더 단단해지고 정예·적장이 늘어요'; } $('plist').innerHTML = V.pl.map((p) => `<li><b>${esc(p.name)}</b> <span style="color:${ROLE[p.role].c}">${ROLE[p.role].n}</span>${p.id === Net.id ? ' (나)' : ''}</li>`).join('');
+    { const n = V.pl.length, CO = COOP[Math.min(4, n) - 1]; $('coopInfo').innerHTML = n > 1 ? `👥 <b>${n}명 협동</b> · 적이 더 단단해지고(체력 ×${CO.h}) 정예${CO.gen ? '와 적장' : ''}이 더 자주 나와요` : '🙋 혼자 하기 · 사람이 늘수록 적이 더 단단해지고 정예·적장이 늘어요'; } $('plist').innerHTML = V.pl.map((p) => `<li>${p.id === Net.id && titleOf() ? '<small>[' + esc(titleOf()) + ']</small> ' : ''}<b>${esc(p.name)}</b> <span style="color:${ROLE[p.role].c}">${ROLE[p.role].n}</span>${p.id === Net.id ? ' (나)' : ''}</li>`).join('');
     if (lastPh !== 'lobby') show('sRoom');
   } else if (lastPh !== V.ph || lastRd !== V.rd) {
     if (V.ph === 'brief') buildBrief(); else if (V.ph === 'battle') { show('sBattle'); } else if (V.ph === 'result') buildResult(); else if (V.ph === 'end') buildEnd();
@@ -1150,6 +1151,7 @@ function buildBrief() {
   show('sBrief'); { let seen = '1'; try { seen = localStorage.getItem('jd_tut') || ''; } catch (e) {} if (!seen) openTut(); }
 }
 function buildResult() {
+  recordResult();
   const r = R[V.rd], win = V.res.win; show('sResult'); $('sResult').scrollTop = 0;
   $('rsTitle').textContent = win ? (r.df ? '버텨 냈어요!' : '승리!') : (V.res.cmf ? ({ b: '봉화를 못 올렸어요…', r: '시간 안에 못 부쉈어요…' }[V.res.cmk] || '보급기지를 못 부쉈어요…') : '거점이 무너졌어요…');
   $('rsTitle').style.color = win ? '#2f6b2a' : '#a8322a';
@@ -1258,6 +1260,54 @@ function dexRec() { // 도감: 이 기기에서 만난 시너지·영웅·적장
   if (ch) try { localStorage.setItem('jd_dex', JSON.stringify(d)); } catch (e) {}
 }
 const HERO_BLURB = { gwakjaeu: '임진왜란 때 가장 먼저 의병을 일으킨 홍의장군 곽재우예요. 붉은 옷을 입고 날쌔게 싸웠어요.', hyujeong: '서산대사 휴정은 임진왜란이 나자 승려들에게 나라를 지키자는 글을 보내 승병을 일으키게 했어요.', yujeong: '사명대사 유정은 휴정의 제자로 승병을 이끌었고, 전쟁이 끝난 뒤 일본에 가서 포로를 데려오는 데 힘썼어요.', jinrin: '명나라 수군 장수 진린은 정유재란 때 조선 수군과 연합해 노량해전에서 이순신과 함께 싸웠어요. (교과서 밖 보충)', gimsimin: '진주대첩(1592)을 이끈 진주목사 김시민이에요. 3천여 명의 군사로 2만여 명의 왜군을 막아 냈어요.', gwonyul: '행주대첩(1593)을 이끈 장군 권율이에요. 화차로 불화살을 쏟아부어요.', archer: '활을 쏘는 사수예요. 멀리서 일직선의 적을 꿰뚫어요.', militia: '나라를 지키려고 스스로 일어난 백성 군대, 의병이에요. 환도로 앞의 적을 베어요.', monk: '임진왜란 때 서산대사 휴정, 사명대사 유정 같은 스님들이 승병을 이끌고 싸웠어요.', gunner: '화약 무기인 화포(대포)를 다루는 병사예요. 한 방에 무리를 날려요.', admiral: '이순신(1545~1598)은 조선 수군을 이끈 장수예요. 한산도 대첩을 이끌었고 노량 해전에서 전사했어요.' };
+
+// ===== 업적·칭호·일일 도전 (v0.33) — 이 기기에만 저장돼요 =====
+const ACH = [
+  ['first', '첫 승리', '라운드에서 처음 이겨요', '새내기 수비대', (s) => s.win >= 1],
+  ['w10', '든든한 방패', '라운드를 10번 이겨요', '든든한 방패', (s) => s.win >= 10],
+  ['w30', '불패의 수비대', '라운드를 30번 이겨요', '불패의 수비대', (s) => s.win >= 30],
+  ['sm5', '척척 해결사', '서브미션을 5번 성공해요', '척척 해결사', (s) => s.sm >= 5],
+  ['sm25', '미션 마스터', '서브미션을 25번 성공해요', '미션 마스터', (s) => s.sm >= 25],
+  ['stk', '호흡 척척', '한 판에서 서브미션 3연속 성공!', '호흡 척척', (s) => s.s3 >= 1],
+  ['du3', '일기토 도전자', '일기토에서 3번 이겨요', '일기토 도전자', (s) => s.du >= 3],
+  ['du10', '적장 사냥꾼', '일기토에서 10번 이겨요', '적장 사냥꾼', (s) => s.du >= 10],
+  ['q30', '역사 박사', '퀴즈를 30개 맞혀요', '역사 박사', (s) => s.q >= 30],
+  ['q100', '역사 대박사', '퀴즈를 100개 맞혀요', '역사 대박사', (s) => s.q >= 100],
+  ['coop', '함께 지켜요', '협동전에서 이겨요', '함께 지켜요', (s) => s.coop >= 1],
+  ['hard', '불꽃 같은 용기', '어려움 난이도에서 이겨요', '불꽃 같은 용기', (s) => s.hard >= 1],
+  ['c0', '임진왜란 지킴이', '임진왜란 마지막 라운드를 이겨요', '임진왜란 지킴이', (s) => s.ch0 >= 1],
+  ['c1', '정유재란 지킴이', '정유재란 마지막 라운드를 이겨요', '정유재란 지킴이', (s) => s.ch1 >= 1],
+  ['c2', '정묘호란 지킴이', '정묘호란 마지막 라운드를 이겨요', '정묘호란 지킴이', (s) => s.ch2 >= 1],
+  ['c3', '병자호란 지킴이', '병자호란 마지막 라운드를 이겨요', '병자호란 지킴이', (s) => s.ch3 >= 1],
+  ['d1', '오늘의 도전자', '일일 도전을 1번 해요', '오늘의 도전자', (s) => s.dly >= 1],
+  ['d3', '꾸준한 도전', '일일 도전을 3일 연속 해요', '꾸준한 도전', (s) => s.dst >= 3]
+];
+function achLoad() { try { const d = JSON.parse(localStorage.getItem('jd_ach') || '{}'); return { st: d.st || {}, ok: d.ok || {}, ti: d.ti || '' }; } catch (e) { return { st: {}, ok: {}, ti: '' }; } }
+function achSave(d) { try { localStorage.setItem('jd_ach', JSON.stringify(d)); } catch (e) {} }
+function titleOf() { const d = achLoad(), a = ACH.find((x) => x[0] === d.ti && d.ok[x[0]]); return a ? a[3] : ''; }
+const kstDay = (off) => new Date(Date.now() + 9 * 3600e3 + (off || 0) * 86400e3).toISOString().slice(0, 10);
+function dailyCfg() { let s = (Math.floor((Date.now() + 9 * 3600e3) / 86400e3) * 2654435761) >>> 0; const r = () => { s = (s + 0x6D2B79F5) >>> 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; const rd = Math.floor(r() * R.length), diff = ['easy', 'normal', 'normal', 'hard'][Math.floor(r() * 4)], mod = ['rich', 'vol', 'haste'][Math.floor(r() * 3)]; return { rd, diff, mod }; }
+function dailyLoad() { try { const d = JSON.parse(localStorage.getItem('jd_daily') || '{}'); return { best: d.best || {}, last: d.last || '', st: d.st | 0, hist: d.hist || [] }; } catch (e) { return { best: {}, last: '', st: 0, hist: [] }; } }
+function dailySave(d) { const ks = Object.keys(d.best).sort().slice(-30), b = {}; ks.forEach((k) => { b[k] = d.best[k]; }); d.best = b; d.hist = d.hist.slice(-30); try { localStorage.setItem('jd_daily', JSON.stringify(d)); } catch (e) {} }
+async function startDaily() { await startAs('single'); const c = dailyCfg(); hostCtl('start', { start: c.rd, dur: 180, diff: c.diff, coop: false, bots: 0, daily: 1, mod: c.mod }); }
+let qokSeen = 0, duSeen = 0, lastResId = '';
+function recordResult() {
+  if (!V || !V.res || V.endless || !V.res.rs || V.res.id === lastResId) { const dr0 = $('dailyRes'); if (dr0 && !(V && V.res && V.res.dl)) dr0.style.display = 'none'; return; }
+  lastResId = V.res.id; const rs = V.res.rs, win = V.res.win, d = achLoad(), st = d.st, inc = (k, n) => { if (n > 0) st[k] = (st[k] | 0) + n; };
+  if (win) { inc('win', 1); if (rs.cm) inc('coop', 1); if (rs.hd) inc('hard', 1); if (rs.ch >= 0) inc('ch' + rs.ch, 1); }
+  inc('sm', rs.sm | 0); inc('s3', rs.s3 | 0);
+  if ((rs.du | 0) < duSeen) duSeen = 0; inc('du', (rs.du | 0) - duSeen); duSeen = rs.du | 0;
+  const me2 = V.pl.find((x) => x.id === Net.id), q = me2 ? me2.qok | 0 : 0; if (q < qokSeen) qokSeen = 0; inc('q', q - qokSeen); qokSeen = q;
+  const dr = $('dailyRes'); if (dr) dr.style.display = 'none';
+  if (V.res.dl) {
+    const day = kstDay(), D = dailyLoad(), sc = V.res.dl.sc | 0;
+    if (!D.hist.includes(day)) { D.st = D.last === kstDay(-1) ? D.st + 1 : 1; D.last = day; D.hist.push(day); inc('dly', 1); st.dst = Math.max(st.dst | 0, D.st); }
+    D.best[day] = Math.max(D.best[day] | 0, sc); dailySave(D);
+    if (dr) { dr.style.display = 'block'; dr.innerHTML = `📅 <b>일일 도전 점수 ${sc}점</b> · 오늘 최고 ${D.best[day]}점 · 연속 ${D.st}일<br><small>점수 = 승리 1000 + 처치×4 + 서브미션 성공×200 + 성 체력(최대 300) + 퀴즈 정답×30</small>`; }
+  }
+  const nw = []; for (const a of ACH) if (!d.ok[a[0]] && a[4](st)) { d.ok[a[0]] = Date.now(); nw.push(a); } if (nw.length && !d.ti) d.ti = nw[0][0]; achSave(d);
+  if (nw.length) setTimeout(() => toast('🏅 업적 달성! ' + nw.map((a) => a[1] + ' (칭호 「' + a[3] + '」)').join(' · ')), 1200);
+}
 function buildBook(tab) {
   tab = tab || 'syn'; show('sBook'); document.querySelectorAll('#bookTabs button[data-t]').forEach((b) => b.classList.toggle('on', b.dataset.t === tab));
   const d = dexLoad(), B = $('bookBody'); let h = '';
@@ -1268,10 +1318,19 @@ function buildBook(tab) {
   } else if (tab === 'boss') {
     const seen = {}; BOSSN.concat(BOSS_EXTRA).forEach((b, i) => { if (!b) return; const x = (seen[b[0]] = seen[b[0]] || { d: b[1], r: [], ok: 0 }); if (i < BOSSN.length) x.r.push(i); if ((d.bn || {})[b[0]] || d.b[i]) x.ok = 1; });
     const ks = Object.keys(seen); h = `<p class="bk-n">만난 적장 ${ks.filter((k) => seen[k].ok).length}/${ks.length} — 적장 설명은 교과서 밖 보충이라 선생님 확인이 필요해요.</p><div class="bk-g">` + ks.map((k) => { const x = seen[k]; return `<div class="bk-c${x.ok ? '' : ' lk'}"><b>${x.ok ? esc(k) : '???'}</b><span>${x.ok ? esc(x.d) : '아직 만나지 못했어요'}</span><small>${x.ok ? (x.r.length ? '출현: ' + x.r.map((i) => esc(R[i].nm)).join(', ') : '무한 모드 최종 보스') : ''}</small></div>`; }).join('') + '</div>';
+  } else if (tab === 'daily') {
+    const c = dailyCfg(), D = dailyLoad(), day = kstDay(), r0 = R[c.rd], dn = { easy: '쉬움', normal: '보통', hard: '어려움' }[c.diff], md = MODS[c.mod];
+    const hist = Object.keys(D.best).sort().slice(-7).reverse().map((k) => `<tr><td>${k}</td><td>${D.best[k]}점</td></tr>`).join('');
+    h = `<p class="bk-n">📅 ${day} 오늘의 도전 — 하루 한 판, 3분! (점수는 이 기기에만 저장돼요 · 날마다 장면·난이도·규칙이 바뀌어요)</p><div class="bk-c"><b>${esc(CH[r0.ch].n)} · ${esc(r0.nm)}</b><span>난이도 ${dn} · 3분 · 오늘의 규칙 ${md[0]} ${md[1]} — ${md[2]}</span><small>오늘 최고 ${D.best[day] | 0}점 · 연속 ${D.last === day || D.last === kstDay(-1) ? D.st : 0}일</small></div><div style="margin:10px 0"><button id="dlGo">📅 오늘의 도전 시작</button></div>` + (hist ? '<table class="bk-t"><tr><th>날짜</th><th>최고 점수</th></tr>' + hist + '</table>' : '<p class="bk-n">아직 기록이 없어요. 첫 도전을 해 보세요!</p>');
+  } else if (tab === 'ach') {
+    const A = achLoad(), got = ACH.filter((a) => A.ok[a[0]]).length;
+    h = `<p class="bk-n">🏅 업적 ${got}/${ACH.length} — 얻은 칭호를 골라 쓰면 방 화면에서 내 이름 앞에 보여요 (이 기기에만 저장돼요)</p><div class="bk-g">` + ACH.map((a) => { const ok = A.ok[a[0]]; return `<div class="bk-c${ok ? '' : ' lk'}"><b>${ok ? '🏅 ' : '🔒 '}${esc(a[1])}</b><span>${esc(a[2])}</span><small>${ok ? '칭호 「' + esc(a[3]) + '」' : '아직이에요'}</small>${ok ? `<button class="sec" data-ti="${a[0]}" style="margin-top:4px;font-size:13px;padding:3px 10px">${A.ti === a[0] ? '✅ 쓰는 중' : '이 칭호 쓰기'}</button>` : ''}</div>`; }).join('') + '</div>';
   } else {
     const rk = rankLoad(); h = '<p class="bk-n">🏆 무한 모드 랭킹 (이 기기에만 저장돼요) · 점수 = 버틴 초 + 처치 수 + 퀴즈 정답×30</p>' + (rk.length ? '<table class="bk-t"><tr><th>순위</th><th>이름</th><th>점수</th><th>버틴 시간</th><th>처치</th><th>퀴즈</th><th>라운드</th></tr>' + rk.map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.n)}</td><td><b>${x.s}</b></td><td>${fmtT(x.t)}</td><td>${x.k}</td><td>${x.q}</td><td>${x.r}</td></tr>`).join('') + '</table>' : '<p>아직 기록이 없어요. 방에서 ♾ 무한 모드로 시작해 보세요!</p>');
   }
   B.innerHTML = h; B.scrollTop = 0;
+  const dg = B.querySelector('#dlGo'); if (dg) dg.onclick = startDaily;
+  B.querySelectorAll('button[data-ti]').forEach((b) => { b.onclick = () => { const A = achLoad(); A.ti = b.dataset.ti; achSave(A); buildBook('ach'); }; });
 }
 function updateHUD() {
   dexRec();
