@@ -1,0 +1,19 @@
+# 방 코드 릴레이(Cloudflare Worker) 자동 배포
+# 처음 한 번: GitHub 저장소 Settings → Secrets and variables → Actions 에
+#   CLOUDFLARE_API_TOKEN (권한: Edit Cloudflare Workers 템플릿) 과 CLOUDFLARE_ACCOUNT_ID 를 등록한 뒤
+#   Actions 탭 → "Deploy relay" → Run workflow 를 누르면 배포됩니다.
+name: Deploy relay
+on:
+  workflow_dispatch:
+  push:
+    paths: ['worker.js', 'wrangler.toml']
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

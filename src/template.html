@@ -256,11 +256,11 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
     <div class="row" style="margin-top:10px"><input id="roomCode" maxlength="6" placeholder="방 코드" style="width:150px;text-transform:uppercase"><button id="btnJoin" class="sec">방 입장</button></div>
     <div id="err"></div>
   </div>
-  <details id="lobSet"><summary>선생님 설정 (온라인 릴레이 주소)</summary><div class="row" style="margin-top:8px"><input id="relayUrl" style="width:520px" placeholder="wss://내-워커.workers.dev/ws"></div><small>한 번만 넣으면 이 기기에 저장돼요. 배포 방법은 README 참고.</small></details>
+  <details id="lobSet"><summary>선생님 설정 (온라인 릴레이 주소)</summary><div class="row" style="margin-top:8px"><input id="relayUrl" style="width:min(520px,80vw)" placeholder="wss://내-워커.workers.dev/ws"></div><small>한 번만 넣으면 이 기기에 저장돼요. 배포 방법은 README 참고.</small></details>
 </div>
 
 <div class="screen" id="sRoom">
-  <h2 id="roomLabel"></h2>
+  <h2 id="roomLabel"></h2><div class="row" style="margin:-4px 0 8px"><button id="btnCopy" class="sec" style="display:none">🔗 초대 링크 복사</button></div><div id="coopInfo" style="margin-bottom:10px;font-size:16px"></div>
   <div class="row" style="align-items:flex-start;gap:30px">
     <div style="min-width:300px"><b>참가자</b><ul id="plist"></ul>
       <div style="margin-top:8px"><b>내 역할</b><div class="row" id="roleRow" style="margin-top:6px"><button data-r="archer">궁수</button><button data-r="militia">의병</button><button data-r="monk">승병</button><button data-r="gunner">화포수</button><button data-r="admiral" id="roleHid">🔒 히든</button></div>
