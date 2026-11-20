@@ -21,7 +21,7 @@ const Z = 0.72, SPS = 0.66; // 시야 넓히기(줌) / 캐릭터 크기 비율
 const $ = (id) => document.getElementById(id);
 const Q = new URLSearchParams(location.search);
 const FAST = Q.get('fast') ? +Q.get('fast') : 0; // 테스트용: 전투 시간(초)
-const DEFAULT_RELAY = 'wss://YOUR-WORKER.workers.dev/ws'; // ← 배포 후 README 안내대로 교체 (게임 화면에서도 입력 가능)
+const DEFAULT_RELAY = 'wss://history-defense-relay.kimsky4409.workers.dev/ws'; // 선생님 Cloudflare 릴레이 (게임 화면의 '선생님 설정'에서 바꿀 수 있어요)
 
 // ---------- 네트워크 ----------
 const Net = {
