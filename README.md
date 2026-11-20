@@ -115,3 +115,4 @@
 - 협동 서브미션 7종(`subStep`): camp/conv/ref/twin/herb/rush/fast, 탈출 시나리오에서는 꺼짐
 - 서브미션 연속 진행(10초 간격, 실패 페널티, 3연속 성공 지원군), 일기토 패배 페널티(대규모 웨이브/성 큰 타격), 기존 일회성 협동 미션(cmOn) 폐지
 - 퀴즈 오답: 정답·설명 7초 읽기 후 카드 선택(qrd)
+- 🎵 음원 파일 BGM: `src/music.js`(base64 mp3, `window.MUSIC`)를 템플릿 `/*MUSIC*/` 자리에 넣어요(빌드 스크립트에 치환 추가). 일기토 중 `MUS.set('duel')`, 곡 끝 3초 전 두 개의 오디오를 크로스페이드해 반복. 원본은 loudnorm -18 LUFS, 80kbps로 줄임
