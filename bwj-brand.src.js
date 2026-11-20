@@ -1,12 +1,11 @@
 /* ===== 배우자교실 공통 브랜드 모듈 (모든 게임에 같은 파일을 넣어 쓰세요) =====
    1) 인트로: 배우자교실 로고가 나타났다 사라짐 (터치하면 바로 넘김)
-   2) 로고 배지: 누르면 인스타그램, 옆에 「💬 오류 신고·건의」(구글폼 안내창)
+   2) 로고 배지: 누르면 인스타그램, 옆에 「💬 오류 신고·건의」(통합 의견함: 쓰기·내 의견·친구들 의견)
    사용: BWJ.init({ game:'게임 이름', ver:'v0.1', parent:'#stage' })   ← parent는 생략하면 화면 오른쪽 아래에 고정
    이름·연락처는 받지 않습니다. 로고 그림은 이 파일 안에 포함되어 있어 별도 이미지 파일이 필요 없습니다. */
 (function () {
   var LOGO = 'data:image/jpeg;base64,__LOGO__';
   var INSTA = 'https://www.instagram.com/bwj_class/';
-  var FORM = 'https://forms.gle/TqxtkR5Pwae6mLfL6';
   var css = '' +
     '#bwj-intro{position:fixed;inset:0;z-index:99999;background:#0b0d12;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .7s ease;cursor:pointer}' +
     '#bwj-intro.in{opacity:1}#bwj-intro.out{opacity:0}' +
@@ -46,7 +45,7 @@
       '<a class="lg" href="' + INSTA + '" target="_blank" rel="noopener noreferrer" title="만든 사람: 배우자교실 인스타그램"><img alt="배우자교실" src="' + LOGO + '"></a><button type="button">💬 오류 신고·건의</button>');
     (par || document.body).appendChild(b);
     b.querySelector('button').addEventListener('click', function () { openFb(game, ver); });
-    setTimeout(function () { checkReplies(); setInterval(checkReplies, 300000); }, 3500);
+    setTimeout(function () { flush(); checkReplies(); setInterval(function () { flush(); checkReplies(); }, 300000); }, 3500);
     b.querySelector('button').addEventListener('pointerdown', function (e) { e.stopPropagation(); });
   }
   // ===== 통합 의견함: 게임 안에서 바로 쓰고, 선생님 답장도 여기서 받아요 =====
@@ -60,6 +59,8 @@
     var o = body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : {}; if (ac) o.signal = ac.signal;
     return fetch(API + path, o).then(function (r) { clearTimeout(t); return r.json().then(function (j) { if (!r.ok) throw j; return j; }); });
   }
+  function outbox() { try { var q = JSON.parse(ls('bwj-out') || '[]'); return Array.isArray(q) ? q : []; } catch (e) { return []; } }
+  function flush() { var q = outbox(); if (!q.length) return; var p = q[0]; api('/api/post', p).then(function () { q.shift(); ls('bwj-out', JSON.stringify(q)); ls('bwj-posted', '1'); flush(); }, function (e) { if (e && e.err) { q.shift(); ls('bwj-out', JSON.stringify(q)); flush(); } }); }
   function ago(t) { var m = Math.floor((Date.now() - t) / 60000); return m < 1 ? '방금' : m < 60 ? m + '분 전' : m < 1440 ? Math.floor(m / 60) + '시간 전' : Math.floor(m / 1440) + '일 전'; }
   function unseen(posts) { var seen = +ls('bwj-seen') || 0, n = 0; for (var i = 0; i < posts.length; i++) if (posts[i].repAt > seen) n++; return n; }
   function setDot(n) { var b = document.querySelector('#bwj-badge button'); if (!b) return; var d = b.querySelector('.bwjdot'); if (n > 0) { if (!d) { d = el('span', { class: 'bwjdot' }); b.appendChild(d); } d.textContent = n > 9 ? '9+' : n; } else if (d) d.remove(); }
@@ -78,8 +79,8 @@
     m.addEventListener('click', function (e) { if (e.target === m) close(); });
     function tabs() { m.querySelectorAll('.tabs button').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-t') === tab); }); }
     function msg(t, bad) { var x = body.querySelector('.msg'); if (x) { x.textContent = t; x.style.color = bad ? '#ffb3a8' : '#9fb'; } }
-    function fallback() { return '<div class="msg" style="color:#ffd98a">지금은 서버에 연결할 수 없어요. 아래 구글폼으로 보내 주세요.</div><div class="row"><a class="b" target="_blank" rel="noopener noreferrer" href="' + FORM + '">구글폼으로 보내기 ↗</a><button type="button" class="b s" id="bwjCopy">📋 게임 정보 복사</button></div>'; }
-    function wireCopy() { var c = body.querySelector('#bwjCopy'); if (c) c.onclick = function () { var bt = this; try { navigator.clipboard.writeText(info).then(function () { bt.textContent = '복사했어요! 폼에 붙여 넣으세요'; }, function () { bt.textContent = info; }); } catch (e) { bt.textContent = info; } }; }
+    function fallback() { return '<div class="msg" style="color:#ffd98a">지금은 의견함 서버에 연결할 수 없어요. 잠시 뒤에 다시 열어 주세요.</div>'; }
+    function wireCopy() {}
     function viewW() {
       body.innerHTML = '<div class="lbl">어떤 내용인가요?</div><div class="kinds">' + Object.keys(KN).map(function (k) { return '<button type="button" data-k="' + k + '" class="kd' + (k === kind ? ' on' : '') + '"><b>' + KN[k] + '</b><span>' + KH[k] + '</span></button>'; }).join('') + '</div>' +
         '<div class="lbl">무슨 일인가요?</div><textarea id="bwjTx" maxlength="500" placeholder="어디에서 무엇을 하다가 어떻게 됐는지 알려 주세요. 원하는 내용이면 그대로 적어 주세요."></textarea>' +
@@ -99,7 +100,7 @@
           if (e && e.err === 'pii') msg('전화번호·메일·인터넷 주소처럼 보이는 글자가 있어요. 지우고 다시 보내 주세요.', 1);
           else if (e && e.err === 'limit') msg('오늘은 많이 보냈어요. 내일 또 보내 주세요 😊', 1);
           else if (e && e.err === 'short') msg('조금만 더 자세히 써 주세요.', 1);
-          else { body.innerHTML = fallback(); wireCopy(); }
+          else { var q = outbox(); q.push({ game: game, ver: ver || '', kind: kind, text: tx.value, did: did() }); ls('bwj-out', JSON.stringify(q.slice(-5))); kind = ''; body.innerHTML = '<div class="ok">📥 지금은 서버에 연결이 안 돼요.<br><small>쓴 내용은 이 기기에 저장해 뒀어요. 연결되면 자동으로 보낼게요! (저장된 글 ' + Math.min(q.length, 5) + '개)</small></div><div class="row"><button type="button" class="b s" id="bwjMore">닫기</button></div>'; body.querySelector('#bwjMore').onclick = close; }
         });
       };
     }
