@@ -13,10 +13,10 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
     const G = G0(); const id = G.order[0]; const h = G.pl[id]; h.role = role; 
     let att = 0;
     const UPC = [60, 90, 130, 180, 240];
-    for (let guard = 0; guard < 45; guard++) {
+    for (let guard = 0; guard < 70; guard++) {
       const G = G0(); if (G.ph === 'end') break;
       if (G.ph === 'brief') { G.ph = 'battle'; }
-      if (G.ph === 'result') { if (G.res.win) { D.hostMsg(id, { k: 'mer', i: 0 }); D.hostCtl('next'); att = 0; } else { att++; if (att >= 2) { D.hostCtl('skip'); D.hostCtl('next'); att = 0; } else D.hostCtl('retry'); } continue; }
+      if (G.ph === 'result') { if (G.res.win) { D.hostMsg(id, { k: 'mer', i: 0 }); D.hostCtl('next'); att = 0; } else { att++; if (att >= 2) { G.res.win = true; D.hostCtl('next'); att = 0; } else D.hostCtl('retry'); } continue; }
       const rd = G.rd, ob = G.obj; const row = { rd, nm: D.R[rd].nm, ob, mod: G.mod, att, tl: [] }; let minB = 1e9, downs = 0, wasDown = false, hl30 = 0, b30 = 0, en30 = 0;
       let lastHp = h.hp;
       for (let i = 0; i < 30 * (dur + 40); i++) {
