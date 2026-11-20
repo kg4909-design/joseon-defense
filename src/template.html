@@ -242,7 +242,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 /* v0.27 알림 스택: 가운데 위쪽 안내(정보창·습격·일시정지·토스트)는 한 줄로 쌓여서 겹치지 않아요 */
 #notes{position:absolute;left:46%;top:92px;transform:translateX(-50%);width:max-content;max-width:min(520px,56%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:12;pointer-events:none}
 #notes>*,#notes #toast{position:static!important;transform:none!important;left:auto!important;top:auto!important;bottom:auto!important;margin:0!important}
-#smTag,#raidTag,#coopTag,#pauseTag,#toast,#waitTag,#lagTag{background:rgba(40,30,20,.88)!important;color:#fff;font-size:15px;font-weight:800;padding:5px 16px;border-radius:99px;border:2px solid rgba(255,255,255,.28);box-shadow:0 3px 0 rgba(0,0,0,.3);white-space:normal;text-align:center;line-height:1.3}
+#wxTag,#smTag,#raidTag,#coopTag,#pauseTag,#toast,#waitTag,#lagTag{background:rgba(40,30,20,.88)!important;color:#fff;font-size:15px;font-weight:800;padding:5px 16px;border-radius:99px;border:2px solid rgba(255,255,255,.28);box-shadow:0 3px 0 rgba(0,0,0,.3);white-space:normal;text-align:center;line-height:1.3}
 #pauseTag,#lagTag{color:#ffe9a0}#toast{max-width:100%}#toast[data-off="1"]{display:none}
 #infoBox{max-width:100%!important}
 .qres{border-radius:99px;border:2px solid rgba(255,255,255,.35);box-shadow:0 3px 0 rgba(0,0,0,.25);text-align:center}
@@ -294,6 +294,11 @@ input[type=range]{touch-action:pan-x!important}
 #sRoom h2{margin:0 0 4px!important;font-size:26px}#sRoom>.row:first-of-type{margin:0 0 4px!important}#coopInfo{margin-bottom:4px!important;font-size:14px!important}
 #hostBox>.row{margin:5px 0!important}#hostBox select{font-size:15px;padding:4px 8px}#hostBox button{font-size:15px;padding:5px 12px}#roleTip{font-size:13px!important}#plist{margin:4px 0;padding-left:18px}#plist li{font-size:16px}
 #rsStart button{font-size:17px;padding:8px 16px}
+#wxOv{position:absolute;inset:0;pointer-events:none;z-index:2;opacity:0;transition:opacity 1.2s}#wxOv.on{opacity:1}
+#wxOv.rain{background:linear-gradient(rgba(40,60,90,.28),rgba(40,60,90,.28)),repeating-linear-gradient(105deg,rgba(220,235,255,0) 0 12px,rgba(220,235,255,.35) 12px 13px);animation:rainm .35s linear infinite}
+@keyframes rainm{to{background-position:0 0,-30px 60px}}
+#wxOv.fog{background:radial-gradient(ellipse at 50% 50%,rgba(235,240,245,.15),rgba(235,240,245,.62))}
+#wxOv.night{background:radial-gradient(ellipse at 50% 50%,rgba(10,14,40,.2),rgba(8,10,34,.7))}
 </style>
 </head><body>
 <div id="stage">
@@ -365,14 +370,14 @@ input[type=range]{touch-action:pan-x!important}
 <div id="saveBox"><div class="pp"><h3 id="svTitle"></h3><p id="svNote" style="font-size:15px;text-align:center"></p><div id="svList"></div><button id="svClose" class="sec" style="margin-top:8px">닫기</button></div></div>
 <div id="pauseBox"><div class="pp"><h3 id="pTitle"></h3><p id="pText"></p><div class="row" style="justify-content:center;gap:12px"><button id="pResume">▶ 계속하기</button><button id="pHelp" class="sec">❓ 도움말</button><button id="pSave" class="sec">💾 저장</button></div><div id="pWait" style="display:none">방장이 멈췄어요. 잠시만 기다려요. (최대 1분 30초, 지나면 자동으로 다시 시작해요)</div><div id="pAuto" style="display:none;font-size:13px;margin-top:6px;color:#7a6652">친구들이 있을 때는 90초 뒤 자동으로 다시 시작해요.</div></div></div>
 <div id="tutBox"><div class="pp"><div id="tutPg"></div><h3 id="tutH"></h3><p id="tutB"></p><div class="row" style="justify-content:center;gap:10px"><button id="tutPrev" class="sec">◀ 이전</button><button id="tutNext">다음 ▶</button><button id="tutSkip" class="sec">건너뛰기</button></div></div></div>
-<div class="screen" id="sBattle">
+<div class="screen" id="sBattle"><div id="wxOv"></div>
   <button id="btnGear" title="설정">⚙</button><button id="btnPause" title="일시정지">❚❚</button><div class="cap" id="hudArmy"></div><div id="hudWeap"></div><button id="btnUp"></button><button id="btnRep" style="display:none"></button>
   <div id="me"><img id="meAv" alt=""><div class="meR"><div class="meT"><b id="hudLv">Lv.1</b><span>체력 · 혼</span></div><div class="bar hp"><i id="barHp"></i></div><div class="bar xp"><i id="barXp"></i></div></div></div>
   <div class="cap" id="hudFoodBox"><span id="hudFood"></span></div><div class="cap" id="hudName"></div>
   <div id="hudMid"><span id="hudT">00:00</span><div id="objBar" class="cap"></div><div id="hudBase"><div class="bar"><i id="barB"></i></div></div><i id="barT" style="display:none"></i></div>
   <div id="joyZone"><div id="joyRing"></div><div id="joyKnob"></div></div>
   <button id="btnSummon">소집</button><button id="btnSkill">함성</button><button id="btnCr" style="display:none"></button>
-  <div id="escGo"><i>➡</i><b>오른쪽으로<br>계속 달리세요!</b><i>➡</i></div><div id="cards"></div><div id="evBox"></div><div id="notes"><div id="infoBox"></div><div id="smTag" style="display:none"></div><div id="raidTag" style="display:none"></div><div id="coopTag" style="display:none"></div><div id="pauseTag"></div><div id="waitTag" style="display:none"></div><div id="lagTag" style="display:none">📶 방장 화면이 멈춘 것 같아요. 잠시만 기다려 주세요…</div></div>
+  <div id="escGo"><i>➡</i><b>오른쪽으로<br>계속 달리세요!</b><i>➡</i></div><div id="cards"></div><div id="evBox"></div><div id="notes"><div id="infoBox"></div><div id="smTag" style="display:none"></div><div id="wxTag" style="display:none"></div><div id="raidTag" style="display:none"></div><div id="coopTag" style="display:none"></div><div id="pauseTag"></div><div id="waitTag" style="display:none"></div><div id="lagTag" style="display:none">📶 방장 화면이 멈춘 것 같아요. 잠시만 기다려 주세요…</div></div>
 </div>
 
 <div class="screen" id="sResult">
