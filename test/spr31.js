@@ -3,7 +3,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const errs = [];
   const p = await b.newPage({ viewport: { width: 1180, height: 820 } });
-  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.31'); localStorage.setItem('jd_hid', '1'); localStorage.setItem('jd_cw', JSON.stringify({ tk: 0, sh: 0, own: { gwonyul: 1, gimsimin: 1 }, cos: [], eq: '', pity: 0, pity2: 0, cl: 0, ids: [] })); });
+  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.32'); localStorage.setItem('jd_hid', '1'); localStorage.setItem('jd_cw', JSON.stringify({ tk: 0, sh: 0, own: { gwonyul: 1, gimsimin: 1 }, cos: [], eq: '', pity: 0, pity2: 0, cl: 0, ids: [] })); });
   p.on('pageerror', (e) => errs.push(String(e)));
   await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.click('#btnSingle'); await p.waitForTimeout(300);
   for (const role of ['gwonyul','admiral','gimsimin']) {
