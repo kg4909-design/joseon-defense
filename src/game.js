@@ -2,7 +2,7 @@
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
 const VER = 'v0.27';
 const UPDATES = [
-  { v: 'v0.27', d: '11/20', t: ['⚔ 일기토 무대가 넓어졌어요(반지름 320).', '💪 영웅이 강할수록 적장도 단단해져요 (약한 영웅일 땐 그대로).', '🛡 일기토에서 받는 피해를 조금 줄였어요.', '📍 화면 위쪽 안내(습격 시간·멈춤·알림)가 겹치지 않고 차례로 쌓여요. 왼쪽 위 칸 간격도 넓혔어요.', '🔊 설정에서 효과음·배경음 크기를 따로 조절할 수 있어요. 효과음 기본은 60%예요.'] },
+  { v: 'v0.27', d: '11/20', t: ['⚔ 일기토 무대가 넓어졌어요(반지름 320).', '💪 영웅이 강할수록 적장도 단단해져요 (약한 영웅일 땐 그대로).', '🛡 일기토에서 받는 피해를 조금 줄였어요.', '📍 화면 위쪽 안내(습격 시간·멈춤·알림)가 겹치지 않고 차례로 쌓여요. 왼쪽 위 칸 간격도 넓혔어요.', '⚔ 영웅 체력이 늘수록 적장의 공격도 세져요. 가만히 맞으면서 싸우면 이기기 어려워요 (보통 이상).', '📋 결과 화면에서 버튼 줄이 위아래로 튀던 것을 고쳤어요(화면 맨 아래에 고정).', '🔊 설정에서 효과음·배경음 크기를 따로 조절할 수 있어요. 효과음 기본은 60%예요.'] },
   { v: 'v0.26', d: '11/20', t: ['👥 온라인 협동 보정: 사람이 늘수록 적이 단단해지고(체력↑) 정예와 적장이 더 자주 나와요. 적 숫자는 조금만 늘어서 렉을 줄였어요', '🔗 방장은 "초대 링크 복사"로 친구에게 방 주소를 보낼 수 있어요 (링크를 열면 방 코드가 자동으로 들어가요)', '📡 온라인 전송량을 절반 가까이 줄였어요'] },
   { v: 'v0.25', d: '11/20', t: ['📜 라운드가 끝나면 "역사 한 컷" 카드가 나와요: 실제 역사와 게임 속 설정을 나눠서 보여줘요', '🧠 레벨업 퀴즈를 맞히면 군량(또는 체력 회복)을 받고, 3문제 연속 정답이면 보너스가 더 커져요', '🔥 영웅마다 스킬이 달라졌어요 (화살비·함성·호국염불·집중포화·학익진)', '⚔ 적장마다 일기토 스타일이 달라요 (돌격형·포격형·파쇄형·결계형·지휘형). 이기면 스타일별 보상!'] },
   { v: 'v0.24', d: '11/20', t: ['⚔ 적장 일기토: 적장이 나타나면 경고 화면 뒤에 원형 무대에서 1:1 승부! 붉은 표시를 피하고(함성 버튼 = 구르기) 공격하세요. 이기면 적장을 쓰러뜨려요', '🎵 배경음이 생겼어요 (설정에서 끌 수 있어요)', '🌱 라운드 초반 준비 시간: 처음 30초는 쉬운 적만 적게 나오고, 큰 습격까지 남은 시간이 위에 표시돼요. 낮은 레벨은 레벨업에 필요한 경험치가 적어 빨리 올라요', '🛡 성 체력이 66%·33%가 되면 의병이 잠시 성을 지켜 줘요 (쉬움 4초·보통 3초·어려움 1.5초). 🌾 군량으로 성 수리 버튼(체력 30% 회복)도 생겼어요', '난이도 재조정: 쉬움은 누구나 깰 수 있게(성 체력 2배·적장 약함), 보통은 그 중간, 어려움은 적 강화·방어 이벤트 짧음·수리 비쌈. 성 수리는 체력 30% 회복(쉬움 35%·어려움 25%)', '탈출 라운드: 첫 매복이 늦고 약하며, 앞쪽에 체력 회복 상자가 있어요', '🎖 공훈 보상: 전투에서 이기면 3가지 중 1개를 골라요. 다음 라운드부터 계속 쌓여요 (체력·공격·군량·성벽·혼·회복)', '전장 변수가 생겼어요: 풍년(군량↑) · 의병 합류(병사 2명 시작) · 질풍(적이 빠른 대신 혼↑)', '적이 거점만 집중 공격하지 않아요. 가까운 영웅을 먼저 쫓는 적이 많아요. 성은 잠시 맞지 않으면 천천히 회복해요', '연속 라운드의 목표가 겹치지 않도록 바꿨고, 초반 라운드(옥포 해전 등) 난이도를 낮췄어요'] },
@@ -333,6 +333,7 @@ function beginDuel(e) {
   { // 영웅이 강할수록 적장도 단단해져요 (약한 영웅일 때는 그대로, 강할 때만 늘어요)
     let dps = 0; for (const p of all) { const S = heroStats(p); let wl = 0; for (const k in WEAP) wl += p.cards[k] || 0; const rg = Math.min(360, Math.max(S.rg, 110)); dps += 26 * (1 + 0.2 * wl) * S.dmg * (rg < 200 ? 1.35 : 1) * S.as / 0.55; }
     const T = G.dif === DIFF.hard ? 40 : G.dif === DIFF.easy ? 20 : 28, ratio = Math.max(1, Math.min(5, dps * T / e.mx)), fr = e.hp / e.mx; e.mx *= ratio; e.hp = e.mx * fr; D.pw = Math.round(dps); D.ratio = +ratio.toFixed(2); }
+  { let sm = 0; for (const p of all) sm += p.mx; D.hk = Math.max(1, sm / all.length / 138); } // 영웅 체력이 늘수록 적장 한 방도 세져요 (그냥 맞으면서 싸우는 방법을 막아요)
   all.forEach((p, i) => { const a = Math.PI + (i - (all.length - 1) / 2) * 0.55; p.x = cx + Math.cos(a) * R0 * 0.55; p.y = cy + Math.sin(a) * R0 * 0.45; p.mvx = p.mvy = 0; if (p.down > 0) { p.down = 0; p.hp = p.mx * 0.4; } p.fz = 3; p.dcd = 0.6; });
   G.info = { id: Date.now() + Math.random(), tt: '⚔ 일기토! ' + bnm(e) + '의 도전', tx: styOf(e).n + ' — ' + styOf(e).h + ' (스킬 버튼 = 구르기)' };
 }
@@ -344,7 +345,7 @@ function endDuel(win) {
   else { b.dueled = true; b.bk = 3; const q = spawnPos() || [G.ax + 500, G.ay]; b.x = q[0]; b.y = q[1]; G.en.push(b); G.info = { id: Date.now() + Math.random(), tt: '😤 일기토에서 밀렸어요', tx: bnm(b) + '이(가) 남은 체력으로 전장에 뛰어들었어요!' }; }
 }
 function duelStep(dt) {
-  const D = G.du, b = D.b, dmk = G.dif.dm * (1 + 0.02 * G.sc) * 0.75, alive = () => G.order.map((id) => G.pl[id]).filter((p) => p.hp > 0);
+  const D = G.du, b = D.b, dmk = G.dif.dm * (1 + 0.02 * G.sc) * 0.75 * (D.hk || 1), alive = () => G.order.map((id) => G.pl[id]).filter((p) => p.hp > 0);
   const inArena = (o, r) => { const dx = o.x - D.cx, dy = o.y - D.cy, d = Math.hypot(dx, dy), m = D.R - r; if (d > m) { o.x = D.cx + dx / d * m; o.y = D.cy + dy / d * m; } };
   for (const id of G.order) { const p = G.pl[id]; if (p.fz > 0) p.fz -= dt; if (p.cd > 0) p.cd -= dt; if (p.hp <= 0) { p.hp = 0; continue; } const S = heroStats(p); p.x += p.mvx * S.sp * dt; p.y += p.mvy * S.sp * dt; inArena(p, 16); if (S.reg > 0) p.hp = Math.min(p.mx, p.hp + p.mx * S.reg * dt); }
   D.tm -= dt; if (b.ef > 0) b.ef -= dt;
@@ -868,7 +869,7 @@ function buildBrief() {
   show('sBrief'); { let seen = '1'; try { seen = localStorage.getItem('jd_tut') || ''; } catch (e) {} if (!seen) openTut(); }
 }
 function buildResult() {
-  const r = R[V.rd], win = V.res.win; show('sResult');
+  const r = R[V.rd], win = V.res.win; show('sResult'); $('sResult').scrollTop = 0;
   $('rsTitle').textContent = win ? (r.df ? '버텨 냈어요!' : '승리!') : '거점이 무너졌어요…';
   $('rsTitle').style.color = win ? '#2f6b2a' : '#a8322a';
   { const nx = R[V.rd + 1], ch = CH[r.ch];
