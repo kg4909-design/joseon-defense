@@ -2,7 +2,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
 (async () => {
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const p = await b.newPage({ viewport: { width: 1280, height: 720 } }); const errs = []; p.on('pageerror', (e) => errs.push(e.message));
-  await p.addInitScript(() => { try { { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.29'); }; } catch (e) {} }); await p.goto('file:///home/claude/work/game/dist/index.html?fast=60'); await p.waitForSelector('#bwj-intro', { state: 'detached' });
+  await p.addInitScript(() => { try { { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.30'); }; } catch (e) {} }); await p.goto('file:///home/claude/work/game/dist/index.html?fast=60'); await p.waitForSelector('#bwj-intro', { state: 'detached' });
   await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on'); await p.click('#btnStart'); await p.waitForSelector('#sBrief.on'); await p.click('#bqOpts .qo'); await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
   await p.evaluate(() => { startRound(4); G.food = 9999; G.ph = 'battle'; for (let k = 0; k < 12; k++) doSummon(false); G.pl.me.hp = 1e6; G.pl.me.mx = 1e6; G.baseHp = 1e6; G.baseMax = 1e6; G.evDone = [true, true]; G.spawnT = -999; });
   await p.evaluate(() => { const hs = 3; for (let i = 0; i < 230; i++) spawn(['grunt', 'shoot', 'cav', 'tank'][i % 4], 0.2, [G.ax + 150 + Math.random() * 400, G.ay - 200 + Math.random() * 400]); });

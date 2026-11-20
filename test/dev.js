@@ -2,7 +2,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
 (async () => {
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   for (const [name, w, h] of [['tab', 1280, 800], ['s23', 780, 360], ['s23tall', 844, 390]]) {
-    const p = await b.newPage({ viewport: { width: w, height: h } }); await p.addInitScript(() => { try { { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.29'); }; } catch (e) {} }); const errs = []; p.on('pageerror', (e) => errs.push(e.message));
+    const p = await b.newPage({ viewport: { width: w, height: h } }); await p.addInitScript(() => { try { { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.30'); }; } catch (e) {} }); const errs = []; p.on('pageerror', (e) => errs.push(e.message));
     await p.goto('file:///home/claude/work/game/dist/index.html?fast=60'); await p.waitForSelector('#bwj-intro', { state: 'detached' });
     await p.screenshot({ path: `test/d_${name}_1lobby.png` });
     await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on'); await p.screenshot({ path: `test/d_${name}_2room.png` });

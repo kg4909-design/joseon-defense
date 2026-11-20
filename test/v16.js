@@ -4,7 +4,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   for (const [nm, w, h] of [['tablet', 1280, 800], ['s23', 780, 360]]) {
     const pg = await (await b.newContext({ viewport: { width: w, height: h }, hasTouch: true })).newPage();
     const errs = []; pg.on('pageerror', (e) => errs.push(e.message));
-    await pg.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.29'); });
+    await pg.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.30'); });
     await pg.goto('file:///home/claude/work/game/dist/index.html');
     await pg.waitForSelector('#bwj-intro',{state:'detached'});
     await pg.screenshot({ path: `/tmp/v16_lobby_${nm}.png` });
