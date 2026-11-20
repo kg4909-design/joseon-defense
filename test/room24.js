@@ -2,7 +2,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
 (async () => {
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const p = await b.newPage({ viewport: { width: +(process.argv[2]||1737), height: +(process.argv[3]||932) } });
-  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.26'); });
+  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.29'); });
   await p.goto('file:///home/claude/work/game/dist/index.html');
   await p.click('#btnSingle'); await p.waitForTimeout(600);
   await p.screenshot({ path: 'test/room24.png' });

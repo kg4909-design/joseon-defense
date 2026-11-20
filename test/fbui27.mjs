@@ -5,7 +5,7 @@ const env = { ADMIN_KEY: 'k-test' }; let down = false;
 const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
 for (const [w, h] of [[1180, 820], [844, 390]]) {
   const ctx = await b.newContext({ viewport: { width: w, height: h } });
-  await ctx.addInitScript(() => { if (!localStorage.getItem('jd_tut')) { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.28'); } });
+  await ctx.addInitScript(() => { if (!localStorage.getItem('jd_tut')) { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.29'); } });
   await ctx.route('https://bwj-feedback.kimsky4409.workers.dev/**', async (route) => { const rq = route.request(); if (down) return route.abort(); const r = await handle(new Request(rq.url(), { method: rq.method(), body: rq.postData() || undefined, headers: rq.headers() }), store, env, '2.2.2.2'); route.fulfill({ status: r.status, headers: Object.fromEntries(r.headers), body: await r.text() }); });
   const p = await ctx.newPage(); const errs = []; p.on('pageerror', (e) => errs.push(String(e)));
   await p.goto('file:///home/claude/work/game/dist/index.html'); await p.waitForTimeout(3500);

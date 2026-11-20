@@ -139,6 +139,8 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #sBattle.lefty #joyZone{left:auto;right:0}#sBattle.lefty #btnSummon{right:auto;left:134px}#sBattle.lefty #btnSkill{right:auto;left:14px}
 
 #btnUp{position:absolute;right:14px;bottom:124px;width:84px;height:84px;border-radius:50%;background:#8fd6c7;border:3px solid var(--line);box-shadow:0 5px 0 var(--line);color:var(--txt);font-size:16px;line-height:1.15;padding:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#btnCr{position:absolute;right:228px;bottom:14px;width:78px;height:78px;border-radius:50%;background:#bfe3c9;border:3px solid var(--line);box-shadow:0 5px 0 var(--line);color:var(--txt);font-size:15px;font-weight:900;line-height:1.15;padding:0;margin:0;flex-direction:column;align-items:center;justify-content:center;z-index:6}#btnCr small{font-size:12px;font-weight:800;color:var(--sub)}#btnCr:active{box-shadow:0 1px 0 var(--line);transform:translateY(4px)}#btnCr.dis{opacity:.55}
+#sBattle.lefty #btnCr{right:auto;left:228px}.noarmy #btnCr{display:none!important}
 #btnRep{position:absolute;right:104px;bottom:150px;width:72px;height:72px;border-radius:50%;background:#f3c969;border:3px solid var(--line);box-shadow:0 5px 0 var(--line);color:var(--txt);font-size:15px;line-height:1.15;padding:0;margin:0;flex-direction:column;align-items:center;justify-content:center}#btnRep small{font-size:12px}#btnRep.dis{filter:grayscale(.7);opacity:.7}#sBattle.lefty #btnRep{right:auto;left:104px}#raidTag{position:absolute;left:50%;top:98px;transform:translateX(-50%);padding:5px 14px;border-radius:16px;background:rgba(40,30,20,.78);color:#fff;font-size:15px;font-weight:800;pointer-events:none;white-space:nowrap;z-index:5}
 #btnUp small{font-size:12px}#btnUp.dis{filter:grayscale(.7);opacity:.7}#sBattle.lefty #btnUp{right:auto;left:14px}
 #hudArmy{left:134px;top:94px}
@@ -236,7 +238,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 /* v0.27 알림 스택: 가운데 위쪽 안내(정보창·습격·일시정지·토스트)는 한 줄로 쌓여서 겹치지 않아요 */
 #notes{position:absolute;left:46%;top:92px;transform:translateX(-50%);width:max-content;max-width:min(520px,56%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:12;pointer-events:none}
 #notes>*,#notes #toast{position:static!important;transform:none!important;left:auto!important;top:auto!important;bottom:auto!important;margin:0!important}
-#raidTag,#pauseTag,#toast,#waitTag,#lagTag{background:rgba(40,30,20,.88)!important;color:#fff;font-size:15px;font-weight:800;padding:5px 16px;border-radius:99px;border:2px solid rgba(255,255,255,.28);box-shadow:0 3px 0 rgba(0,0,0,.3);white-space:normal;text-align:center;line-height:1.3}
+#raidTag,#coopTag,#pauseTag,#toast,#waitTag,#lagTag{background:rgba(40,30,20,.88)!important;color:#fff;font-size:15px;font-weight:800;padding:5px 16px;border-radius:99px;border:2px solid rgba(255,255,255,.28);box-shadow:0 3px 0 rgba(0,0,0,.3);white-space:normal;text-align:center;line-height:1.3}
 #pauseTag,#lagTag{color:#ffe9a0}#toast{max-width:100%}#toast[data-off="1"]{display:none}
 #infoBox{max-width:100%!important}
 .qres{border-radius:99px;border:2px solid rgba(255,255,255,.35);box-shadow:0 3px 0 rgba(0,0,0,.25);text-align:center}
@@ -286,7 +288,8 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
       <div class="row" style="margin:10px 0">시작 챕터 <select id="selStart"></select></div>
       <div class="row" style="margin:10px 0">전투 시간 <select id="selDur"><option value="300">5분 (기본)</option><option value="180">3분</option><option value="120">2분 (짧게)</option></select></div>
       <div class="row" style="margin:10px 0">난이도 <div class="row" id="diffRow" style="gap:6px"><button data-d="easy">쉬움</button><button data-d="normal" class="on">보통</button><button data-d="hard">어려움</button></div></div><small id="diffTip"></small>
-      <button id="btnStart">게임 시작</button> <button id="btnStartE" class="sec">♾ 무한 모드로 시작</button></div>
+      <button id="btnStart">게임 시작</button> <button id="btnStartE" class="sec">♾ 무한 모드로 시작</button> <button id="btnCoop" class="sec">🤝 협동전으로 시작</button>
+      <div class="note" style="margin-top:6px;font-size:13px">🤝 협동전: 친구마다 역할(수비·유격·보급)이 생기고, 성 방어 라운드에서 보급기지 2곳을 함께 부숴야 해요. 보급기지를 못 부수면 져요.</div></div>
     <div id="guestBox" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div>
   </div>
   <div style="margin:18px 0 10px"><button id="btnLeave" class="sec">나가기</button></div>
@@ -323,8 +326,8 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
   <div class="cap" id="hudFoodBox"><span id="hudFood"></span></div><div class="cap" id="hudName"></div>
   <div id="hudMid"><span id="hudT">00:00</span><div id="objBar" class="cap"></div><div id="hudBase"><div class="bar"><i id="barB"></i></div></div><i id="barT" style="display:none"></i></div>
   <div id="joyZone"><div id="joyRing"></div><div id="joyKnob"></div></div>
-  <button id="btnSummon">소집</button><button id="btnSkill">함성</button>
-  <div id="cards"></div><div id="evBox"></div><div id="notes"><div id="infoBox"></div><div id="raidTag" style="display:none"></div><div id="pauseTag"></div><div id="waitTag" style="display:none"></div><div id="lagTag" style="display:none">📶 방장 화면이 멈춘 것 같아요. 잠시만 기다려 주세요…</div></div>
+  <button id="btnSummon">소집</button><button id="btnSkill">함성</button><button id="btnCr" style="display:none"></button>
+  <div id="cards"></div><div id="evBox"></div><div id="notes"><div id="infoBox"></div><div id="raidTag" style="display:none"></div><div id="coopTag" style="display:none"></div><div id="pauseTag"></div><div id="waitTag" style="display:none"></div><div id="lagTag" style="display:none">📶 방장 화면이 멈춘 것 같아요. 잠시만 기다려 주세요…</div></div>
 </div>
 
 <div class="screen" id="sResult">
