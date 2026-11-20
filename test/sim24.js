@@ -7,14 +7,14 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const errs = []; p.on('pageerror', (e) => errs.push(String(e)));
   await p.goto('file:///home/claude/work/game/dist/index.html');
   await p.click('#btnSingle'); await p.waitForTimeout(400);
-  const out = await p.evaluate(({ role, diff, dur }) => {
+  await p.evaluate((l) => { window.__LIM = l; }, +(process.env.LIMIT || 99)); const out = await p.evaluate(({ role, diff, dur }) => {
     const D = window.__dbg, G0 = () => D.G; const rows = [];
     D.hostCtl('start', { start: 0, dur, diff, wall: 0 });
     const G = G0(); const id = G.order[0]; const h = G.pl[id]; h.role = role; 
     let att = 0;
     const UPC = [60, 90, 130, 180, 240];
     for (let guard = 0; guard < 70; guard++) {
-      const G = G0(); if (G.ph === 'end') break;
+      const G = G0(); if (G.ph === 'end' || rows.length >= (window.__LIM || 99)) break;
       if (G.ph === 'brief') { G.ph = 'battle'; }
       if (G.ph === 'result') { if (G.res.win) { D.hostMsg(id, { k: 'mer', i: 0 }); D.hostCtl('next'); att = 0; } else { att++; if (att >= 2) { G.res.win = true; D.hostCtl('next'); att = 0; } else D.hostCtl('retry'); } continue; }
       const rd = G.rd, ob = G.obj; const row = { rd, nm: D.R[rd].nm, ob, mod: G.mod, att, tl: [] }; let minB = 1e9, downs = 0, wasDown = false, hl30 = 0, b30 = 0, en30 = 0;

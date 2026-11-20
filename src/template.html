@@ -169,6 +169,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 @keyframes pu{from{transform:translateY(0)}to{transform:translateY(-4px)}}
 #hudWeap .eq{display:flex;align-items:center;gap:3px;background:rgba(252,244,224,.95);border:2px solid var(--line);border-radius:10px;padding:1px 6px 1px 2px;font-size:12px;font-weight:800;color:var(--txt)}#hudWeap .eq img{width:26px;height:26px;image-rendering:pixelated}#hudWeap .eq.wp{background:#ffe9a0}#hudWeap .eq.ev{border-color:#ff9a00;box-shadow:0 0 8px #ffb300}
 #sLobby,#sRoom,#sBrief,#sResult,#sEnd{overflow-y:auto;-webkit-overflow-scrolling:touch}
+@media (min-width:900px){#sRoom>.row{flex-wrap:nowrap!important}#sRoom>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}#hostBox{flex:0 0 auto;min-width:340px}}
 #rsHost{position:sticky;bottom:0;padding:10px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 40%);z-index:3}
 @media (max-height:620px){.screen:not(#sBattle):not(#sLobby){zoom:.74;padding:14px 20px}}
 .card.nw,.card.evo{animation:glow .8s infinite alternate!important}@keyframes glow{from{box-shadow:0 5px 0 var(--line),0 0 4px #ffb300}to{box-shadow:0 5px 0 var(--line),0 0 18px #ffb300}}
@@ -267,7 +268,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
       <button id="btnStart">게임 시작</button> <button id="btnStartE" class="sec">♾ 무한 모드로 시작</button></div>
     <div id="guestBox" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div>
   </div>
-  <div style="position:absolute;left:28px;bottom:16px"><button id="btnLeave" class="sec">나가기</button></div>
+  <div style="margin:18px 0 10px"><button id="btnLeave" class="sec">나가기</button></div>
 </div>
 
 <div class="screen" id="sBrief">

@@ -2,7 +2,7 @@
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
 const VER = 'v0.24';
 const UPDATES = [
-  { v: 'v0.24', d: '11/20', t: ['🌱 라운드 초반 준비 시간: 처음 30초는 적이 적게 나오고, 큰 습격까지 남은 시간이 위에 표시돼요. 첫 레벨업도 더 빨라요', '🛡 성 체력이 66%·33%가 되면 의병이 잠시 성을 지켜 줘요 (쉬움 4초·보통 3초·어려움 1.5초). 🌾 군량으로 성 수리 버튼(체력 30% 회복)도 생겼어요', '난이도 재조정: 쉬움은 누구나 깰 수 있게(성 체력 2배·적장 약함), 보통은 그 중간, 어려움은 적 강화·방어 이벤트 짧음·수리 비쌈. 성 수리는 체력 30% 회복(쉬움 35%·어려움 25%)', '탈출 라운드: 첫 매복이 늦고 약하며, 앞쪽에 체력 회복 상자가 있어요', '🎖 공훈 보상: 전투에서 이기면 3가지 중 1개를 골라요. 다음 라운드부터 계속 쌓여요 (체력·공격·군량·성벽·혼·회복)', '전장 변수가 생겼어요: 풍년(군량↑) · 의병 합류(병사 2명 시작) · 질풍(적이 빠른 대신 혼↑)', '적이 거점만 집중 공격하지 않아요. 가까운 영웅을 먼저 쫓는 적이 많아요. 성은 잠시 맞지 않으면 천천히 회복해요', '연속 라운드의 목표가 겹치지 않도록 바꿨고, 초반 라운드(옥포 해전 등) 난이도를 낮췄어요'] },
+  { v: 'v0.24', d: '11/20', t: ['🌱 라운드 초반 준비 시간: 처음 30초는 적이 적게 나오고, 큰 습격까지 남은 시간이 위에 표시돼요. 낮은 레벨은 레벨업에 필요한 경험치가 적어 빨리 올라요', '🛡 성 체력이 66%·33%가 되면 의병이 잠시 성을 지켜 줘요 (쉬움 4초·보통 3초·어려움 1.5초). 🌾 군량으로 성 수리 버튼(체력 30% 회복)도 생겼어요', '난이도 재조정: 쉬움은 누구나 깰 수 있게(성 체력 2배·적장 약함), 보통은 그 중간, 어려움은 적 강화·방어 이벤트 짧음·수리 비쌈. 성 수리는 체력 30% 회복(쉬움 35%·어려움 25%)', '탈출 라운드: 첫 매복이 늦고 약하며, 앞쪽에 체력 회복 상자가 있어요', '🎖 공훈 보상: 전투에서 이기면 3가지 중 1개를 골라요. 다음 라운드부터 계속 쌓여요 (체력·공격·군량·성벽·혼·회복)', '전장 변수가 생겼어요: 풍년(군량↑) · 의병 합류(병사 2명 시작) · 질풍(적이 빠른 대신 혼↑)', '적이 거점만 집중 공격하지 않아요. 가까운 영웅을 먼저 쫓는 적이 많아요. 성은 잠시 맞지 않으면 천천히 회복해요', '연속 라운드의 목표가 겹치지 않도록 바꿨고, 초반 라운드(옥포 해전 등) 난이도를 낮췄어요'] },
   { v: 'v0.23', d: '11/20', t: ['♾ 무한 모드 개편: 한 전장에서 라운드마다 1분, 99라운드까지! 레벨·카드가 계속 쌓여요', '라운드가 오를수록 적이 강해지고 정예와 적장이 더 많이 나와요. 가끔 밤이 와요', '99라운드는 최종 보스 (도요토미 히데요시 또는 홍타이지). 쓰러뜨리면 클리어!', '일반 모드 적장: 더 단단해지고(체력↑·갑옷), 붉은 원 범위 공격을 해요. 2분마다 나오고 고니시·와키자카 같은 장수가 번갈아 나와요', '업데이트 노트 팝업에서 닫기 버튼이 항상 보여요'] },
   { v: 'v0.22', d: '11/19', t: ['적 대포병 등장! 멀리서 쏘는 포탄이 떨어지는 자리에 붉은 원이 보여요. 원 밖으로 피하세요 (범위 피해)', '시간이 지날수록 중갑병·대포병·정예가 더 많이 나와요 (보통·어려움은 더 빠르게). 강한 적은 조선인의 혼을 더 많이 줘요', '적 조총병·궁수는 체력이 약하지만 한 방이 더 아파요. 보병·기병은 체력이 늘고 공격은 약해졌어요 (기병은 빠른 속도 그대로)', '아군 조총병·화포는 공격이 조금 더 세졌어요'] },
   { v: 'v0.21', d: '11/19', t: ['♾ 무한 모드! 30라운드를 깨면 끝없이 이어져요 (방에서 바로 시작할 수도 있어요). 버틴 시간·처치 수·퀴즈 정답으로 점수를 매겨요', '📖 도감과 🏆 랭킹이 생겼어요 (시작 화면 아래 버튼): 시너지·영웅·적장 도감', '레벨 업 때 퀴즈가 나와요! 이번 시대·지난 시대·더 먼저 배운 시대 문제가 섞여 나오고, 맞히면 보너스 카드 1장', '라운드가 끝나면 복기 카드를 10초 동안 읽어야 다음으로 넘어갈 수 있어요', '무기를 Lv.5까지 키우면 공격 이펙트가 금빛으로 빛나요', '⛶ 전체화면 버튼 추가 (카카오톡 안 브라우저는 막혀 있어서 크롬·삼성 인터넷으로 열어야 해요)', '소집 병사 밸런스 조정: 창병·기마병을 약하게, 레벨1 병사 1명이 적 보병 3명과 겨우 비길 정도예요', '창병은 적 보병과, 기마병은 적 기병과 같은 속도로 움직여요', '사거리 순서: 궁병 < 조총병 < 화포. 내 캐릭터 사거리 표시도 다시 보여요'] },
@@ -60,7 +60,7 @@ const ROLE = { // 영웅(플레이어) — 시작할 때 고유 무기 1개만 �
   admiral:{ n: '이순신', c: '#ffd84a', rg: 250, dmg: 38, rt: 0.55, hp: 300, sp: 118, aoe: 0,  tag: ['히든 영웅', '시작 무기: 거북선'], d: '거북선의 포로 사방의 적을 쓸어요 (모든 라운드를 깨면 열려요)' }
 
 };
-const DIFF = { easy: { n: '쉬움', sc: 0.45, hp: 0.6, sp: 0.55, dm: 0.5, fd: 50, hh: 1.4, bs: 2, bb: 0.5, rc: 40, rh: 0.35, bi: 4, pr: 0.12 }, normal: { n: '보통', sc: 0.7, hp: 0.9, sp: 0.78, dm: 0.8, fd: 20, hh: 1.15, bs: 1.4, bb: 0.75, rc: 50, rh: 0.3, bi: 3, pr: 0.2 }, hard: { n: '어려움', sc: 1, hp: 1.2, sp: 1.0, dm: 1.1, fd: -10, hh: 1, bs: 1, bb: 1.1, rc: 70, rh: 0.25, bi: 1.5, pr: 0.4 } };
+const DIFF = { easy: { n: '쉬움', sc: 0.45, hp: 0.6, sp: 0.55, dm: 0.5, fd: 50, hh: 1.4, bs: 2, bb: 0.5, rc: 40, rh: 0.35, bi: 4, pr: 0.2 }, normal: { n: '보통', sc: 0.7, hp: 0.9, sp: 0.78, dm: 0.8, fd: 20, hh: 1.15, bs: 1.4, bb: 0.75, rc: 50, rh: 0.3, bi: 3, pr: 0.3 }, hard: { n: '어려움', sc: 1, hp: 1.2, sp: 1.0, dm: 1.1, fd: -10, hh: 1, bs: 1, bb: 1.1, rc: 70, rh: 0.25, bi: 1.5, pr: 0.45 } };
 const ET = { // 적
   grunt:  { n: '보병',   hp: 30,  sp: 38, dm: 5,  r: 9,  st: 0,   f: 8,  xp: 1 },
   shoot:  { n: '조총·궁수', hp: 13, sp: 34, dm: 5,  r: 8,  st: 120, f: 9,  xp: 1 },
@@ -202,7 +202,7 @@ function startRound(i) {
   G.info = null; G.ambT = G.endless ? 8 : 26; G.runX = 0; G.souls = []; G.pj = []; G.magT = 0; G.nl = 0; G.nIn = false; G.evR = null; G.evShow = 0; G.units = new Array(SLOTN).fill(null); G.sumN = 0; G.sumMiss = 0; G.buffAtk = 0; G.slowT = 0; G.evDone = [false, false];
   G.baseMax = Math.round(600 * G.dif.bs * (1 + 0.2 * (G.wallN || 0)) * (1 + 0.12 * Math.max(0, ...G.order.map((id) => (G.pl[id].mer && G.pl[id].mer.wall) || 0)))); G.baseHp = G.baseMax;
   G.mod = (G.endless || i === 0) ? null : [null, 'rich', 'vol', 'haste'][(i * 7 + 3) % 4]; G.dmx = i < 6 && !G.endless ? 0.85 : 1;
-  G.food = 110 + G.bonus + G.dif.fd + 20 * Math.max(0, ...G.order.map((id) => (G.pl[id].mer && G.pl[id].mer.fd) || 0)); G.bonus = 0; G.foodMul = G.mod === 'rich' ? 1.3 : 1; G.spawnT = 1.5; G.bossDone = false; G.xp = 0; G.need = 5; G.lvC = 0; G.crates = ob === 'e' ? [{ x: 760, y: roadY(760, ww, wh), k: 'gmc' }] : []; G.crateT = 5; G.upg = 0; G.tt = 1;
+  G.food = 110 + G.bonus + G.dif.fd + 20 * Math.max(0, ...G.order.map((id) => (G.pl[id].mer && G.pl[id].mer.fd) || 0)); G.bonus = 0; G.foodMul = G.mod === 'rich' ? 1.3 : 1; G.spawnT = 1.5; G.bossDone = false; G.xp = 0; G.need = 4; G.lvC = 0; G.crates = ob === 'e' ? [{ x: 760, y: roadY(760, ww, wh), k: 'gmc' }] : []; G.crateT = 5; G.upg = 0; G.tt = 1;
   if (G.endless) G.dur = 1e9;
   const hs = (1 + 0.09 * G.dif.sc * G.sc) * (rd.df ? 1.1 : 1) * G.dif.hp * (i < 6 && !G.endless ? 0.88 : 1);
   if (ob === 'r') { const n = 3 + (i >= 16 ? 1 : 0), pos = [[ww * 0.42, wh * 0.26], [ww * 0.72, wh * 0.7], [ww * 0.88, wh * 0.28], [ww * 0.55, wh * 0.88]]; for (let j = 0; j < n; j++) { G.campPos.push(pos[j]); spawn('camp', hs * 0.9, pos[j]); } G.campTotal = n; }
@@ -310,7 +310,7 @@ function pickType(rd) { // 시간이 지날수록(특히 보통·어려움) 강�
   const wc = prog > 0.12 ? 0.02 + 0.14 * prog * k : 0, wt = prog > 0.2 ? 0.05 + 0.35 * prog * k : 0, ws = 0.2, wg = 0.45, r = Math.random() * (wg + ws + cvw + wc + wt);
   return r < wc ? 'cannon' : r < wc + wt ? 'tank' : r < wc + wt + ws ? 'shoot' : r < wc + wt + ws + cvw ? 'cav' : 'grunt'; }
 function gainXp(v) {
-  G.xp += v * xpMul(); while (G.xp >= G.need) { G.xp -= G.need; G.need = (G.lvC = (G.lvC || 0) + 1) === 1 ? 8 : Math.round(G.need * 1.28 + 3); for (const id of G.order) { const p = G.pl[id]; p.lv++; G.fx.push([p.x, p.y, 60, 'lvl']); if (!p.offer) { offerCards(p); pickQuiz(p); p.offT = 30; } } }
+  G.xp += v * xpMul() * (!G.endless && (G.lvC || 0) < 3 ? 1.5 : 1); while (G.xp >= G.need) { G.xp -= G.need; G.lvC = (G.lvC || 0) + 1; G.need = G.lvC <= 3 ? [6, 9, 12][G.lvC - 1] : Math.round(G.need * 1.28 + 3); for (const id of G.order) { const p = G.pl[id]; p.lv++; G.fx.push([p.x, p.y, 60, 'lvl']); if (!p.offer) { offerCards(p); pickQuiz(p); p.offT = 30; } } }
 }
 function nearestHero(x, y, rg) { let b = null, bd = rg * rg; for (const p of aliveHeroes()) { const d = (p.x - x) ** 2 + (p.y - y) ** 2; if (d < bd) { bd = d; b = p; } } return b; }
 function enemyDeath(e) {
@@ -355,7 +355,6 @@ function stepBattle(dt) {
   const hs = (1 + 0.09 * G.dif.sc * G.sc) * (rd.df ? 1.1 : 1) * G.dif.hp, hs2 = aliveHeroes();
   const rate = G.dif.sp * (0.55 + 0.9 * prog + 0.018 * G.sc) * (1 + 0.5 * (np - 1)) * (rd.df ? 1.12 : 1) * (G.obj === 'r' ? 0.45 : G.obj === 'e' ? 1.25 : 1);
   const ramp = G.endless ? 1 : G.t < 40 ? G.dif.pr : G.t < 100 ? G.dif.pr + (1 - G.dif.pr) * (G.t - 40) / 60 : 1;
-  if (!G.endless && G.t < 40) gainXp(0.32 * dt);
   G.spawnT -= dt * ramp * rate * 1.6 * (1 + 1.5 * prog) * (1 + 0.3 * G.nl); while (G.spawnT <= 0) { G.spawnT += 1; if (G.en.length >= (isLow() ? 130 : 260)) continue; const q = spawnPos(); if (q) spawn(pickType(rd), hs, q); }
   if (G.obj === 'e' && hs2.length) { G.ambT = (G.ambT === undefined ? 8 : G.ambT) - dt; if (G.ambT <= 0) { G.ambT = Math.max(5, 11 - 5 * prog); const h = hs2[rint(hs2.length)], ax0 = h.x + rnd(300, 440), ay0 = h.y + rnd(-190, 190), n = 4 + Math.round(prog * 5) - ((G.ambN = (G.ambN || 0) + 1) === 1 ? 2 : 0); for (let k = 0; k < n && G.en.length < (isLow() ? 130 : 260); k++) spawn(k % 4 === 3 ? 'cav' : pickType(rd), hs, clampW(ax0 + rnd(-60, 60), ay0 + rnd(-60, 60))); G.fx.push([ax0, ay0, 70, 'amb']); } }
   G.waveT -= dt; if (G.waveT <= 0 && G.obj !== 'e') { G.waveT = G.endless || G.t >= 120 ? 14 : 24; const q = spawnPos(); if (q) { const n = Math.round((14 + Math.floor(G.sc / 2) * 2 + Math.round(prog * 12)) * (G.endless ? 1 : Math.min(1, 0.45 + G.t / 180))); G.firstRaid = false; for (let k = 0; k < n && G.en.length < (isLow() ? 130 : 260); k++) spawn(pickType(rd), hs, clampW(q[0] + rnd(-110, 110), q[1] + rnd(-110, 110))); G.fx.push([q[0], q[1], 40, 'warn']); } }
