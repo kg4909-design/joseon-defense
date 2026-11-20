@@ -132,4 +132,3 @@
 - 끊긴 뒤 이어하기: localStorage jd_last(15분), 로비 btnResume. test/resume36.js
 - 영웅 꾸미기 강화: drawAura/trailTick(src/game.js), AUR 후광18+흔적7, 미리보기 cwPv. test/fx36.js fxui36.js
 - 업적 보상 꾸미기: LVF(레벨업 연출 8)·BRD(이름표 테두리 10)·ACHRW, 설정 fxs(친구·봇 이펙트 작게). test/ach36.js
-- 숙련도(MAST, jd_mast), 연속 원정(G.exp/carry, chkExp), 라운드 고유 규칙(SIGD, G.sig). test/mast36.js
