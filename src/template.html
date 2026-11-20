@@ -126,7 +126,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #bwj-badge button{background:var(--cream)!important;color:var(--txt)!important;border:2px solid var(--line)!important;box-shadow:0 3px 0 var(--line)!important;font-weight:900!important;padding:7px 12px!important}
 #bwj-badge a.lg{border:2px solid var(--line);box-shadow:0 3px 0 var(--line)!important}
 #evBox{left:276px!important;top:72px!important;width:470px!important}
-#sBrief .panel{font-size:17px!important;padding:10px 18px!important;margin:6px 0!important;line-height:1.45!important}#sBrief h2{margin:2px 0 0!important}#sBrief #bkGoal{margin:6px 0!important;font-size:16px}
+#sBrief .panel{font-size:15.5px!important;padding:7px 14px!important;margin:4px 0!important;line-height:1.35!important}#bkSrc{display:none}#sBrief h2{margin:2px 0 0!important}#sBrief #bkGoal{margin:6px 0!important;font-size:16px}
 #objBar{position:static;display:inline-block;margin-top:4px;font-size:14px;font-weight:800;padding:3px 14px}
 
 #btnGear,#btnGearL{position:absolute;right:12px;top:104px;width:44px;height:44px;border-radius:50%;background:var(--cream);border:3px solid var(--line);font-size:22px;padding:0;margin:0;box-shadow:0 3px 0 var(--line);z-index:6}
@@ -139,7 +139,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #sBattle.lefty #joyZone{left:auto;right:0}#sBattle.lefty #btnSummon{right:auto;left:134px}#sBattle.lefty #btnSkill{right:auto;left:14px}
 
 #btnUp{position:absolute;right:14px;bottom:124px;width:84px;height:84px;border-radius:50%;background:#8fd6c7;border:3px solid var(--line);box-shadow:0 5px 0 var(--line);color:var(--txt);font-size:16px;line-height:1.15;padding:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-#btnRep{position:absolute;right:108px;bottom:112px;width:76px;height:76px;border-radius:50%;background:#f3c969;border:3px solid var(--line);box-shadow:0 5px 0 var(--line);color:var(--txt);font-size:15px;line-height:1.15;padding:0;margin:0;flex-direction:column;align-items:center;justify-content:center}#btnRep small{font-size:12px}#btnRep.dis{filter:grayscale(.7);opacity:.7}#sBattle.lefty #btnRep{right:auto;left:108px}#raidTag{position:absolute;left:50%;top:60px;transform:translateX(-50%);padding:5px 14px;border-radius:16px;background:rgba(40,30,20,.78);color:#fff;font-size:15px;font-weight:800;pointer-events:none;white-space:nowrap;z-index:5}
+#btnRep{position:absolute;right:104px;bottom:150px;width:72px;height:72px;border-radius:50%;background:#f3c969;border:3px solid var(--line);box-shadow:0 5px 0 var(--line);color:var(--txt);font-size:15px;line-height:1.15;padding:0;margin:0;flex-direction:column;align-items:center;justify-content:center}#btnRep small{font-size:12px}#btnRep.dis{filter:grayscale(.7);opacity:.7}#sBattle.lefty #btnRep{right:auto;left:104px}#raidTag{position:absolute;left:50%;top:60px;transform:translateX(-50%);padding:5px 14px;border-radius:16px;background:rgba(40,30,20,.78);color:#fff;font-size:15px;font-weight:800;pointer-events:none;white-space:nowrap;z-index:5}
 #btnUp small{font-size:12px}#btnUp.dis{filter:grayscale(.7);opacity:.7}#sBattle.lefty #btnUp{right:auto;left:14px}
 #hudArmy{left:134px;top:84px}
 #hudWeap{position:absolute;left:10px;top:126px;display:flex;flex-wrap:wrap;gap:4px;width:300px}
@@ -169,17 +169,21 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 @keyframes pu{from{transform:translateY(0)}to{transform:translateY(-4px)}}
 #hudWeap .eq{display:flex;align-items:center;gap:3px;background:rgba(252,244,224,.95);border:2px solid var(--line);border-radius:10px;padding:1px 6px 1px 2px;font-size:12px;font-weight:800;color:var(--txt)}#hudWeap .eq img{width:26px;height:26px;image-rendering:pixelated}#hudWeap .eq.wp{background:#ffe9a0}#hudWeap .eq.ev{border-color:#ff9a00;box-shadow:0 0 8px #ffb300}
 #sLobby,#sRoom,#sBrief,#sResult,#sEnd{overflow-y:auto;-webkit-overflow-scrolling:touch}
-@media (min-width:900px){#sRoom>.row{flex-wrap:nowrap!important}#sRoom>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}#hostBox{flex:0 0 auto;min-width:340px}}
+#lobSet{max-width:calc(100vw - 24px);box-sizing:border-box}#lobSet[open]{position:fixed;left:12px;right:12px;bottom:10px;z-index:35;background:var(--cream);border:3px solid var(--line);border-radius:16px;padding:8px 12px}#relayUrl{width:100%!important;max-width:520px;box-sizing:border-box}
+@media (min-width:900px){#sRoom>.row{flex-wrap:nowrap!important}#sRoom>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}#hostBox{flex:0 0 auto;min-width:340px;margin-top:54px}}
 #rsHost{position:sticky;bottom:0;padding:10px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 40%);z-index:3}
 @media (max-height:620px){.screen:not(#sBattle):not(#sLobby){zoom:.74;padding:14px 20px}}
 .card.nw,.card.evo{animation:glow .8s infinite alternate!important}@keyframes glow{from{box-shadow:0 5px 0 var(--line),0 0 4px #ffb300}to{box-shadow:0 5px 0 var(--line),0 0 18px #ffb300}}
 .card .pp5 u.nx{animation:none}
 .noarmy #btnSummon,.noarmy #btnSkill,.noarmy #btnUp,.noarmy #btnRep,.noarmy #hudArmy{display:none!important}
 #pauseTag{top:112px!important;bottom:auto!important}
-#sResult{padding-bottom:96px}
+#sResult{padding-bottom:96px}#merBox{padding:8px 12px!important;margin:6px 0!important;max-width:calc(100% - 232px)}#merBox .row{flex-wrap:nowrap;gap:8px}#merBox .merb{flex:1 1 0;min-width:0;font-size:15px;line-height:1.3;padding:8px 6px;border-radius:16px}#merBox small{font-size:12px}
 #saveBox{display:none;position:absolute;inset:0;background:rgba(30,24,16,.55);z-index:40;align-items:center;justify-content:center}#saveBox.on{display:flex}
+#saveBox .pp,#pauseBox .pp{display:flex;flex-direction:column;max-height:92%;box-sizing:border-box}#svList{overflow-y:auto;min-height:0;flex:1 1 auto;-webkit-overflow-scrolling:touch}#svClose{flex:0 0 auto}
 #svList{display:flex;flex-direction:column;gap:8px}.svb{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:8px 16px;font-size:18px;background:var(--cream2);color:var(--txt);border:2px solid var(--line);box-shadow:0 3px 0 var(--line)}.svb small{font-size:13px;color:var(--sub)}.svb:disabled{opacity:.5}
-#bQ{margin:6px 0}#bQ .qo{display:block;width:100%;text-align:left;margin:4px 0;padding:8px 14px;font-size:17px}
+@media (min-width:700px){.screen#sBrief{zoom:.64!important}}
+#bfBar{position:sticky;bottom:0;padding:8px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 35%);z-index:3}@media (min-width:700px){#bqOpts{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}#bqOpts .qo{margin:0}}
+#sBrief{padding-bottom:12px}#bQ{margin:6px 0}#bQ .qo{display:block;width:100%;text-align:left;margin:4px 0;padding:8px 14px;font-size:17px}
 #btnSingle,#btnLoad,#btnCreate{white-space:nowrap;font-size:18px;padding:11px 10px;flex:1 1 auto}
 #lobMenu{width:470px;box-sizing:border-box}#lobMenu .row{gap:8px;flex-wrap:nowrap}#lobMenu .row input{min-width:0}
 #lobSet{left:auto;right:16px;bottom:12px;max-width:560px}#lobSet input{width:100%!important;box-sizing:border-box}
@@ -280,7 +284,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
   <div class="panel" id="bkClue"></div>
   <div id="bkGoal" style="margin:8px 0"></div>
   <div id="bQ"><div class="panel" id="bqText" style="margin-bottom:4px"></div><div id="bqOpts"></div><div id="bqWhy" style="margin:4px 0;min-height:20px"></div></div>
-  <button id="btnFight">전투 시작!</button><div id="bkWait" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div>
+  <div id="bfBar"><button id="btnFight">전투 시작!</button><div id="bkWait" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div></div>
 </div>
 
 <div id="setBox"><h3>⚙ 설정</h3>
@@ -305,8 +309,8 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 
 <div class="screen" id="sResult">
   <h2 id="rsTitle"></h2>
-  <div class="panel" id="rsHist"></div>
   <div class="panel" id="merBox" style="display:none"></div>
+  <div class="panel" id="rsHist"></div>
   <div id="qBox"><div class="panel" id="qText" style="margin-bottom:0"></div><div id="qOpts"></div><div id="qWhy" style="margin:6px 0;min-height:22px"></div></div>
   <div id="rsHost" class="row"><button id="btnNext">다음 라운드</button><button id="btnRetry">다시 도전</button><button id="rsSave" class="sec">💾 저장</button><button id="btnSkip" class="sec">역사 확인했으니 다음으로</button><button id="btnHome" class="sec">처음으로</button></div>
   <div id="rsWait" style="display:none">방장이 다음으로 넘어가길 기다려요…</div>
