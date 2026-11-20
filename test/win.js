@@ -11,7 +11,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   await p.evaluate(() => { G.t = G.dur; }); await p.waitForTimeout(1500);
   console.log('escape end', JSON.stringify(await p.evaluate(() => ({ ph: G.ph, gi: G.gi, res: G.res && G.res.win }))));
   await run(4, () => { }, 'boss'); await p.waitForTimeout(7000); await p.screenshot({ path: 'test/o_boss.png' });
-  await p.evaluate(() => { G.en.filter((e) => e.t === 'boss').forEach((e) => (e.hp = 0)); }); await p.waitForTimeout(1200);
+  await p.evaluate(() => { G.en.concat(G.du ? [G.du.b] : []).filter((e) => e.t === 'boss').forEach((e) => (e.hp = 0)); }); await p.waitForTimeout(600); await p.evaluate(() => { for (const id in G.pl) G.pl[id].offer = null; }); await p.waitForTimeout(1200);
   console.log('boss win', JSON.stringify(await p.evaluate(() => ({ ph: G.ph, res: G.res && G.res.win }))));
   await run(2, () => { G.pl.me.hp = 0; G.lives = 0; G.pl.me.down = 1e9; G.pl.me.hp = 0; }, 'survive wipe');
   await run(0, () => { G.baseHp = 0; }, 'castle fall');
