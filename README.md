@@ -130,3 +130,4 @@
 
 - v0.33 (밤): 잠시멈춤 창에 처음으로·전체화면 버튼, 일기토 중 팝업 숨김(.duel), 레벨 기반 적 강화(lvScale). test/pause36.js, shot36.js
 - 끊긴 뒤 이어하기: localStorage jd_last(15분), 로비 btnResume. test/resume36.js
+- 영웅 꾸미기 강화: drawAura/trailTick(src/game.js), AUR 후광18+흔적7, 미리보기 cwPv. test/fx36.js fxui36.js
