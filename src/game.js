@@ -2,7 +2,7 @@
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
 const VER = 'v0.27';
 const UPDATES = [
-  { v: 'v0.27', d: '11/20', t: ['⚔ 일기토 무대가 넓어졌어요(반지름 320).', '💪 영웅이 강할수록 적장도 단단해져요 (약한 영웅일 땐 그대로).', '🛡 일기토에서 받는 피해를 조금 줄였어요.', '📍 태블릿에서 "습격까지" 표시가 성 체력바와 겹치던 것을 고쳤어요.'] },
+  { v: 'v0.27', d: '11/20', t: ['⚔ 일기토 무대가 넓어졌어요(반지름 320).', '💪 영웅이 강할수록 적장도 단단해져요 (약한 영웅일 땐 그대로).', '🛡 일기토에서 받는 피해를 조금 줄였어요.', '📍 화면 위쪽 안내(습격 시간·멈춤·알림)가 겹치지 않고 차례로 쌓여요. 왼쪽 위 칸 간격도 넓혔어요.', '🔊 설정에서 효과음·배경음 크기를 따로 조절할 수 있어요. 효과음 기본은 60%예요.'] },
   { v: 'v0.26', d: '11/20', t: ['👥 온라인 협동 보정: 사람이 늘수록 적이 단단해지고(체력↑) 정예와 적장이 더 자주 나와요. 적 숫자는 조금만 늘어서 렉을 줄였어요', '🔗 방장은 "초대 링크 복사"로 친구에게 방 주소를 보낼 수 있어요 (링크를 열면 방 코드가 자동으로 들어가요)', '📡 온라인 전송량을 절반 가까이 줄였어요'] },
   { v: 'v0.25', d: '11/20', t: ['📜 라운드가 끝나면 "역사 한 컷" 카드가 나와요: 실제 역사와 게임 속 설정을 나눠서 보여줘요', '🧠 레벨업 퀴즈를 맞히면 군량(또는 체력 회복)을 받고, 3문제 연속 정답이면 보너스가 더 커져요', '🔥 영웅마다 스킬이 달라졌어요 (화살비·함성·호국염불·집중포화·학익진)', '⚔ 적장마다 일기토 스타일이 달라요 (돌격형·포격형·파쇄형·결계형·지휘형). 이기면 스타일별 보상!'] },
   { v: 'v0.24', d: '11/20', t: ['⚔ 적장 일기토: 적장이 나타나면 경고 화면 뒤에 원형 무대에서 1:1 승부! 붉은 표시를 피하고(함성 버튼 = 구르기) 공격하세요. 이기면 적장을 쓰러뜨려요', '🎵 배경음이 생겼어요 (설정에서 끌 수 있어요)', '🌱 라운드 초반 준비 시간: 처음 30초는 쉬운 적만 적게 나오고, 큰 습격까지 남은 시간이 위에 표시돼요. 낮은 레벨은 레벨업에 필요한 경험치가 적어 빨리 올라요', '🛡 성 체력이 66%·33%가 되면 의병이 잠시 성을 지켜 줘요 (쉬움 4초·보통 3초·어려움 1.5초). 🌾 군량으로 성 수리 버튼(체력 30% 회복)도 생겼어요', '난이도 재조정: 쉬움은 누구나 깰 수 있게(성 체력 2배·적장 약함), 보통은 그 중간, 어려움은 적 강화·방어 이벤트 짧음·수리 비쌈. 성 수리는 체력 30% 회복(쉬움 35%·어려움 25%)', '탈출 라운드: 첫 매복이 늦고 약하며, 앞쪽에 체력 회복 상자가 있어요', '🎖 공훈 보상: 전투에서 이기면 3가지 중 1개를 골라요. 다음 라운드부터 계속 쌓여요 (체력·공격·군량·성벽·혼·회복)', '전장 변수가 생겼어요: 풍년(군량↑) · 의병 합류(병사 2명 시작) · 질풍(적이 빠른 대신 혼↑)', '적이 거점만 집중 공격하지 않아요. 가까운 영웅을 먼저 쫓는 적이 많아요. 성은 잠시 맞지 않으면 천천히 회복해요', '연속 라운드의 목표가 겹치지 않도록 바꿨고, 초반 라운드(옥포 해전 등) 난이도를 낮췄어요'] },
@@ -610,13 +610,14 @@ let me = { name: '', role: 'archer' };
 let sel = -1, lastIn = [0, 0], joy = { on: false, id: null, ox: 0, oy: 0, x: 0, y: 0 }, keys = {};
 let lastPh = '', lastRd = -1, lastOffer = '', lastEvKey = '', draftSel = { start: 0, dur: 300 };
 const cam = { x: 0, y: 0, rd: -1, t0: 0 };
-const ST = (() => { let o = {}; try { o = JSON.parse(localStorage.getItem('jd_set') || '{}'); } catch (e) {} return Object.assign({ joy: 'm', hand: 'R', q: 'auto', snd: 'on', bgm: 'on' }, o); })();
+const ST = (() => { let o = {}; try { o = JSON.parse(localStorage.getItem('jd_set') || '{}'); } catch (e) {} return Object.assign({ joy: 'm', hand: 'R', q: 'auto', snd: 'on', bgm: 'on', sv: 60, bv: 100 }, o); })();
 let autoLow = false, fAcc = 0, fN = 0, skipF = 0, bossBan = 0, bossName = '', bannerBn = ['적장', ''];
 const isLow = () => ST.q === 'low' || (ST.q === 'auto' && autoLow);
 const JRS = { s: 42, m: 55, l: 72 }; let JR = 55;
 function saveSt() { try { localStorage.setItem('jd_set', JSON.stringify(ST)); } catch (e) {} }
-function toast(m) { let d = document.getElementById('toast'); if (!d) { d = document.createElement('div'); d.id = 'toast'; document.getElementById('stage').appendChild(d); } d.textContent = m; d.style.opacity = 1; clearTimeout(d._t); d._t = setTimeout(() => (d.style.opacity = 0), 4200); }
-function applySt() { JR = JRS[ST.joy] || 55; const ring = $('joyRing'), knob = $('joyKnob'); ring.style.width = ring.style.height = JR * 2 + 'px'; $('sBattle').classList.toggle('lefty', ST.hand === 'L');
+function toast(m) { let d = document.getElementById('toast'); if (!d) { d = document.createElement('div'); d.id = 'toast'; document.getElementById('notes').appendChild(d); } d.textContent = m; d.dataset.off = ''; d.style.opacity = 1; clearTimeout(d._t); d._t = setTimeout(() => { d.style.opacity = 0; d.dataset.off = '1'; }, 4200); }
+function applyVol() { try { if (SFX._o) SFX._o.gain.value = Math.max(0, Math.min(1, ST.sv / 100)); if (BGM.bus && BGM.on) BGM.bus.gain.value = 0.5 * ST.bv / 100; } catch (e) {} const a = $('volSfx'), b = $('volBgm'); if (a) { a.value = ST.sv; $('volSfxN').textContent = ST.sv + '%'; } if (b) { b.value = ST.bv; $('volBgmN').textContent = ST.bv + '%'; } }
+function applySt() { applyVol(); JR = JRS[ST.joy] || 55; const ring = $('joyRing'), knob = $('joyKnob'); ring.style.width = ring.style.height = JR * 2 + 'px'; $('sBattle').classList.toggle('lefty', ST.hand === 'L');
   const rs = isLow() ? 0.75 : 1, nw = Math.round(W * rs); if (cv.width !== nw) { cv.width = nw; cv.height = Math.round(H * rs); }
   document.querySelectorAll('#setBox [data-k]').forEach((b) => b.classList.toggle('on', ST[b.dataset.k] === b.dataset.v)); }
 const CAPS = {};
@@ -663,8 +664,9 @@ function ICON(id) { if (id.startsWith('evo_')) id = id.slice(4); if (ICU[id]) re
 // ---- 효과음 (코드로 만든 소리, 파일 없음) ----
 const SFX = { ctx: null, last: {}, TH: { hit: 70, slash: 90, bow: 80, gun: 120, boom: 120, gong: 300, pop: 80, pick: 50, lvl: 300, boss: 1000, night: 1000, cannon: 200 },
   init() { if (this.ctx) return; try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} },
-  tone(f0, f1, d, type, v) { const c = this.ctx, o = c.createOscillator(), g = c.createGain(), t = c.currentTime; o.type = type; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + d); g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0008, t + d); o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + d + 0.02); },
-  noise(d, v, f) { const c = this.ctx, n = Math.floor(c.sampleRate * d), b = c.createBuffer(1, n, c.sampleRate), a = b.getChannelData(0); for (let i = 0; i < n; i++) a[i] = (Math.random() * 2 - 1) * (1 - i / n); const s = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain(); s.buffer = b; fl.type = 'lowpass'; fl.frequency.value = f; g.gain.value = v; s.connect(fl); fl.connect(g); g.connect(c.destination); s.start(); },
+  out() { if (!this._o) { this._o = this.ctx.createGain(); this._o.connect(this.ctx.destination); } this._o.gain.value = Math.max(0, Math.min(1, ST.sv / 100)); return this._o; },
+  tone(f0, f1, d, type, v) { const c = this.ctx, o = c.createOscillator(), g = c.createGain(), t = c.currentTime; o.type = type; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + d); g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0008, t + d); o.connect(g); g.connect(this.out()); o.start(t); o.stop(t + d + 0.02); },
+  noise(d, v, f) { const c = this.ctx, n = Math.floor(c.sampleRate * d), b = c.createBuffer(1, n, c.sampleRate), a = b.getChannelData(0); for (let i = 0; i < n; i++) a[i] = (Math.random() * 2 - 1) * (1 - i / n); const s = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain(); s.buffer = b; fl.type = 'lowpass'; fl.frequency.value = f; g.gain.value = v; s.connect(fl); fl.connect(g); g.connect(this.out()); s.start(); },
   p(n) { if (!this.ctx || ST.snd === 'off') return; const t = performance.now(); if (t - (this.last[n] || 0) < (this.TH[n] || 50)) return; this.last[n] = t;
     if (n === 'hit') { this.noise(0.07, 0.16, 2600); this.tone(220, 90, 0.07, 'square', 0.05); }
     else if (n === 'slash') { this.noise(0.12, 0.13, 5200); }
@@ -683,7 +685,7 @@ const SFX = { ctx: null, last: {}, TH: { hit: 70, slash: 90, bow: 80, gun: 120, 
 // ===== 배경음(코드로 만드는 음악: 파일·인터넷 없이 재생) =====
 const BGM = { on: false, lv: 0, step: 0, next: 0, bus: null, timer: null, SC: [293.66, 349.23, 392, 440, 523.25, 587.33, 698.46], BPM: 104,
   PH: [[0,-1,-1,2,-1,3,-1,-1,4,-1,3,-1,2,-1,-1,-1,0,-1,-1,2,-1,3,-1,-1,5,-1,4,-1,3,-1,-1,-1], [3,-1,-1,4,-1,5,-1,-1,4,-1,3,-1,2,-1,0,-1,2,-1,-1,3,-1,2,-1,0,1,-1,0,-1,0,-1,-1,-1], [0,-1,2,-1,3,-1,4,-1,5,-1,-1,4,3,-1,2,-1,3,-1,4,-1,5,-1,6,-1,5,-1,4,-1,3,-1,-1,-1], [4,-1,-1,3,-1,2,-1,-1,3,-1,2,-1,0,-1,-1,-1,2,-1,-1,0,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1]],
-  start() { if (this.on || !SFX.ctx || ST.bgm === 'off') return; const c = SFX.ctx; this.bus = c.createGain(); this.bus.gain.value = 0.5; this.bus.connect(c.destination); this.on = true; this.next = c.currentTime + 0.15; this.step = 0; this.timer = setInterval(() => this.tick(), 90); },
+  start() { if (this.on || !SFX.ctx || ST.bgm === 'off') return; const c = SFX.ctx; this.bus = c.createGain(); this.bus.gain.value = 0.5 * ST.bv / 100; this.bus.connect(c.destination); this.on = true; this.next = c.currentTime + 0.15; this.step = 0; this.timer = setInterval(() => this.tick(), 90); },
   stop() { if (!this.on) return; this.on = false; clearInterval(this.timer); try { this.bus.gain.setTargetAtTime(0, SFX.ctx.currentTime, 0.2); } catch (e) {} },
   sync() { if (ST.bgm === 'off') { this.stop(); return; } if (!this.on) { this.start(); } if (!this.on) return; const v = (typeof V !== 'undefined') ? V : null; let lv = 0; if (v && v.ph === 'battle') { lv = v.paused ? 1 : v.du ? 3 : (v.en || []).some((e) => e[1] === 'boss') ? 3 : (v.t < 30 && !v.endless) ? 1 : 2; } this.lv = lv; },
   osc(f, t, d, type, v, lp) { const c = SFX.ctx, o = c.createOscillator(), g = c.createGain(); o.type = type; o.frequency.setValueAtTime(f, t); g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0004, t + d); let n = o; if (lp) { const fl = c.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = lp; o.connect(fl); n = fl; } n.connect(g); g.connect(this.bus); o.start(t); o.stop(t + d + 0.05); },
@@ -792,6 +794,7 @@ function hostBroadcast() { const s = makeSnap(); V = s; if (Net.mode === 'online
 
 // ----- 입력 -----
 function setupInput() {
+  { let pv = 0; $('volSfx').oninput = function () { ST.sv = +this.value; saveSt(); applyVol(); const n = performance.now(); if (n - pv > 160) { pv = n; SFX.init(); SFX.p('gun'); } }; $('volBgm').oninput = function () { ST.bv = +this.value; saveSt(); applyVol(); }; }
   document.querySelectorAll('#setBox [data-k]').forEach((b) => b.onclick = () => { ST[b.dataset.k] = b.dataset.v; if (b.dataset.k === 'q') autoLow = false; saveSt(); applySt(); });
   $('btnPause').onpointerdown = () => sendHost({ k: 'pause', v: true }); $('pResume').onclick = () => sendHost({ k: 'pause', v: false });
   $('pHelp').onclick = () => openTut(); $('setHelp').onclick = () => { $('setBox').classList.remove('on'); openTut(); };
