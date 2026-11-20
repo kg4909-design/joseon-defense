@@ -58,3 +58,14 @@
 - `bwj-brand.js` 한 파일에 **인트로 로고(나타났다 사라짐) + 로고 배지(인스타 연결) + 💬 오류 신고·건의(구글폼 안내창)** 가 들어 있습니다. 로고 그림도 파일 안에 포함되어 있어요.
 - 새 게임에는 이 파일 내용을 `<script>`로 넣고 `BWJ.init({ game:'게임 이름', ver:'v0.1' })` 한 줄만 부르면 됩니다.
 - 구글폼 주소나 인스타 주소를 바꾸려면 `bwj-brand.src.js` 위쪽의 `FORM`, `INSTA` 값을 고친 뒤 로고를 다시 합쳐야 하므로, 바꿀 일이 생기면 알려 주세요.
+
+## 통합 의견함 (배우자교실 모든 게임 공용)
+
+게임 안의 「💬 오류 신고·건의」 버튼 → 쓰기 / 내 의견(선생님 답장) / 친구들 의견(선생님이 공개한 글)
+
+- 서버: `feedback/` (Cloudflare Worker + Durable Object 저장소). 주소 `https://bwj-feedback.kimsky4409.workers.dev`
+- 선생님 관리 화면: `…/admin` (관리 열쇠 필요, 글 보기·답장·공개·숨김·삭제)
+- 학생은 이름 없이 기기마다 임의 번호로만 구분해요. 전화번호·메일·인터넷 주소가 들어간 글은 자동으로 막아요. 기기당 하루 5개까지.
+- 처음 한 번 배포: GitHub 저장소 Settings → Secrets and variables → Actions 에 `FEEDBACK_ADMIN_KEY` 등록 → Actions 탭 "Deploy feedback" 실행.
+- 서버에 연결할 수 없으면 기존 구글폼으로 보내는 버튼이 나와요.
+- 시험: `node test/fb27.mjs` (서버 논리 25개 확인), `test/fbui27.mjs` (게임 화면, 가짜 서버로 확인)
