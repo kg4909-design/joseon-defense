@@ -172,7 +172,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #hudWeap .eq{display:flex;align-items:center;gap:3px;background:rgba(252,244,224,.95);border:2px solid var(--line);border-radius:10px;padding:1px 6px 1px 2px;font-size:12px;font-weight:800;color:var(--txt)}#hudWeap .eq img{width:26px;height:26px;image-rendering:pixelated}#hudWeap .eq.wp{background:#ffe9a0}#hudWeap .eq.ev{border-color:#ff9a00;box-shadow:0 0 8px #ffb300}
 #sLobby,#sRoom,#sBrief,#sResult,#sEnd{overflow-y:auto;-webkit-overflow-scrolling:touch}
 #lobSet{max-width:calc(100vw - 24px);box-sizing:border-box}#lobSet[open]{position:fixed;left:12px;right:12px;bottom:10px;z-index:35;background:var(--cream);border:3px solid var(--line);border-radius:16px;padding:8px 12px}#relayUrl{width:100%!important;max-width:520px;box-sizing:border-box}
-@media (min-width:900px){#sRoom>.row{flex-wrap:nowrap!important}#sRoom>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}#hostBox{flex:0 0 auto;min-width:340px;margin-top:54px}}
+@media (min-width:900px){#sRoom>.row{flex-wrap:nowrap!important}#sRoom>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}#hostBox{flex:0 0 490px;width:490px;max-width:46vw;min-width:320px;margin-top:30px}#hostBox>.row{margin:4px 0!important}#hostBox>b{display:block;margin-bottom:2px}}
 #rsHost{position:sticky;bottom:0;padding:10px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 40%);z-index:3}
 @media (max-height:620px){.screen:not(#sBattle):not(#sLobby){zoom:.74;padding:14px 20px}}
 .card.nw,.card.evo{animation:glow .8s infinite alternate!important}@keyframes glow{from{box-shadow:0 5px 0 var(--line),0 0 4px #ffb300}to{box-shadow:0 5px 0 var(--line),0 0 18px #ffb300}}
@@ -286,7 +286,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
   <h2 id="roomLabel"></h2><div class="row" style="margin:-4px 0 8px"><button id="btnCopy" class="sec" style="display:none">🔗 초대 링크 복사</button></div><div id="coopInfo" style="margin-bottom:10px;font-size:16px"></div>
   <div class="row" style="align-items:flex-start;gap:30px">
     <div style="min-width:300px"><b>참가자</b><ul id="plist"></ul>
-      <div style="margin-top:8px"><b>내 역할</b><div class="row" id="roleRow" style="margin-top:6px"><button data-r="archer">궁수</button><button data-r="militia">의병</button><button data-r="monk">승병</button><button data-r="gunner">화포수</button><button data-r="admiral" id="roleHid">🔒 히든</button><button data-r="gwonyul" id="roleLeg">🔒 전설</button></div>
+      <div style="margin-top:8px"><b>내 역할</b><div class="row" id="roleRow" style="margin-top:6px"><button data-r="archer">궁수</button><button data-r="militia">의병</button><button data-r="monk">승병</button><button data-r="gunner">화포수</button><button data-r="admiral" id="roleHid">🔒 히든</button><button data-r="gwonyul" id="roleLeg">🔒 전설</button><button data-r="gimsimin" id="roleLeg2">🔒 전설</button></div>
       <div id="roleTip" style="margin-top:6px;font-size:15px"></div></div></div>
     <div id="hostBox"><b>방장 설정</b>
       <div class="row" style="margin:10px 0">시작 챕터 <select id="selStart"></select></div>

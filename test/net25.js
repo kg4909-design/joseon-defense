@@ -8,7 +8,7 @@ const N = +(process.argv[2] || 4), FILE = process.env.GAME || 'file:///home/clau
   const errs = [], pages = [], out = {};
   for (let i = 0; i < N; i++) {
     const ctx = await b.newContext({ viewport: { width: 1180, height: 820 } }); const p = await ctx.newPage();
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.30'); localStorage.setItem('hdg_relay', 'ws://localhost:8799/ws'); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.31'); localStorage.setItem('hdg_relay', 'ws://localhost:8799/ws'); });
     p.on('pageerror', (e) => errs.push(i + ':' + e.message)); p.on('dialog', (d) => d.dismiss());
     await p.goto(FILE); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.fill('#nick', '학생' + (i + 1)); pages.push(p);
   }
@@ -18,7 +18,7 @@ const N = +(process.argv[2] || 4), FILE = process.env.GAME || 'file:///home/clau
   await pages[0].waitForTimeout(800);
   out.hostPlayers = await pages[0].evaluate(() => __dbg.G.order.length);
   // 5번째 접속은 거절돼야 함
-  if (N === 4) { const ctx = await b.newContext(); const p = await ctx.newPage(); await p.addInitScript(() => { localStorage.setItem('hdg_relay', 'ws://localhost:8799/ws'); localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.30'); }); await p.goto(FILE); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.fill('#roomCode', code); await p.click('#btnJoin'); await p.waitForTimeout(800); out.fifth = await p.textContent('#err'); }
+  if (N === 4) { const ctx = await b.newContext(); const p = await ctx.newPage(); await p.addInitScript(() => { localStorage.setItem('hdg_relay', 'ws://localhost:8799/ws'); localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.31'); }); await p.goto(FILE); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.fill('#roomCode', code); await p.click('#btnJoin'); await p.waitForTimeout(800); out.fifth = await p.textContent('#err'); }
   if (process.env.SHOT) { await pages[0].screenshot({ path: 'test/net_host_1180.png' }); await pages[1].screenshot({ path: 'test/net_guest_1180.png' }); for (const q of [pages[0], pages[1]]) await q.setViewportSize({ width: 844, height: 390 }); await pages[0].waitForTimeout(400); await pages[0].screenshot({ path: 'test/net_host_844.png' }); await pages[1].screenshot({ path: 'test/net_guest_844.png' }); for (const q of [pages[0], pages[1]]) await q.setViewportSize({ width: 1180, height: 820 }); }
   // 영웅 선택 동기화
   const roles = ['archer', 'militia', 'monk', 'gunner'];
