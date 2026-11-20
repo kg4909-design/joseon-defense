@@ -218,7 +218,7 @@ function startRound(i) {
   if (G.endless) G.dur = 1e9;
   const hs = (1 + 0.09 * G.dif.sc * G.sc) * (rd.df ? 1.1 : 1) * G.dif.hp * (i < 6 && !G.endless ? 0.88 : 1);
   if (ob === 'r') { const n = 3 + (i >= 16 ? 1 : 0), pos = [[ww * 0.42, wh * 0.26], [ww * 0.72, wh * 0.7], [ww * 0.88, wh * 0.28], [ww * 0.55, wh * 0.88]]; for (let j = 0; j < n; j++) { G.campPos.push(pos[j]); spawn('camp', hs * 0.9, pos[j]); } G.campTotal = n; }
-  G.cmOn = !!G.cm && ob === 'd'; if (G.cmOn) { const pos = [[ww * 0.14, wh * 0.2], [ww * 0.86, wh * 0.8]]; for (const q of pos) { G.campPos.push(q); spawn('camp', hs * 0.9, q); } G.campTotal = 2; }
+  G.cmOn = !!G.cm && ob === 'd'; if (G.cmOn) { const pos = [[ww * 0.14, wh * 0.2], [ww * 0.86, wh * 0.8]]; for (const q of pos) { G.campPos.push(q); spawn('camp', hs * (G.rd < 6 ? 0.55 : 0.75), q); } G.campTotal = 2; }
   if (ob !== 'e') for (let j = 0; j < Math.min(5, Math.floor(i0 / 4)) + (G.mod === 'vol' ? 2 : 0); j++) doSummon(true);
   G.order.forEach((id, n) => { const p = G.pl[id]; p.cr = G.cm ? CR_ORD[n % 3] : ''; if (p.bot && p.cr) p.name = BOT_NM[p.cr]; p.cc = 0; p.cards = startCards(p.role); p.sn = {}; p.rv = 0; calcSyn(p); p.lv = 1; p.mx = Math.round(ROLE[p.role].hp * G.dif.hh * heroStats(p).mxm); p.hp = p.mx; p.down = 0; p.cd = 0; p.offer = null; p.mo = null; p.fz = 3; const a = n * 1.2; if (G.castle) { p.x = G.ax - 120 + Math.cos(a) * 30; p.y = G.ay + 70 + Math.sin(a) * 40; } else { p.x = G.ax + Math.cos(a) * 60; p.y = G.ay + 110 + Math.sin(a) * 40; } });
 }
@@ -466,7 +466,7 @@ function stepBattle(dt) {
   if (G.obj === 'e' && hs2.length) { const lim = Math.min(...hs2.map((h) => h.x)) - 700; G.en = G.en.filter((e) => e.t === 'boss' || e.x > lim); }
   // 적 이동 / 공격
   for (const e of G.en) { const T = ET[e.t]; if (e.ef > 0) e.ef -= dt;
-    if (e.t === 'camp') { e.gt -= dt; if (e.gt <= 0) { e.gt = 7; for (let k = 0; k < 2 && G.en.length < 260; k++) spawn('grunt', hs, clampW(e.x + rnd(-50, 50), e.y + rnd(30, 70))); } continue; }
+    if (e.t === 'camp') { e.gt -= dt; if (e.gt <= 0) { e.gt = G.cmOn ? 12 : 7; for (let k = 0; k < (G.cmOn && G.rd < 6 ? 1 : 2) && G.en.length < 260; k++) spawn('grunt', hs, clampW(e.x + rnd(-50, 50), e.y + rnd(30, 70))); } continue; }
     if (e.t === 'boss') { e.bk -= dt; if (e.bk <= 0) { e.bk = e.bi % 2 ? 9 : 7; bossAttack(e); } }
     if (e.st > 0) e.st -= dt; else { let tx, ty, reach, tp = null;
       if (G.castle) { if (e.hu === undefined) e.hu = e.t !== 'shoot' && Math.random() < 0.6; let hh = null; if (e.hu) { let bd2 = 340 * 340; for (const p of hs2) { const d2 = (p.x - e.x) ** 2 + (p.y - e.y) ** 2; if (d2 < bd2) { bd2 = d2; hh = p; } } } if (hh) { tp = hh; tx = hh.x; ty = hh.y; reach = T.r + 10 + T.st * 0.8; } else { tx = G.ax + e.ox; ty = G.ay + e.oy; reach = e.t === 'shoot' ? e.rg * 0.9 : CR + 14 + T.st * 0.9 + e.ro; } }
@@ -835,6 +835,12 @@ function fillBots(total) {
   dropBots(); total = Math.min(4, total | 0); let k = 0;
   while (G.order.length < total) { const used = new Set(G.order.map((id) => G.pl[id].role)), r = BOT_ROLES.find((x) => !used.has(x)) || 'archer', id = 'bot' + (++k); addPlayer(id, '🤖봇' + k, r); G.pl[id].bot = true; }
 }
+const BOT_WP = ['bow', 'cannon', 'sword', 'buddha', 'spear', 'flail', 'bomb', 'hwacha', 'musket', 'rocket', 'stone', 'nu', 'turtle'];
+function botCard(p) { // 봇은 이미 키우던 카드를 더 키우고, 무기는 3개까지만 모아요
+  const c = p.cards || {}, nw = BOT_WP.filter((k) => c[k]).length; let bi = 0, bs = -1;
+  p.offer.forEach((id, i) => { let s = Math.random(); if (String(id).startsWith('evo_')) s += 100; else if (BOT_WP.includes(id)) s += c[id] ? 12 + c[id] : (nw < 3 ? 8 : 2); else if (c[id]) s += 6 + c[id]; else if (['armor', 'guard', 'medic', 'forge', 'gong', 'train', 'powder', 'crit'].includes(id)) s += 5; else if (id === 'wall' && G.castle) s += 3; else if (id === 'heal' || id === 'food' || id === 'volun') s += 1; else s += 2; if (s > bs) { bs = s; bi = i; } });
+  return bi;
+}
 let lastBt = 0;
 function botAI(dd) {
   const now = performance.now(), dt = dd || Math.min(0.2, (now - lastBt) / 1000); lastBt = now;
@@ -843,12 +849,12 @@ function botAI(dd) {
   const hum = all.filter((p) => !p.bot && !p.away && p.hp > 0 && !(p.down > 0)), d2 = (a, x, y) => Math.hypot(a.x - x, a.y - y), ch = (m) => Math.random() < dt / m;
   const camps = G.en.filter((e) => e.t === 'camp');
   for (const p of bots) {
-    const B = p.bt = p.bt || { o: 0, dir: 1, df: 0, s: 0 }; B.df -= dt; if (B.df <= 0) { B.df = 2 + Math.random() * 2; B.dir = -B.dir; }
+    const B = p.bt = p.bt || { o: 0, dir: 1, df: 0, s: 0 }; const rep = bots[0] === p; B.df -= dt; if (B.df <= 0) { B.df = 2 + Math.random() * 2; B.dir = -B.dir; }
     if (G.ph === 'brief') { const q = R[G.rd].q; if (q && G.ans[p.id] == null && ch(2.5)) hostMsg(p.id, { k: 'ans', i: Math.random() < 0.65 ? q[2] : rint(q[1].length) }); continue; }
     if (G.ph === 'result') { if (p.mo && ch(2)) hostMsg(p.id, { k: 'mer', i: rint(p.mo.length) }); continue; }
     if (G.ph !== 'battle') continue;
     if (G.ev) { if (G.ev.votes[p.id] == null && ch(1.8)) hostMsg(p.id, { k: 'vote', i: rint(2) }); p.mvx = p.mvy = 0; continue; }
-    if (p.offer) { B.o += dt; if (B.o > 1.6) { B.o = 0.6; if (p.qz && p.qs === 0) hostMsg(p.id, { k: 'qa', i: Math.random() < 0.65 ? p.qz.a : rint(p.qz.o.length) }); else hostMsg(p.id, { k: 'card', i: rint(p.offer.length) }); } } else B.o = 0;
+    if (p.offer) { B.o += dt; if (B.o > 1.6) { B.o = 0.6; if (p.qz && p.qs === 0) hostMsg(p.id, { k: 'qa', i: Math.random() < 0.65 ? p.qz.a : rint(p.qz.o.length) }); else hostMsg(p.id, { k: 'card', i: botCard(p) }); } } else B.o = 0;
     if (p.hp <= 0 || p.down > 0) { p.mvx = p.mvy = 0; continue; }
     let tx = G.ax, ty = G.ay, stop = 110;
     if (G.du) {
@@ -857,7 +863,7 @@ function botAI(dd) {
       continue;
     }
     const foes = G.en.filter((e) => e.t !== 'camp'), near = (r) => foes.filter((e) => d2(e, p.x, p.y) < r);
-    if (p.cr === 'ranger') { const c = camps.slice().sort((a, b) => d2(a, p.x, p.y) - d2(b, p.x, p.y))[0]; if (c) { tx = c.x; ty = c.y; stop = 230; } else { const e = foes.slice().sort((a, b) => d2(a, G.ax, G.ay) - d2(b, G.ax, G.ay))[0]; if (e && d2(e, G.ax, G.ay) < 650) { tx = e.x; ty = e.y; stop = 240; } else stop = 170; } }
+    if (p.cr === 'ranger' || (G.obj === 'r' && p.cr !== 'supply')) { const c = camps.slice().sort((a, b) => d2(a, p.x, p.y) - d2(b, p.x, p.y))[0]; if (c) { tx = c.x; ty = c.y; stop = 230; } else { const e = foes.slice().sort((a, b) => d2(a, G.ax, G.ay) - d2(b, G.ax, G.ay))[0]; if (e && d2(e, G.ax, G.ay) < 650) { tx = e.x; ty = e.y; stop = 240; } else stop = 170; } }
     else if (p.cr === 'supply') { const f = hum.slice().sort((a, b) => a.hp / a.mx - b.hp / b.mx)[0] || all.find((q) => q.id !== p.id && q.hp > 0); if (f) { tx = f.x; ty = f.y; stop = 120; } }
     else { stop = 120; }
     const dx = tx - p.x, dy = ty - p.y, L = Math.hypot(dx, dy);
@@ -870,8 +876,13 @@ function botAI(dd) {
       else go = all.some((q) => q.hp > 0 && q.hp < q.mx * 0.5) || all.some((q) => q.down > 0 && q.down < 1e8);
       if (go && ch(0.8)) hostMsg(p.id, { k: 'cr' });
     }
-    B.s += dt; if (B.s > 3.5) { B.s = 0;
-      if (p.cr === 'supply' && G.obj !== 'e' && G.food >= summonCost() + 60 && G.units.some((x, i) => i < slotsOpen(G.upg) && !x)) hostMsg(p.id, { k: 'summon' });
+    B.s += dt; if (B.s > 2) { B.s = 0;
+      if (G.obj !== 'e' && rep) { // 팀 살림은 봇 한 명이 대표로 (사람이 직접 해도 돼요)
+        let did = false; const n = slotsOpen(G.upg);
+        for (let i = 0; i < n && !did; i++) for (let j = 0; j < n && !did; j++) { const A = G.units[i], Bq = G.units[j]; if (i !== j && A && Bq && A.t === Bq.t && A.lv === Bq.lv && Bq.lv < 4) { hostMsg(p.id, { k: 'merge', a: i, b: j }); did = true; } }
+        if (!did && G.upg < 5 && G.food >= UPC[G.upg] + 20) { hostMsg(p.id, { k: 'upg' }); did = true; }
+        if (!did && G.food >= summonCost() + 20 && G.units.some((x, i) => i < n && !x)) { hostMsg(p.id, { k: 'summon' }); did = true; }
+      }
       if (p.cr === 'guard' && G.castle && G.baseHp < G.baseMax * 0.6 && G.food >= G.dif.rc + 30 && (G.repCd || 0) <= 0) hostMsg(p.id, { k: 'rep' }); }
   }
 }
