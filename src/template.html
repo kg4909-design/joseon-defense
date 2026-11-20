@@ -277,6 +277,23 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #cards .rcm{display:block;font-style:normal;font-size:12px;font-weight:900;color:#d35400;background:#fff1cf;border:2px solid #f0b34a;border-radius:99px;padding:0 8px;margin-top:3px}
 #smTag{background:rgba(120,70,0,.92)!important;border-color:#ffd24a!important}
 .sm #smTag{font-size:18px}
+
+/* v0.33 휴대폰/태블릿/PC 공통 보정 */
+.screen:not(#sBattle),.screen:not(#sBattle) *{touch-action:pan-y}
+input[type=range]{touch-action:pan-x!important}
+#updModal{justify-content:flex-start!important;padding-left:36px!important}
+#updModal .um{width:min(560px,62%)!important}
+#updModal .us{padding-left:44px;min-height:18px}
+#sRoom>.row{flex-wrap:nowrap!important;gap:20px!important}#sRoom>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}
+#hostBox{flex:0 0 470px!important;width:470px!important;max-width:none!important;min-width:0!important;margin-top:0!important}
+#rsStart{position:sticky;bottom:0;z-index:5;padding:8px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 30%);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#rsStart button{margin:0}
+#stage[data-scr=sBrief] #bwj-badge,#stage[data-scr=sResult] #bwj-badge,#stage[data-scr=sEnd] #bwj-badge,#stage[data-scr=sRoom] #bwj-badge{top:6px!important}
+#sBrief,#sResult,#sEnd{padding-right:20px}
+#roleRow{gap:6px!important;margin-top:4px!important}#roleRow button{font-size:15px!important;padding:4px 11px!important}
+#sRoom h2{margin:0 0 4px!important;font-size:26px}#sRoom>.row:first-of-type{margin:0 0 4px!important}#coopInfo{margin-bottom:4px!important;font-size:14px!important}
+#hostBox>.row{margin:5px 0!important}#hostBox select{font-size:15px;padding:4px 8px}#hostBox button{font-size:15px;padding:5px 12px}#roleTip{font-size:13px!important}#plist{margin:4px 0;padding-left:18px}#plist li{font-size:16px}
+#rsStart button{font-size:17px;padding:8px 16px}
 </style>
 </head><body>
 <div id="stage">
@@ -315,11 +332,11 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
       <div class="row" style="margin:10px 0">전투 시간 <select id="selDur"><option value="300">5분 (기본)</option><option value="180">3분</option><option value="120">2분 (짧게)</option></select></div>
       <div class="row" style="margin:10px 0">난이도 <div class="row" id="diffRow" style="gap:6px"><button data-d="easy">쉬움</button><button data-d="normal" class="on">보통</button><button data-d="hard">어려움</button></div></div><small id="diffTip"></small>
       <div class="row" style="margin:6px 0;gap:6px">🤝 협동 <select id="selCl"><option value="1">난이도 1 연습</option><option value="2" selected>난이도 2 도전</option><option value="3">난이도 3 극한</option></select> <select id="selBots"><option value="0">봇 없음</option><option value="2">총 2명(봇 채움)</option><option value="3" selected>총 3명(봇 채움)</option><option value="4">총 4명(봇 채움)</option></select></div>
-      <button id="btnStart">게임 시작</button> <button id="btnStartE" class="sec">♾ 무한 모드로 시작</button> <button id="btnCoop" class="sec">🤝 협동전으로 시작</button>
       <div class="note" style="margin-top:6px;font-size:13px">🤝 협동전: 친구마다 역할(수비·유격·보급)이 생기고, 성 방어 라운드에서 보급기지 2곳을 함께 부숴야 해요. 미션은 라운드마다 달라요(🏕 이중 전선·🔥 쌍둥이 봉화·⚡ 속전속결). 깨면 🎟 뽑기권과 🧩 전설 영웅 조각을 받아요.</div></div>
     <div id="guestBox" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div>
   </div>
-  <div style="margin:18px 0 10px"><button id="btnLeave" class="sec">나가기</button></div>
+  <div style="margin:10px 0 4px"><button id="btnLeave" class="sec">나가기</button></div>
+  <div id="rsStart"><button id="btnStart">게임 시작</button><button id="btnStartE" class="sec">♾ 무한 모드로 시작</button><button id="btnCoop" class="sec">🤝 협동전으로 시작</button></div>
 </div>
 
 <div class="screen" id="sBrief">
