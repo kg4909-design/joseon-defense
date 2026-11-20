@@ -300,6 +300,7 @@ input[type=range]{touch-action:pan-x!important}
 @keyframes rainm{to{background-position:0 0,-30px 60px}}
 #wxOv.fog{background:radial-gradient(ellipse at 50% 50%,rgba(235,240,245,.15),rgba(235,240,245,.62))}
 #wxOv.night{background:radial-gradient(ellipse at 50% 50%,rgba(10,14,40,.2),rgba(8,10,34,.7))}
+#sBattle.duel #notes,#sBattle.duel #wxOv,#sBattle.duel #evBox,#sBattle.duel #escGo{display:none!important}
 </style>
 </head><body>
 <div id="stage">
@@ -369,7 +370,7 @@ input[type=range]{touch-action:pan-x!important}
  <button id="setHelp" class="sec" style="display:block;margin:10px auto 0;padding:8px 22px">❓ 게임 방법 다시 보기</button><button id="setClose">닫기</button></div>
 <div id="cwBox"><div class="pp"><h3>🎁 내 보관함</h3><div id="cwBody"></div><button id="cwClose" class="sec" style="margin-top:8px">닫기</button></div></div>
 <div id="saveBox"><div class="pp"><h3 id="svTitle"></h3><p id="svNote" style="font-size:15px;text-align:center"></p><div id="svList"></div><button id="svClose" class="sec" style="margin-top:8px">닫기</button></div></div>
-<div id="pauseBox"><div class="pp"><h3 id="pTitle"></h3><p id="pText"></p><div class="row" style="justify-content:center;gap:12px"><button id="pResume">▶ 계속하기</button><button id="pHelp" class="sec">❓ 도움말</button><button id="pSave" class="sec">💾 저장</button></div><div id="pWait" style="display:none">방장이 멈췄어요. 잠시만 기다려요. (최대 1분 30초, 지나면 자동으로 다시 시작해요)</div><div id="pAuto" style="display:none;font-size:13px;margin-top:6px;color:#7a6652">친구들이 있을 때는 90초 뒤 자동으로 다시 시작해요.</div></div></div>
+<div id="pauseBox"><div class="pp"><h3 id="pTitle"></h3><p id="pText"></p><div class="row" style="justify-content:center;gap:12px"><button id="pResume">▶ 계속하기</button><button id="pHelp" class="sec">❓ 도움말</button><button id="pSave" class="sec">💾 저장</button></div><div class="row" style="justify-content:center;gap:12px;margin-top:8px"><button id="pFs" class="sec">⛶ 전체화면</button><button id="pHome" class="sec">🏠 처음으로</button></div><div id="pWait" style="display:none">방장이 멈췄어요. 잠시만 기다려요. (최대 1분 30초, 지나면 자동으로 다시 시작해요)</div><div id="pAuto" style="display:none;font-size:13px;margin-top:6px;color:#7a6652">친구들이 있을 때는 90초 뒤 자동으로 다시 시작해요.</div></div></div>
 <div id="tutBox"><div class="pp"><div id="tutPg"></div><h3 id="tutH"></h3><p id="tutB"></p><div class="row" style="justify-content:center;gap:10px"><button id="tutPrev" class="sec">◀ 이전</button><button id="tutNext">다음 ▶</button><button id="tutSkip" class="sec">건너뛰기</button></div></div></div>
 <div class="screen" id="sBattle"><div id="wxOv"></div>
   <button id="btnGear" title="설정">⚙</button><button id="btnPause" title="일시정지">❚❚</button><div class="cap" id="hudArmy"></div><div id="hudWeap"></div><button id="btnUp"></button><button id="btnRep" style="display:none"></button>
