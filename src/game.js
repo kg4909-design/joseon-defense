@@ -2,7 +2,7 @@
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
 const VER = 'v0.29';
 const UPDATES = [
-  { v: 'v0.29', d: '11/20', t: ['🤝 협동전 모드 추가! 방장이 "협동전으로 시작"을 누르면 친구마다 역할(🛡수비·🔥유격·🌾보급)이 생기고, 역할 버튼으로 각자 능력을 써요.', '🏕 성 방어 라운드마다 멀리 보급기지 2곳이 생겨요. 시간 안에 함께 부수지 못하면 져요.'] },
+  { v: 'v0.29', d: '11/20', t: ['🤝 협동전 모드 추가! 방장이 "협동전으로 시작"을 누르면 친구마다 역할(🛡수비·🔥유격·🌾보급)이 생기고, 역할 버튼으로 각자 능력을 써요.', '🏕 성 방어 라운드마다 멀리 보급기지 2곳이 생겨요. 시간 안에 함께 부수지 못하면 져요.', '🤖 협동전 빈자리를 봇이 채워 줘요! 봇도 역할대로 움직이고 능력·퀴즈·카드·투표를 알아서 해요. (방 설정의 "협동전 빈자리"에서 고르세요)'] },
   { v: 'v0.28', d: '11/20', t: ['📶 같이하기 중 연결이 끊겨도 3분 안에 다시 들어오면 영웅 그대로 이어서 해요 (끊긴 동안은 다치지 않아요).', '🛑 방장이 나가려 하면 "모두 나가게 돼요" 확인이 떠요.', '🌙 게임하는 동안 화면이 꺼지지 않게 했어요.', '⏸ 방장이 멈추면 친구 화면에 안내가 뜨고, 90초 뒤 자동으로 다시 시작해요.', '👀 투표·카드를 고르는 중인 친구 이름이 보여요. 방장 화면이 멈추면 "방장 화면이 멈춘 것 같아요"가 떠요.'] },
   { v: 'v0.27', d: '11/20', t: ['⚔ 일기토 무대가 넓어졌어요(반지름 320).', '💪 영웅이 강할수록 적장도 단단해져요 (약한 영웅일 땐 그대로).', '🛡 일기토에서 받는 피해를 조금 줄였어요.', '📍 화면 위쪽 안내(습격 시간·멈춤·알림)가 겹치지 않고 차례로 쌓여요. 왼쪽 위 칸 간격도 넓혔어요.', '⚔ 영웅 체력이 늘수록 적장의 공격도 세져요. 가만히 맞으면서 싸우면 이기기 어려워요 (보통 이상).', '📋 결과 화면에서 버튼 줄이 위아래로 튀던 것을 고쳤어요(화면 맨 아래에 고정).', '🔊 설정에서 효과음·배경음 크기를 따로 조절할 수 있어요. 효과음 기본은 60%예요.'] },
   { v: 'v0.26', d: '11/20', t: ['👥 온라인 협동 보정: 사람이 늘수록 적이 단단해지고(체력↑) 정예와 적장이 더 자주 나와요. 적 숫자는 조금만 늘어서 렉을 줄였어요', '🔗 방장은 "초대 링크 복사"로 친구에게 방 주소를 보낼 수 있어요 (링크를 열면 방 코드가 자동으로 들어가요)', '📡 온라인 전송량을 절반 가까이 줄였어요'] },
@@ -220,7 +220,7 @@ function startRound(i) {
   if (ob === 'r') { const n = 3 + (i >= 16 ? 1 : 0), pos = [[ww * 0.42, wh * 0.26], [ww * 0.72, wh * 0.7], [ww * 0.88, wh * 0.28], [ww * 0.55, wh * 0.88]]; for (let j = 0; j < n; j++) { G.campPos.push(pos[j]); spawn('camp', hs * 0.9, pos[j]); } G.campTotal = n; }
   G.cmOn = !!G.cm && ob === 'd'; if (G.cmOn) { const pos = [[ww * 0.14, wh * 0.2], [ww * 0.86, wh * 0.8]]; for (const q of pos) { G.campPos.push(q); spawn('camp', hs * 0.9, q); } G.campTotal = 2; }
   if (ob !== 'e') for (let j = 0; j < Math.min(5, Math.floor(i0 / 4)) + (G.mod === 'vol' ? 2 : 0); j++) doSummon(true);
-  G.order.forEach((id, n) => { const p = G.pl[id]; p.cr = G.cm ? CR_ORD[n % 3] : ''; p.cc = 0; p.cards = startCards(p.role); p.sn = {}; p.rv = 0; calcSyn(p); p.lv = 1; p.mx = Math.round(ROLE[p.role].hp * G.dif.hh * heroStats(p).mxm); p.hp = p.mx; p.down = 0; p.cd = 0; p.offer = null; p.mo = null; p.fz = 3; const a = n * 1.2; if (G.castle) { p.x = G.ax - 120 + Math.cos(a) * 30; p.y = G.ay + 70 + Math.sin(a) * 40; } else { p.x = G.ax + Math.cos(a) * 60; p.y = G.ay + 110 + Math.sin(a) * 40; } });
+  G.order.forEach((id, n) => { const p = G.pl[id]; p.cr = G.cm ? CR_ORD[n % 3] : ''; if (p.bot && p.cr) p.name = BOT_NM[p.cr]; p.cc = 0; p.cards = startCards(p.role); p.sn = {}; p.rv = 0; calcSyn(p); p.lv = 1; p.mx = Math.round(ROLE[p.role].hp * G.dif.hh * heroStats(p).mxm); p.hp = p.mx; p.down = 0; p.cd = 0; p.offer = null; p.mo = null; p.fz = 3; const a = n * 1.2; if (G.castle) { p.x = G.ax - 120 + Math.cos(a) * 30; p.y = G.ay + 70 + Math.sin(a) * 40; } else { p.x = G.ax + Math.cos(a) * 60; p.y = G.ay + 110 + Math.sin(a) * 40; } });
 }
 function beginBattle() { G.ph = 'battle'; if (G.cmOn) G.info = { id: Date.now() + Math.random(), tt: '🤝 협동 미션 · 이중 전선', tx: '성도 지키고, 멀리 있는 보급기지 2곳도 시간 안에 부수세요! 각자 역할 버튼을 써요' }; const ok = Object.keys(G.ans).filter((id) => G.ans[id] === R[G.rd].q[2]).length; G.food += ok * 15; if (G.es) G.es.q += ok; }
 function summonCost() { return Math.round(40 * (1 + 0.1 * G.sumN)); }
@@ -442,7 +442,7 @@ function stepBattle(dt) {
   if (G.paused) return;
   const rd = R[G.rd], np = G.order.length, prog = progOf();
   if (G.ev) { evTick(dt); return; } // 투표 중에는 게임이 멈춰요
-  if (np === 1 && G.pl[G.order[0]].offer) return; // 혼자 할 때 카드 고르는 동안 멈춤
+  { const hu = G.order.filter((id) => !G.pl[id].bot); if (hu.length === 1 && G.pl[hu[0]].offer) return; } // 혼자 할 때 카드 고르는 동안 멈춤
   if (G.du) { duelStep(dt); return; }
   G.t += dt; if (G.endless) { const r = Math.floor(G.t / 60); if (r !== G.er) endlessRound(r); } if (G.buffAtk > 0) G.buffAtk -= dt; if (G.slowT > 0) G.slowT -= dt;
   // 사건(투표)
@@ -593,13 +593,13 @@ function hostMsg(from, m) {
   else if (m.k === 'ans' && (G.ph === 'result' || G.ph === 'brief') && G.ans[from] == null) G.ans[from] = m.i | 0;
 }
 function hostCtl(c, v) { // 방장 전용 조작
-  if (c === 'start') { G.sel.start = v.start; G.sel.dur = FAST || v.dur; G.dif = DIFF[v.diff] || DIFF.normal; G.sel.diff = v.diff; G.bonus = 0; G.wallN = v.wall | 0; G.endless = !!v.endless; G.cm = !!v.coop && !v.endless; G.cyc = 0; G.bpi = 0; G.es = G.endless ? { tot: 0, k: 0, q: 0, from: v.start, over: false, r: 1, clear: false } : null; for (const id of G.order) { G.pl[id].cards = {}; G.pl[id].mer = {}; } { let st = v.start; if (G.endless) { st = 0; for (let i = v.start; i < R.length; i++) if (ROUND_OBJ[i] === 'd') { st = i; break; } } startRound(st); } }
+  if (c === 'start') { G.sel.start = v.start; G.sel.dur = FAST || v.dur; G.dif = DIFF[v.diff] || DIFF.normal; G.sel.diff = v.diff; G.bonus = 0; G.wallN = v.wall | 0; G.endless = !!v.endless; G.cm = !!v.coop && !v.endless; fillBots(G.cm ? (v.bots | 0) : 0); G.cyc = 0; G.bpi = 0; G.es = G.endless ? { tot: 0, k: 0, q: 0, from: v.start, over: false, r: 1, clear: false } : null; for (const id of G.order) { G.pl[id].cards = {}; G.pl[id].mer = {}; } { let st = v.start; if (G.endless) { st = 0; for (let i = v.start; i < R.length; i++) if (ROUND_OBJ[i] === 'd') { st = i; break; } } startRound(st); } }
   else if (c === 'endless' && G.ph === 'end' && !G.endless) { G.endless = true; G.cyc = 0; G.bpi = 0; G.bonus = 0; G.es = { tot: 0, k: 0, q: 0, from: 0, over: false, r: 1, clear: false }; G.ph = 'brief'; startRound(0); }
   else if (c === 'fight' && G.ph === 'brief') beginBattle();
   else if (c === 'next' && G.ph === 'result') { if (G.res.win) nextRound(); else startRound(G.rd); }
   else if (c === 'retry' && G.ph === 'result') startRound(G.rd);
   else if (c === 'skip' && G.ph === 'result' && !G.res.win && R[G.rd].df) nextRound();
-  else if (c === 'lobby') { G.ph = 'lobby'; }
+  else if (c === 'lobby') { dropBots(); G.ph = 'lobby'; }
 }
 function makeSnap() {
   const g = G; const s = { ph: g.ph, rd: g.rd, t: g.t, dur: g.dur, sel: g.sel, order: g.order,
@@ -770,7 +770,7 @@ function initLobby() {
   const setDiff = (d) => { diffSel = d; document.querySelectorAll('#diffRow button').forEach((x) => x.classList.toggle('on', x.dataset.d === d)); $('diffTip').textContent = DT_[d]; }; document.querySelectorAll('#diffRow button').forEach((b) => (b.onclick = () => setDiff(b.dataset.d))); setDiff('normal');
   const roleTip = (r) => { const R0 = ROLE[r]; $('roleTip').innerHTML = `<b>${R0.n}</b> — ${R0.d}<br>` + R0.tag.map((x) => `<span class="tg">${x}</span>`).join('') + `<br>🔥 스킬 <b>${SKILL[r].n}</b> — ${SKILL[r].d}`; }; roleTip('archer'); refreshHid();
   $('btnStart').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel }; hostCtl('start', draftSel); };
-  $('btnCoop').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel, coop: true }; hostCtl('start', draftSel); };
+  $('btnCoop').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel, coop: true, bots: +$('selBots').value }; hostCtl('start', draftSel); };
   $('btnStartE').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel, endless: true }; hostCtl('start', draftSel); };
   $('btnLeave').onclick = () => { if (confirmLeave()) location.reload(); };
   document.querySelectorAll('#roleRow button').forEach((b) => { b.onclick = () => { if (b.dataset.r === 'admiral' && !hidOK()) { $('roleTip').innerHTML = '🔒 <b>히든 영웅</b> — 모든 라운드를 끝까지 깨면 열려요!'; return; } me.role = b.dataset.r; sendProf(); roleTip(b.dataset.r); document.querySelectorAll('#roleRow button').forEach((x) => x.classList.toggle('on', x === b)); }; });
@@ -828,7 +828,54 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) wasHi
 setInterval(() => { const lag = Net.mode === 'online' && !Net.host && V && V.ph === 'battle' && !dropT && performance.now() - lastSnapAt > 2500; const t = document.getElementById('lagTag'); if (t) t.style.display = lag ? 'block' : 'none'; }, 500);
 function confirmLeave() { return !(Net.host && Net.mode === 'online' && G && G.order.length > 1) || confirm('방장이 나가면 방이 닫히고 모든 친구가 나가게 돼요. 정말 나갈까요?'); }
 let acc = 0, lastT = performance.now();
-function hostTick() { if (Net.mode === 'online') { const nw = Date.now(); for (const id of [...G.order]) { const p = G.pl[id]; if (p && p.away && nw - p.away > 180000) { delete G.pl[id]; G.order = G.order.filter((x) => x !== id); if (G.ev) delete G.ev.votes[id]; } } if (G.paused && G.pausedAt && G.order.length > 1 && nw - G.pausedAt > 90000) { G.paused = false; G.pausedAt = 0; } }
+// ----- 협동전 봇 (빈자리 채우기) -----
+const BOT_ROLES = ['militia', 'monk', 'gunner', 'archer'], BOT_NM = { guard: '🤖방패봇', ranger: '🤖불화살봇', supply: '🤖보급봇' };
+function dropBots() { for (const id of [...G.order]) if (G.pl[id] && G.pl[id].bot) { delete G.pl[id]; if (G.ev) delete G.ev.votes[id]; if (G.ans) delete G.ans[id]; } G.order = G.order.filter((id) => G.pl[id]); }
+function fillBots(total) {
+  dropBots(); total = Math.min(4, total | 0); let k = 0;
+  while (G.order.length < total) { const used = new Set(G.order.map((id) => G.pl[id].role)), r = BOT_ROLES.find((x) => !used.has(x)) || 'archer', id = 'bot' + (++k); addPlayer(id, '🤖봇' + k, r); G.pl[id].bot = true; }
+}
+let lastBt = 0;
+function botAI(dd) {
+  const now = performance.now(), dt = dd || Math.min(0.2, (now - lastBt) / 1000); lastBt = now;
+  if (!G || !G.cm || G.paused) return;
+  const all = G.order.map((id) => G.pl[id]), bots = all.filter((p) => p && p.bot); if (!bots.length) return;
+  const hum = all.filter((p) => !p.bot && !p.away && p.hp > 0 && !(p.down > 0)), d2 = (a, x, y) => Math.hypot(a.x - x, a.y - y), ch = (m) => Math.random() < dt / m;
+  const camps = G.en.filter((e) => e.t === 'camp');
+  for (const p of bots) {
+    const B = p.bt = p.bt || { o: 0, dir: 1, df: 0, s: 0 }; B.df -= dt; if (B.df <= 0) { B.df = 2 + Math.random() * 2; B.dir = -B.dir; }
+    if (G.ph === 'brief') { const q = R[G.rd].q; if (q && G.ans[p.id] == null && ch(2.5)) hostMsg(p.id, { k: 'ans', i: Math.random() < 0.65 ? q[2] : rint(q[1].length) }); continue; }
+    if (G.ph === 'result') { if (p.mo && ch(2)) hostMsg(p.id, { k: 'mer', i: rint(p.mo.length) }); continue; }
+    if (G.ph !== 'battle') continue;
+    if (G.ev) { if (G.ev.votes[p.id] == null && ch(1.8)) hostMsg(p.id, { k: 'vote', i: rint(2) }); p.mvx = p.mvy = 0; continue; }
+    if (p.offer) { B.o += dt; if (B.o > 1.6) { B.o = 0.6; if (p.qz && p.qs === 0) hostMsg(p.id, { k: 'qa', i: Math.random() < 0.65 ? p.qz.a : rint(p.qz.o.length) }); else hostMsg(p.id, { k: 'card', i: rint(p.offer.length) }); } } else B.o = 0;
+    if (p.hp <= 0 || p.down > 0) { p.mvx = p.mvy = 0; continue; }
+    let tx = G.ax, ty = G.ay, stop = 110;
+    if (G.du) {
+      const b = G.du.b; p.mvx = p.mvy = 0;
+      if (G.du.ph === 'fight') { const dx = p.x - b.x, dy = p.y - b.y, L = Math.hypot(dx, dy) || 1, want = G.du.R * 0.5, rad = (want - L) / want, tx_ = -dy / L * B.dir + dx / L * -rad * 0.9, ty_ = dx / L * B.dir + dy / L * -rad * 0.9, l2 = Math.hypot(tx_, ty_) || 1; p.mvx = tx_ / l2; p.mvy = ty_ / l2; if (p.cd <= 0 && ch(2.2)) hostMsg(p.id, { k: 'skill' }); }
+      continue;
+    }
+    const foes = G.en.filter((e) => e.t !== 'camp'), near = (r) => foes.filter((e) => d2(e, p.x, p.y) < r);
+    if (p.cr === 'ranger') { const c = camps.slice().sort((a, b) => d2(a, p.x, p.y) - d2(b, p.x, p.y))[0]; if (c) { tx = c.x; ty = c.y; stop = 230; } else { const e = foes.slice().sort((a, b) => d2(a, G.ax, G.ay) - d2(b, G.ax, G.ay))[0]; if (e && d2(e, G.ax, G.ay) < 650) { tx = e.x; ty = e.y; stop = 240; } else stop = 170; } }
+    else if (p.cr === 'supply') { const f = hum.slice().sort((a, b) => a.hp / a.mx - b.hp / b.mx)[0] || all.find((q) => q.id !== p.id && q.hp > 0); if (f) { tx = f.x; ty = f.y; stop = 120; } }
+    else { stop = 120; }
+    const dx = tx - p.x, dy = ty - p.y, L = Math.hypot(dx, dy);
+    if (L > stop) { p.mvx = dx / L; p.mvy = dy / L; } else { const ax = -dy / (L || 1) * B.dir, ay = dx / (L || 1) * B.dir; p.mvx = ax * 0.35; p.mvy = ay * 0.35; }
+    if (p.cd <= 0 && near(300).length >= 3 && ch(1.5)) hostMsg(p.id, { k: 'skill' });
+    if (G.cm && p.cr && (p.cc || 0) <= 0) {
+      let go = false;
+      if (p.cr === 'guard') go = (G.castle && G.baseHp < G.baseMax * 0.6 && G.bInv <= 0) || near(240).length >= 8;
+      else if (p.cr === 'ranger') go = near(380).length >= 5 || camps.some((c) => d2(c, p.x, p.y) < 380);
+      else go = all.some((q) => q.hp > 0 && q.hp < q.mx * 0.5) || all.some((q) => q.down > 0 && q.down < 1e8);
+      if (go && ch(0.8)) hostMsg(p.id, { k: 'cr' });
+    }
+    B.s += dt; if (B.s > 3.5) { B.s = 0;
+      if (p.cr === 'supply' && G.obj !== 'e' && G.food >= summonCost() + 60 && G.units.some((x, i) => i < slotsOpen(G.upg) && !x)) hostMsg(p.id, { k: 'summon' });
+      if (p.cr === 'guard' && G.castle && G.baseHp < G.baseMax * 0.6 && G.food >= G.dif.rc + 30 && (G.repCd || 0) <= 0) hostMsg(p.id, { k: 'rep' }); }
+  }
+}
+function hostTick() { botAI(); if (Net.mode === 'online') { const nw = Date.now(); for (const id of [...G.order]) { const p = G.pl[id]; if (p && p.away && nw - p.away > 180000) { delete G.pl[id]; G.order = G.order.filter((x) => x !== id); if (G.ev) delete G.ev.votes[id]; } } if (G.paused && G.pausedAt && G.order.length > 1 && nw - G.pausedAt > 90000) { G.paused = false; G.pausedAt = 0; } }
   const now = performance.now(); let dt = Math.min(0.1, (now - lastT) / 1000); lastT = now; if (G.ph === 'battle') { stepBattle(dt); if (FAST && window.__ff) {} } }
 function hostBroadcast() { const s = makeSnap(); V = s; if (Net.mode === 'online') Net.send('all', { s }); G.shots = []; G.fx = []; }
 
@@ -1368,7 +1415,7 @@ function draw() {
   if (V.evR) { cx.fillStyle = 'rgba(20,16,40,.85)'; rr(250, 214, 460, 66, 33); cx.fill(); cx.fillStyle = '#fff'; cx.font = 'bold 22px sans-serif'; cx.textAlign = 'center'; cx.fillText('결정: ' + V.evR, 480, 255); }
   cx.restore();
 }
-function boot() { initLobby(); setupInput(); applySt(); show('sLobby'); window.__dbg = { get G() { return G; }, get V() { return V; }, Net, R, hostCtl, hostMsg, stepBattle, makeSnap, ER, pickQuiz, gainXp, spawn, UT, ET, pickType, DIFF }; }
+function boot() { initLobby(); setupInput(); applySt(); show('sLobby'); window.__dbg = { get G() { return G; }, get V() { return V; }, Net, R, hostCtl, hostMsg, stepBattle, botAI, makeSnap, ER, pickQuiz, gainXp, spawn, UT, ET, pickType, DIFF }; }
 boot();
 lobbyArt();
 if (window.BWJ) BWJ.init({ game: '조선의 위기 디펜스', ver: VER, parent: '#stage' });
