@@ -313,7 +313,7 @@ input[type=range]{touch-action:pan-x!important}
   <canvas id="lobCv" width="960" height="540"></canvas>
   <div class="mist m1"></div><div class="mist m2"></div>
   <div id="lobArt"></div>
-  <div id="lobBtns"><button id="btnUpdL">📢 업데이트 노트</button><button id="btnFs">⛶ 전체화면</button><button id="btnDex">📖 도감</button><button id="btnCw">🎁 보관함·뽑기</button><button id="btnRank">🏅 도전·업적</button></div><div id="fsTip"></div>
+  <div id="lobBtns"><button id="btnUpdL">📢 업데이트 노트</button><button id="btnFs">⛶ 전체화면</button><button id="btnDex">📖 도감</button><button id="btnPas">🎖 영웅 숙련도</button><button id="btnCw">🎁 보관함·뽑기</button><button id="btnRank">🏅 도전·업적</button></div><div id="fsTip"></div>
   <div id="updModal"><div class="um"><button id="umX" aria-label="닫기">✕</button><h3>📜 업데이트 노트</h3><p id="umSub" class="us"></p><div id="umBody"></div><div class="row"><button id="umClose">시작하러 가기</button><button id="umAll" class="sec">이전 업데이트 모두 보기</button></div></div></div>
   <div id="lobTitle">
     <div class="lt-tag">초등 사회 · 역사 디펜스</div>
@@ -335,7 +335,7 @@ input[type=range]{touch-action:pan-x!important}
   <div class="row" style="align-items:flex-start;gap:30px">
     <div style="min-width:300px"><b>참가자</b><ul id="plist"></ul>
       <div style="margin-top:8px"><b>내 역할</b><div class="row" id="roleRow" style="margin-top:6px"><button data-r="archer">궁수</button><button data-r="militia">의병</button><button data-r="monk">승병</button><button data-r="gunner">화포수</button><button data-r="admiral" id="roleHid">🔒 히든</button><button data-r="gwonyul" id="roleLeg">🔒 전설</button><button data-r="gimsimin" id="roleLeg2">🔒 전설</button><button data-r="gwakjaeu" id="roleLeg3">🔒 전설</button><button data-r="hyujeong" id="roleLeg4">🔒 전설</button><button data-r="yujeong" id="roleLeg5">🔒 전설</button><button data-r="jinrin" id="roleLeg6">🔒 전설</button></div>
-      <div id="roleTip" style="margin-top:6px;font-size:15px"></div><div id="mastTip" style="margin-top:6px;font-size:14px;background:#fff6d6;border-radius:10px;padding:4px 8px"></div></div></div>
+      <div id="roleTip" style="margin-top:6px;font-size:15px"></div><div id="pasTip" style="margin-top:6px;font-size:14px;background:#fff6d6;border-radius:10px;padding:4px 8px"></div></div></div>
     <div id="hostBox"><b>방장 설정</b>
       <div class="row" style="margin:10px 0">시작 챕터 <select id="selStart"></select></div>
       <div class="row" style="margin:10px 0">전투 시간 <select id="selDur"><option value="300">5분 (기본)</option><option value="180">3분</option><option value="120">2분 (짧게)</option></select></div>
@@ -386,7 +386,7 @@ input[type=range]{touch-action:pan-x!important}
 </div>
 
 <div class="screen" id="sResult">
-  <h2 id="rsTitle"></h2><div id="rsReward"></div><div class="panel" id="dailyRes" style="display:none"></div><div class="panel" id="mastRes" style="display:none"></div>
+  <h2 id="rsTitle"></h2><div id="rsReward"></div><div class="panel" id="dailyRes" style="display:none"></div><div class="panel" id="pasRes" style="display:none"></div>
   <div class="panel" id="merBox" style="display:none"></div>
   <div class="panel" id="rsHist"></div>
   <div id="qBox"><div class="panel" id="qText" style="margin-bottom:0"></div><div id="qOpts"></div><div id="qWhy" style="margin:6px 0;min-height:22px"></div></div>
@@ -394,7 +394,7 @@ input[type=range]{touch-action:pan-x!important}
   <div id="rsWait" style="display:none">방장이 다음으로 넘어가길 기다려요…</div>
 </div>
 
-<div class="screen" id="sBook"><h2 style="margin:0">📖 도감 · 🏅 도전·업적 · 🏆 랭킹</h2><div id="bookTabs" class="row" style="margin:8px 0"><button data-t="syn">시너지</button><button data-t="hero">영웅</button><button data-t="boss">적장</button><button data-t="rank">랭킹</button><button data-t="daily">일일 도전</button><button data-t="ach">업적·칭호</button><button id="bookBack" class="sec">← 처음으로</button></div><div id="bookBody"></div></div>
+<div class="screen" id="sBook"><h2 style="margin:0">📖 도감 · 🏅 도전·업적 · 🏆 랭킹</h2><div id="bookTabs" class="row" style="margin:8px 0"><button data-t="syn">시너지</button><button data-t="hero">영웅</button><button data-t="boss">적장</button><button data-t="rank">랭킹</button><button data-t="daily">일일 도전</button><button data-t="ach">업적·칭호</button><button data-t="pas">🎖 숙련도</button><button id="bookBack" class="sec">← 처음으로</button></div><div id="bookBody"></div></div>
 <div class="screen" id="sEnd"><h2 id="endH">끝까지 지켜 냈어요! 🎉</h2><div class="panel" id="endText" style="font-size:16px;white-space:normal"></div><button id="btnEndless" style="display:none">♾ 무한 모드 시작!</button> <button onclick="location.reload()">처음으로</button></div>
 </div>
 <div id="rotWarn"><div><div class="rw-ph">📱</div><b>화면을 가로로 돌려 주세요</b><p>이 게임은 가로 화면에서 가장 잘 보여요.<br>자동 회전이 꺼져 있다면 켜 주세요!</p></div></div>
