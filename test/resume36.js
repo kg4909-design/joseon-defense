@@ -1,0 +1,26 @@
+const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwright');
+const { spawn } = require('child_process');
+(async () => {
+  const relay = spawn('node', ['local-relay.js', '8799'], { cwd: '/home/claude/joseon-defense' }); await new Promise((r) => setTimeout(r, 600));
+  const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox', '--disable-background-timer-throttling', '--disable-renderer-backgrounding'] });
+  const errs = [], out = {};
+  const mk = async (name, extra) => { const ctx = await b.newContext({ viewport: { width: 1180, height: 820 } }); const p = await ctx.newPage();
+    await p.addInitScript((x) => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.33'); localStorage.setItem('hdg_relay', 'ws://localhost:8799/ws'); if (x) localStorage.setItem('jd_last', x); }, extra || null);
+    p.on('pageerror', (e) => errs.push(e.message)); p.on('dialog', (d) => d.dismiss());
+    await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.fill('#nick', name); return [ctx, p]; };
+  const [, h] = await mk('방장'); const [c2, g] = await mk('친구');
+  await h.click('#btnCreate'); await h.waitForSelector('#sRoom.on');
+  const code = (await h.textContent('#roomLabel')).replace(/[^A-Z0-9]/g, '').slice(-4);
+  await g.fill('#roomCode', code); await g.click('#btnJoin'); await g.waitForSelector('#sRoom.on'); await h.waitForTimeout(500);
+  await h.click('#btnStart'); await h.waitForTimeout(1200); await h.evaluate(() => __dbg.hostCtl('fight')); await h.waitForTimeout(1000);
+  await h.evaluate(() => { const G = __dbg.G; G.pl[G.order[1]].hp = 77; G.pl[G.order[1]].cards.bow = 3; });
+  const rec = await g.evaluate(() => localStorage.getItem('jd_last')); out.rec = !!rec;
+  await c2.close(); await h.waitForTimeout(800);
+  out.away = await h.evaluate(() => { const G = __dbg.G; return G.pl[G.order[1]].away > 0; });
+  const [, g2] = await mk('친구', rec);
+  out.btn = await g2.evaluate(() => [getComputedStyle(document.getElementById('btnResume')).display, document.getElementById('btnResume').textContent]);
+  await g2.click('#btnResume'); await g2.waitForTimeout(1500);
+  out.after = await h.evaluate(() => { const G = __dbg.G; const p = G.pl[G.order[1]]; return { n: G.order.length, away: p.away, hp: Math.round(p.hp), bow: p.cards.bow, name: p.name }; });
+  out.screen = await g2.evaluate(() => document.querySelector('.screen.on').id);
+  console.log(JSON.stringify(out), errs); relay.kill(); await b.close();
+})();

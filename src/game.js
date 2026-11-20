@@ -2,7 +2,7 @@
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
 const VER = 'v0.33';
 const UPDATES = [
-  { v: 'v0.33', d: '11/20', t: ['⏸ 잠시멈춤 창에 「🏠 처음으로」와 「⛶ 전체화면」 버튼이 생겼어요', '⚔️ 일기토 중에는 서브미션·날씨·알림 팝업이 잠깐 사라져서 보스 체력이 잘 보여요 (끝나면 다시 나와요)', '📈 내 레벨이 올라갈수록 강한 적(방패병·대포)과 정예 적이 더 자주 나와요', '🚶 피난민 호위가 바뀌었어요! 피난민이 맵 끝에서 나와 성으로 들어가면 성공(성이 없는 판에서는 영웅을 만나면 성공)이에요', '📅 일일 도전(하루 한 판, 날마다 새 규칙)과 🏅 업적·칭호가 생겼어요! 도감 화면의 「도전·업적」에서 볼 수 있어요', '🌧 협동 이벤트 3종: 성 위험하면 🏰 성벽 수리 작전, 🌧🌫🌙 날씨 변화, 연속 실패하면 😞 사기 하락', '🔥 어려움에서는 적 장수 난입 · 양쪽 습격 · 갑옷 입은 적(스킬로 깨기)이 나와요', '🎯 혼자 하기(게임 시작)에서도 서브미션이 나와요! 40초쯤마다 제한시간 30초 미션 — 성공하면 이득, 실패하면 페널티 (무한 모드는 제외)', '📱 폰에서 방 화면을 못 내려 게임을 시작할 수 없던 문제를 고쳤어요! (시작 버튼은 항상 아래에 보여요) 방 화면·업데이트 노트에서 로고가 글자를 가리던 것도 정리했어요', '⏩ 탈출에서 한 친구가 오래(25초) 못 오면 늦은 친구를 앞으로 데려가 함께 이동해요', '🚩 탈출: 살아있는 친구 모두가 오른쪽 끝에 닿아야 다음 구간으로 넘어가요! 늦은 친구가 있으면 "OO 친구가 아직 도착하지 못했습니다!" 라고 알려줘요 (봇은 제외)', '🎯 서브미션은 40초마다, 제한시간 30초로 모든 목표(성 수비·버티기·적장·기습·탈출)에서 나와요', '🎵 장마다 다른 전투 음악(임진·정유·정묘·병자) + 로비·준비·브리핑·결과 화면 음악이 생겼어요', '🔉 배경음을 전체적으로 작게 줄였어요 (설정에서 더 키우거나 줄일 수 있어요)', '🎵 일기토(보스전)에 전용 음악이 생겼어요! 끝나면 원래 배경음으로 돌아와요', '📖 퀴즈를 틀리면 정답과 설명을 7초 동안 보여 준 뒤에 카드가 열려요', '🎯 서브미션이 한 판 안에서 계속 이어져요 (성공 → 10초 뒤 다음 미션 · 실패하면 페널티 · 3연속 성공하면 지원군!)', '⚔ 일기토에서 못 이기면 적장이 병력을 휘몰아치거나(대규모 웨이브), 성에 큰 타격을 줘요', '🃏 퀴즈 푸는 친구가 카드를 골라요! 능력 카드는 모두에게, 무기 카드는 고른 친구만(다른 친구는 가진 무기가 +1). 다른 친구는 카드를 눌러 추천해요', '🎯 협동 서브미션 7종: 보급기지 습격 · 식량 수송대 차단 · 피난민 호위 · 쌍둥이 봉화 · 약초 수집 · 돌격 막아내기 · 빠른 처치 경쟁 (성공하면 우리 편에 유리!)', '🎲 협동전은 5분 단판! 어떤 시나리오가 걸릴지는 시작해야 알 수 있어요 (탈출은 ➡ 오른쪽으로 계속 달리세요! 안내, 적도 오른쪽에서 많이 나와요)', '⚔ 보스전에서 얻은 무기가 모두 나가고, 활 사거리를 대포보다 짧게 조정했어요', '📱 폰·태블릿에서 버튼/글자/카드가 겹치지 않게 화면을 정리했어요', '🧠 레벨 업 퀴즈가 바뀌었어요! 같이 하기에서는 한 판에 한 친구(랜덤)가 문제를 풀고, 다른 친구들도 같은 문제를 보며 힌트를 줄 수 있어요.', '맞히면 모두에게 카드 4장이 열리고, 틀리면 카드 2장만 열려요. 혼자 할 때도 똑같아요.', '문제를 크게 늘렸어요! 선사 시대부터 지금 싸우는 전쟁 시대까지의 문제가 섞여 나와요 (임진왜란 판은 임진왜란까지, 병자호란 판은 병자호란까지).'] },
+  { v: 'v0.33', d: '11/20', t: ['🔌 연결이 끊기거나 화면이 닫혀도 15분 안에는 처음 화면의 「방 ○○○○ 이어하기」로 같은 영웅으로 돌아올 수 있어요 (방장이 방을 열어 둬야 해요)', '⏸ 잠시멈춤 창에 「🏠 처음으로」와 「⛶ 전체화면」 버튼이 생겼어요', '⚔️ 일기토 중에는 서브미션·날씨·알림 팝업이 잠깐 사라져서 보스 체력이 잘 보여요 (끝나면 다시 나와요)', '📈 내 레벨이 올라갈수록 강한 적(방패병·대포)과 정예 적이 더 자주 나와요', '🚶 피난민 호위가 바뀌었어요! 피난민이 맵 끝에서 나와 성으로 들어가면 성공(성이 없는 판에서는 영웅을 만나면 성공)이에요', '📅 일일 도전(하루 한 판, 날마다 새 규칙)과 🏅 업적·칭호가 생겼어요! 도감 화면의 「도전·업적」에서 볼 수 있어요', '🌧 협동 이벤트 3종: 성 위험하면 🏰 성벽 수리 작전, 🌧🌫🌙 날씨 변화, 연속 실패하면 😞 사기 하락', '🔥 어려움에서는 적 장수 난입 · 양쪽 습격 · 갑옷 입은 적(스킬로 깨기)이 나와요', '🎯 혼자 하기(게임 시작)에서도 서브미션이 나와요! 40초쯤마다 제한시간 30초 미션 — 성공하면 이득, 실패하면 페널티 (무한 모드는 제외)', '📱 폰에서 방 화면을 못 내려 게임을 시작할 수 없던 문제를 고쳤어요! (시작 버튼은 항상 아래에 보여요) 방 화면·업데이트 노트에서 로고가 글자를 가리던 것도 정리했어요', '⏩ 탈출에서 한 친구가 오래(25초) 못 오면 늦은 친구를 앞으로 데려가 함께 이동해요', '🚩 탈출: 살아있는 친구 모두가 오른쪽 끝에 닿아야 다음 구간으로 넘어가요! 늦은 친구가 있으면 "OO 친구가 아직 도착하지 못했습니다!" 라고 알려줘요 (봇은 제외)', '🎯 서브미션은 40초마다, 제한시간 30초로 모든 목표(성 수비·버티기·적장·기습·탈출)에서 나와요', '🎵 장마다 다른 전투 음악(임진·정유·정묘·병자) + 로비·준비·브리핑·결과 화면 음악이 생겼어요', '🔉 배경음을 전체적으로 작게 줄였어요 (설정에서 더 키우거나 줄일 수 있어요)', '🎵 일기토(보스전)에 전용 음악이 생겼어요! 끝나면 원래 배경음으로 돌아와요', '📖 퀴즈를 틀리면 정답과 설명을 7초 동안 보여 준 뒤에 카드가 열려요', '🎯 서브미션이 한 판 안에서 계속 이어져요 (성공 → 10초 뒤 다음 미션 · 실패하면 페널티 · 3연속 성공하면 지원군!)', '⚔ 일기토에서 못 이기면 적장이 병력을 휘몰아치거나(대규모 웨이브), 성에 큰 타격을 줘요', '🃏 퀴즈 푸는 친구가 카드를 골라요! 능력 카드는 모두에게, 무기 카드는 고른 친구만(다른 친구는 가진 무기가 +1). 다른 친구는 카드를 눌러 추천해요', '🎯 협동 서브미션 7종: 보급기지 습격 · 식량 수송대 차단 · 피난민 호위 · 쌍둥이 봉화 · 약초 수집 · 돌격 막아내기 · 빠른 처치 경쟁 (성공하면 우리 편에 유리!)', '🎲 협동전은 5분 단판! 어떤 시나리오가 걸릴지는 시작해야 알 수 있어요 (탈출은 ➡ 오른쪽으로 계속 달리세요! 안내, 적도 오른쪽에서 많이 나와요)', '⚔ 보스전에서 얻은 무기가 모두 나가고, 활 사거리를 대포보다 짧게 조정했어요', '📱 폰·태블릿에서 버튼/글자/카드가 겹치지 않게 화면을 정리했어요', '🧠 레벨 업 퀴즈가 바뀌었어요! 같이 하기에서는 한 판에 한 친구(랜덤)가 문제를 풀고, 다른 친구들도 같은 문제를 보며 힌트를 줄 수 있어요.', '맞히면 모두에게 카드 4장이 열리고, 틀리면 카드 2장만 열려요. 혼자 할 때도 똑같아요.', '문제를 크게 늘렸어요! 선사 시대부터 지금 싸우는 전쟁 시대까지의 문제가 섞여 나와요 (임진왜란 판은 임진왜란까지, 병자호란 판은 병자호란까지).'] },
   { v: 'v0.32', d: '11/20', t: ['🌟 전설 영웅 4명 더 등장! 곽재우(홍의장군) · 휴정(서산대사) · 유정(사명대사) · 진린(명나라 수군 도독, 교과서 밖 보충)', '곽재우: 이동이 빠르고, 스킬 \'홍의 분신\'으로 적을 잠깐 멈춰 세워요 · 휴정: 근처 동료가 천천히 회복하고, 스킬 \'격문\'으로 동료 공격력을 올려요', '유정: 단단하고, 스킬 \'호국 결계\'로 6초 동안 사라지지 않는 결계를 펼쳐 적을 느리게 하고 다치게 해요 · 진린: 스킬 \'명군 지원 포격\'으로 여러 곳에 포탄을 떨어뜨려요', '전설 영웅 조각은 권율 → 김시민 → 곽재우 → 휴정 → 유정 → 진린 순서로 모여요. 영웅 그림도 새로 바뀌었어요.'] },
   { v: 'v0.31', d: '11/20', t: ['🌟 전설 영웅 김시민 등장! 진주대첩의 수성 명장 — 성 근처에서 받는 피해가 줄고, 스킬 \'진주성 철벽\'으로 성을 고치고 동료에게 방패막을 쳐 줘요', '영웅마다 고유 패시브와 스킬 이펙트가 생겼어요: 권율(주변 동료 공격력↑ · 돌이 쏟아지는 행주 돌비), 이순신(체력이 낮을수록 강해짐 · 학의 날개 모양 학익진), 김시민', '협동 보상 조각은 권율 → 김시민 순서로 모여요 (다음 패치마다 전설 영웅이 늘어요)', '전설·히든 영웅은 자기만의 색 후광이 둘러요'] },
   { v: 'v0.30', d: '11/20', t: ['🎁 협동전을 깨면 🎟 뽑기권과 🧩 전설 영웅 조각을 받아요! 로비의 "보관함·뽑기"에서 확인해요.', '🌟 전설 영웅 권율 등장! 조각 10개를 모으면 열려요 (행주대첩의 명장 · 시작 무기 화차 · 스킬 행주 돌비). 패치마다 전설 영웅이 늘어날 예정이에요.', '✨ 뽑기로 영웅 발밑 꾸미기(기운)를 얻어요. 확률은 화면에 적혀 있고, 10번째엔 희귀 이상·30번째엔 전설이 확정! 돈은 전혀 들지 않아요.', '🔥 새 협동 미션: 쌍둥이 봉화(두 발판에 한 명씩 동시에 서기)·속전속결(시간 안에 기지 격파). 성 방어 라운드는 이중 전선이에요.', '🏁 협동 난이도 1 연습 · 2 도전(기본) · 3 극한. 높을수록 적이 강하고 제한 시간이 짧지만 보상이 커요.'] },
@@ -798,7 +798,10 @@ function makeSnap() {
 let V = null;                // 최신 스냅샷
 const RP = new Map();        // id -> 화면 표시 좌표(부드럽게)
 let me = { name: '', role: 'archer', aura: (() => { try { const d = JSON.parse(localStorage.getItem('jd_cw') || 'null'); return d && d.eq ? String(d.eq) : ''; } catch (e) { return ''; } })() };
-const TK = (() => { try { let k = sessionStorage.getItem('hdg_tk'); if (!k) { k = Math.random().toString(36).slice(2, 12) + Date.now().toString(36).slice(-4); sessionStorage.setItem('hdg_tk', k); } return k; } catch (e) { return Math.random().toString(36).slice(2, 14); } })();
+let TK = (() => { try { let k = sessionStorage.getItem('hdg_tk'); if (!k) { k = Math.random().toString(36).slice(2, 12) + Date.now().toString(36).slice(-4); sessionStorage.setItem('hdg_tk', k); } return k; } catch (e) { return Math.random().toString(36).slice(2, 14); } })();
+// 마지막으로 들어간 방 기억 (탭이 닫히거나 새로고침돼도 「이어하기」로 돌아와요)
+const LASTROOM = { get() { try { const r = JSON.parse(localStorage.getItem('jd_last') || 'null'); return r && Date.now() - r.t < 15 * 60 * 1000 ? r : null; } catch (e) { return null; } }, set(r) { try { localStorage.setItem('jd_last', JSON.stringify(r)); } catch (e) {} }, clear() { try { localStorage.removeItem('jd_last'); } catch (e) {} } };
+function saveLast() { LASTROOM.set({ url: Net.rurl, code: Net.rcode, tk: TK, name: me.name, role: me.role, t: Date.now() }); }
 let sel = -1, lastIn = [0, 0], joy = { on: false, id: null, ox: 0, oy: 0, x: 0, y: 0 }, keys = {};
 let lastPh = '', lastRd = -1, lastOffer = '', lastEvKey = '', draftSel = { start: 0, dur: 300 };
 const cam = { x: 0, y: 0, rd: -1, t0: 0 };
@@ -939,7 +942,7 @@ function initLobby() {
     const ua = navigator.userAgent, inApp = /KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|Line\/|DaumApps/i.test(ua), de = document.documentElement;
     const can = !!(de.requestFullscreen || de.webkitRequestFullscreen), isFs = () => !!(document.fullscreenElement || document.webkitFullscreenElement), tip = $('fsTip');
     const note = () => { tip.textContent = inApp ? '지금은 카카오톡 같은 앱 안의 브라우저라 전체화면이 안 돼요. 오른쪽 아래 ⋮ 메뉴에서 "다른 브라우저로 열기"를 눌러 크롬이나 삼성 인터넷에서 열어 주세요.' : /iPhone|iPad/.test(ua) ? '아이폰/아이패드는 전체화면 기능이 막혀 있어요. 공유 버튼 → "홈 화면에 추가"로 앱처럼 열면 주소창이 사라져요.' : '이 브라우저에서는 전체화면을 쓸 수 없어요. 크롬이나 삼성 인터넷으로 열어 보세요.'; tip.classList.add('on'); clearTimeout(note.t); note.t = setTimeout(() => tip.classList.remove('on'), 9000); };
-    $('pHome').onclick = () => { if (confirmLeave()) location.reload(); };
+    $('pHome').onclick = () => { if (confirmLeave()) { LASTROOM.clear(); location.reload(); } };
     $('btnFs').onclick = $('pFs').onclick = async () => {
       if (isFs()) { try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} return; }
       if (inApp || !can) { note(); return; }
@@ -962,9 +965,10 @@ function initLobby() {
   $('btnStart').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel }; hostCtl('start', draftSel); };
   $('btnCoop').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel, coop: true, bots: +$('selBots').value, cl: +$('selCl').value }; hostCtl('start', draftSel); };
   $('btnStartE').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel, endless: true }; hostCtl('start', draftSel); };
-  $('btnLeave').onclick = () => { if (confirmLeave()) location.reload(); };
+  $('btnLeave').onclick = () => { if (confirmLeave()) { LASTROOM.clear(); location.reload(); } };
   document.querySelectorAll('#roleRow button').forEach((b) => { b.onclick = () => { if (LEG[b.dataset.r] && !legOK(b.dataset.r)) { const c = cwLoad(), tg = cwTarget(c), k = b.dataset.r; $('roleTip').innerHTML = tg === k ? `🔒 <b>전설 영웅 ${LEG[k].n}</b> — 협동전을 깨서 영웅 조각 ${LEG[k].need}개를 모으면 열려요! (지금 ${c.sh}/${LEG[k].need})` : `🔒 <b>전설 영웅 ${LEG[k].n}</b> — 먼저 전설 영웅 ‘${LEG[tg].n}’을 열면 조각이 ‘${LEG[k].n}’ 쪽으로 모여요!`; return; } if (b.dataset.r === 'admiral' && !hidOK()) { $('roleTip').innerHTML = '🔒 <b>히든 영웅</b> — 모든 라운드를 끝까지 깨면 열려요!'; return; } me.role = b.dataset.r; sendProf(); roleTip(b.dataset.r); document.querySelectorAll('#roleRow button').forEach((x) => x.classList.toggle('on', x === b)); }; });
   document.querySelector('#roleRow button').classList.add('on');
+  { const lr = LASTROOM.get(), rb = $('btnResume'); if (lr && rb) { rb.style.display = 'inline-block'; rb.textContent = '🔌 방 ' + lr.code + ' 이어하기'; rb.onclick = () => { try { sessionStorage.setItem('hdg_tk', lr.tk); } catch (e) {} TK = lr.tk; $('nick').value = lr.name || $('nick').value; $('roomCode').value = lr.code; if (lr.url && lr.url !== DEFAULT_RELAY) $('relayUrl').value = lr.url; startAs('join'); }; } }
 }
 // 끊겼던 친구가 같은 기기·같은 탭으로 다시 들어오면 영웅을 그대로 돌려줘요
 function rejoin(from, d) {
@@ -989,14 +993,14 @@ async function startAs(mode) {
       Net.rcode = code; await Net.connect(url, code, mode === 'create');
     }
   } catch (e) { $('err').textContent = typeof e === 'string' ? e : '연결 실패'; return; }
-  Net.onClosed = () => { alert('방이 닫혔어요. 처음 화면으로 돌아갑니다.'); location.reload(); };
+  Net.onClosed = () => { LASTROOM.clear(); alert('방이 닫혔어요. 처음 화면으로 돌아갑니다.'); location.reload(); };
   if (Net.host) {
     G = newG(); addPlayer(Net.id, me.name, me.role);
     G.pl[Net.id].tk = TK;
     Net.onJoin = () => {}; Net.onLeave = (id) => { const p = G.pl[id]; if (!p) return; if (G.ph === 'lobby' || G.ph === 'end' || id === G.order[0]) { delete G.pl[id]; G.order = G.order.filter((x) => x !== id); if (G.ev) delete G.ev.votes[id]; } else { p.away = Date.now(); p.mvx = p.mvy = 0; G.info = { id: Date.now() + Math.random(), tt: '📶 ' + p.name + ' 연결이 끊겼어요', tx: '3분 안에 다시 들어오면 이어서 할 수 있어요.' }; } };
     Net.onData = (from, d) => { if (d.k === 'prof' && !G.pl[from] && G.ph !== 'lobby') { rejoin(from, d); return; } hostMsg(from, d); };
     setInterval(hostTick, 1000 / 30); setInterval(hostBroadcast, 1000 / 15);
-  } else { Net.onData = (from, d) => { if (d.s) { V = d.s; lastSnapAt = performance.now(); } }; Net.onDrop = reconnectLoop; sendProf(); }
+  } else { Net.onData = (from, d) => { if (d.s) { V = d.s; lastSnapAt = performance.now(); } }; Net.onDrop = reconnectLoop; sendProf(); saveLast(); setInterval(() => { if (Net.ws && Net.ws.readyState === 1) saveLast(); }, 30000); }
   keepAwake(); if (Net.host && Net.mode === 'online') window.addEventListener('beforeunload', (e) => { if (G && G.order.length > 1) { e.preventDefault(); e.returnValue = ''; } });
   $('roomLabel').textContent = Net.mode === 'online' ? '방 코드  ' + Net.room : '혼자 하기'; $('btnCopy').style.display = Net.mode === 'online' && Net.host ? 'inline-block' : 'none'; $('btnCopy').onclick = () => { const u = new URL(location.href.split('#')[0]); u.search = ''; u.searchParams.set('room', Net.room); if ($('relayUrl').value && $('relayUrl').value !== DEFAULT_RELAY) u.searchParams.set('relay', $('relayUrl').value.trim()); const t = u.toString(); const ok = () => { $('btnCopy').textContent = '✅ 복사했어요!'; setTimeout(() => ($('btnCopy').textContent = '🔗 초대 링크 복사'), 1800); }; try { navigator.clipboard.writeText(t).then(ok, () => prompt('이 주소를 복사해 친구에게 보내세요', t)); } catch (e) { prompt('이 주소를 복사해 친구에게 보내세요', t); } };
   $('hostBox').style.display = Net.host ? 'block' : 'none'; $('rsStart').style.display = Net.host ? 'flex' : 'none'; $('guestBox').style.display = Net.host ? 'none' : 'block';
@@ -1010,7 +1014,7 @@ function reconnectLoop() {
   dropT = setInterval(async () => {
     if (busy) return; busy = true; n++; box.textContent = '📶 연결이 끊겼어요. 다시 연결하는 중… (' + n + ')';
     try { await Net.connect(Net.rurl, Net.rcode, false); clearInterval(dropT); dropT = 0; dropBox(false); lastSnapAt = performance.now(); sendProf(); toast('다시 연결됐어요!'); }
-    catch (e) { busy = false; if (e === '그런 방이 없어요' || n >= 30) { clearInterval(dropT); dropT = 0; alert('방에 다시 들어가지 못했어요. 처음 화면으로 돌아갑니다.'); location.reload(); } }
+    catch (e) { busy = false; if (e === '그런 방이 없어요' || n >= 30) { clearInterval(dropT); dropT = 0; LASTROOM.clear(); alert('방에 다시 들어가지 못했어요. 처음 화면으로 돌아갑니다.'); location.reload(); } }
   }, 2000);
 }
 async function keepAwake() { try { if (navigator.wakeLock && !wl && document.visibilityState === 'visible') { wl = await navigator.wakeLock.request('screen'); wl.addEventListener('release', () => { wl = null; }); } } catch (e) { wl = null; } }
@@ -1105,7 +1109,7 @@ function setupInput() {
     if (hit < 0) { sel = -1; return; }
     if (sel < 0) { if (V.un && V.un[hit]) sel = hit; } else { if (sel !== hit) sendHost({ k: 'merge', a: sel, b: hit }); sel = -1; } });
   $('btnCw').onclick = () => openCw(); $('cwClose').onclick = () => $('cwBox').classList.remove('on'); $('btnDex').onclick = () => buildBook('syn'); $('btnRank').onclick = () => buildBook('daily'); $('bookBack').onclick = () => show('sLobby'); document.querySelectorAll('#bookTabs button[data-t]').forEach((b) => b.onclick = () => buildBook(b.dataset.t)); $('btnEndless').onclick = () => hostCtl('endless'); $('btnNext').onclick = () => hostCtl('next'); $('btnRetry').onclick = () => hostCtl('retry'); $('btnSkip').onclick = () => hostCtl('skip');
-  $('btnFight').onclick = () => hostCtl('fight'); $('btnHome').onclick = () => { if (confirmLeave()) location.reload(); };
+  $('btnFight').onclick = () => hostCtl('fight'); $('btnHome').onclick = () => { if (confirmLeave()) { LASTROOM.clear(); location.reload(); } };
 }
 function sendMove() {
   let mx = 0, my = 0;
