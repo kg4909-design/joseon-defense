@@ -8,7 +8,7 @@ const total = +(process.argv[2] || 3), diff = process.argv[3] || 'normal', maxR 
   await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.click('#btnSingle'); await p.waitForTimeout(200);
   const r = await p.evaluate(([total, diff, maxR, dur, START, NOCAMP, CL]) => {
     const D = window.__dbg, G = D.G, log = [];
-    D.hostCtl('start', { start: START, dur, diff, wall: 0, coop: true, bots: total, cl: CL });
+    D.hostCtl('start', { start: START, dur, diff, wall: 0, coop: true, fix: 1, bots: total, cl: CL });
     G.pl[G.order[0]].bot = true; // 사람도 봇이 대신 조종
     let guard = 0, fails = 0;
     while (G.rd < maxR + (START) && guard++ < 400) {

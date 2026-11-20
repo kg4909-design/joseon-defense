@@ -7,7 +7,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.click('#btnSingle'); await p.waitForTimeout(200);
   const r = await p.evaluate(() => {
     const D = window.__dbg, G = D.G, o = {};
-    D.hostCtl('start', { start: 0, dur: 180, diff: 'normal', wall: 0, coop: true, bots: 3 });
+    D.hostCtl('start', { start: 0, dur: 180, diff: 'normal', wall: 0, coop: true, fix: 1, bots: 3 });
     o.names = G.order.map((id) => G.pl[id].name + ':' + G.pl[id].role + ':' + G.pl[id].cr);
     for (let i = 0; i < 100; i++) D.botAI(0.1); o.ans = Object.keys(G.ans).length;
     D.hostCtl('fight'); G.evDone = [true, true]; G.bossTimes = [];
