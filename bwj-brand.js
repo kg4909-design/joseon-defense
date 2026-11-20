@@ -16,9 +16,10 @@
     '#bwj-badge.fx{position:fixed;right:max(8px,env(safe-area-inset-right,0px));bottom:8px}#bwj-badge.ab{position:absolute;right:8px;top:52px}' +
     '#bwj-badge a.lg{display:block;background:#fff;border-radius:7px;padding:2px 5px;line-height:0;box-shadow:0 2px 8px rgba(0,0,0,.45)}#bwj-badge img{height:24px;width:auto;display:block}' +
     '#bwj-badge button{font:700 12px/1 inherit;font-family:inherit;border:0;border-radius:99px;padding:7px 10px;background:rgba(20,22,30,.82);color:#ffd98a;border:1px solid #c9a24a}' +
-    '#bwj-fb{position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:14px}' +
+    '#bwj-fb{position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:14px}' +
     '#bwj-fb .bx{max-width:460px;width:100%;background:#1d2230;color:#fff;border-radius:16px;padding:18px 20px;font:15px/1.55 sans-serif;box-shadow:0 10px 40px rgba(0,0,0,.6)}' +
     '#bwj-fb h3{margin:0 0 8px;font-size:19px}#bwj-fb ul{margin:6px 0 10px;padding-left:20px}#bwj-fb .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}' +
+    '#bwj-fb *{box-sizing:border-box}#bwj-fb textarea{width:100%;max-width:100%}' +
     '#bwj-fb .b{font:700 15px sans-serif;border:0;border-radius:10px;padding:10px 14px;background:#3d6ef0;color:#fff;text-decoration:none;display:inline-block}#bwj-fb .b.s{background:#4b5568}#bwj-fb .b:disabled{opacity:.45}' +
     '#bwj-fb .bx{max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;max-width:520px}#bwj-fb h3 small{font-size:13px;font-weight:400;color:#9aa}' +
     '#bwj-fb .tabs{display:flex;gap:6px;margin:6px 0 10px}#bwj-fb .tabs button{flex:1;font:700 14px sans-serif;border:2px solid #4b5568;border-radius:10px;padding:8px 4px;background:#262c3c;color:#cbd}#bwj-fb .tabs button.on{background:#3d6ef0;border-color:#3d6ef0;color:#fff}' +
@@ -29,9 +30,10 @@
     '#bwj-badge button{position:relative}.bwjdot{position:absolute;top:-7px;right:-5px;min-width:19px;height:19px;border-radius:99px;background:#e5362a;color:#fff;font:800 11px/19px sans-serif;text-align:center;padding:0 4px;box-shadow:0 0 0 2px #fff}#bwj-fb .bwjdot2{color:#ffd98a}';
   function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
   function today() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function ensureCss() { if (document.getElementById('bwj-css')) return; var st = el('style', { id: 'bwj-css' }); st.textContent = css; document.head.appendChild(st); }
   function init(o) {
     o = o || {}; var game = o.game || '게임', ver = o.ver || '';
-    var st = el('style'); st.textContent = css; document.head.appendChild(st);
+    ensureCss();
     // --- 인트로
     var ov = el('div', { id: 'bwj-intro' }, '<div class="bx"><img alt="배우자교실" src="' + LOGO + '"></div><p>만든이 · 배우자교실</p>');
     document.body.appendChild(ov);
@@ -45,7 +47,7 @@
       '<a class="lg" href="' + INSTA + '" target="_blank" rel="noopener noreferrer" title="만든 사람: 배우자교실 인스타그램"><img alt="배우자교실" src="' + LOGO + '"></a><button type="button">💬 오류 신고·건의</button>');
     (par || document.body).appendChild(b);
     b.querySelector('button').addEventListener('click', function () { openFb(game, ver); });
-    setTimeout(function () { flush(); checkReplies(); setInterval(function () { flush(); checkReplies(); }, 300000); }, 3500);
+    watch();
     b.querySelector('button').addEventListener('pointerdown', function (e) { e.stopPropagation(); });
   }
   // ===== 통합 의견함: 게임 안에서 바로 쓰고, 선생님 답장도 여기서 받아요 =====
@@ -61,9 +63,10 @@
   }
   function outbox() { try { var q = JSON.parse(ls('bwj-out') || '[]'); return Array.isArray(q) ? q : []; } catch (e) { return []; } }
   function flush() { var q = outbox(); if (!q.length) return; var p = q[0]; api('/api/post', p).then(function () { q.shift(); ls('bwj-out', JSON.stringify(q)); ls('bwj-posted', '1'); flush(); }, function (e) { if (e && e.err) { q.shift(); ls('bwj-out', JSON.stringify(q)); flush(); } }); }
+  function watch() { if (watch.on) return; watch.on = 1; setTimeout(function () { flush(); checkReplies(); setInterval(function () { flush(); checkReplies(); }, 300000); }, 3500); }
   function ago(t) { var m = Math.floor((Date.now() - t) / 60000); return m < 1 ? '방금' : m < 60 ? m + '분 전' : m < 1440 ? Math.floor(m / 60) + '시간 전' : Math.floor(m / 1440) + '일 전'; }
   function unseen(posts) { var seen = +ls('bwj-seen') || 0, n = 0; for (var i = 0; i < posts.length; i++) if (posts[i].repAt > seen) n++; return n; }
-  function setDot(n) { var b = document.querySelector('#bwj-badge button'); if (!b) return; var d = b.querySelector('.bwjdot'); if (n > 0) { if (!d) { d = el('span', { class: 'bwjdot' }); b.appendChild(d); } d.textContent = n > 9 ? '9+' : n; } else if (d) d.remove(); }
+  function setDot(n) { var b = document.querySelector('#bwj-badge button, [data-act="feedback"]'); if (!b) return; if (!b.style.position) b.style.position = 'relative'; var d = b.querySelector('.bwjdot'); if (n > 0) { if (!d) { d = el('span', { class: 'bwjdot' }); b.appendChild(d); } d.textContent = n > 9 ? '9+' : n; } else if (d) d.remove(); }
   function checkReplies() { if (!ls('bwj-posted')) return; api('/api/mine?did=' + did()).then(function (j) { setDot(unseen(j.posts)); }, function () {}); }
   function openFb(game, ver) {
     if (document.getElementById('bwj-fb')) return;
@@ -136,5 +139,5 @@
     if (ls('bwj-posted')) api('/api/mine?did=' + did()).then(function (j) { var n = unseen(j.posts), d = m.querySelector('.bwjdot2'); if (d && n > 0) d.textContent = ' ' + n; }, function () {});
     render();
   }
-  window.BWJ = { init: init };
+  window.BWJ = { init: init, openFb: function (g, v) { ensureCss(); openFb(g, v); }, watch: watch };
 })();
