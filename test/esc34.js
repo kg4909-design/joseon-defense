@@ -14,6 +14,9 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
     out.blocked = { shifted: G.sf !== sf0, esw: G.esw, snap: D.makeSnap().esw, meX: Math.round(me.x) };
     h2p.x = G.ww - 700; D.stepBattle(0.1); D.stepBattle(0.1);
     out.passed = { shifted: G.sf !== sf0 };
+    // 안전장치: 25초 뒤 함께 이동
+    me.x = G.ww - 700; h2p.x = 800; h2p.down = 0; const sfA = G.sf; for (let i = 0; i < 120; i++) { me.hp = me.mx; D.stepBattle(0.1); } out.wait12s = { shifted: G.sf !== sfA, esl: G.esl };
+    for (let i = 0; i < 160; i++) { me.hp = me.mx; h2p.hp = h2p.mx; D.stepBattle(0.1); if (G.sf !== sfA) break; } out.auto = { shifted: G.sf !== sfA, lagX: Math.round(h2p.x), meX: Math.round(me.x) };
     // 봇만 뒤처지면?
     const sf1 = G.sf; me.x = G.ww - 700; h2p.x = G.ww - 700; bot.x = 300; D.stepBattle(0.1);
     out.botIgnored = { shifted: G.sf !== sf1 };
