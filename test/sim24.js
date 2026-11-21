@@ -3,7 +3,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const role = process.argv[2] || 'archer', diff = process.argv[3] || 'normal', dur = +(process.argv[4] || 180);
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const p = await b.newPage({ viewport: { width: 1180, height: 820 } });
-  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.36'); });
+  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.37'); });
   const errs = []; p.on('pageerror', (e) => errs.push(String(e)));
   await p.goto('file:///home/claude/work/game/dist/index.html');
   await p.click('#btnSingle'); await p.waitForTimeout(400);

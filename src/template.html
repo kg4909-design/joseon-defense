@@ -244,7 +244,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 /* v0.27 알림 스택: 가운데 위쪽 안내(정보창·습격·일시정지·토스트)는 한 줄로 쌓여서 겹치지 않아요 */
 #notes{position:absolute;left:46%;top:92px;transform:translateX(-50%);width:max-content;max-width:min(520px,56%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:12;pointer-events:none}
 #notes>*,#notes #toast{position:static!important;transform:none!important;left:auto!important;top:auto!important;bottom:auto!important;margin:0!important}
-#wxTag,#smTag,#raidTag,#coopTag,#pauseTag,#toast,#waitTag,#lagTag{background:rgba(40,30,20,.88)!important;color:#fff;font-size:15px;font-weight:800;padding:5px 16px;border-radius:99px;border:2px solid rgba(255,255,255,.28);box-shadow:0 3px 0 rgba(0,0,0,.3);white-space:normal;text-align:center;line-height:1.3}
+#wxTag,#smTag,#spTag,#raidTag,#coopTag,#pauseTag,#toast,#waitTag,#lagTag{background:rgba(40,30,20,.88)!important;color:#fff;font-size:15px;font-weight:800;padding:5px 16px;border-radius:99px;border:2px solid rgba(255,255,255,.28);box-shadow:0 3px 0 rgba(0,0,0,.3);white-space:normal;text-align:center;line-height:1.3}
 #pauseTag,#lagTag{color:#ffe9a0}#toast{max-width:100%}#toast[data-off="1"]{display:none}
 #infoBox{max-width:100%!important}
 .qres{border-radius:99px;border:2px solid rgba(255,255,255,.35);box-shadow:0 3px 0 rgba(0,0,0,.25);text-align:center}
@@ -278,6 +278,8 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 .sm #escGo b{font-size:19px}
 #cards .rcm{display:block;font-style:normal;font-size:12px;font-weight:900;color:#d35400;background:#fff1cf;border:2px solid #f0b34a;border-radius:99px;padding:0 8px;margin-top:3px}
 #smTag{background:rgba(120,70,0,.92)!important;border-color:#ffd24a!important}
+#spTag{background:rgba(150,30,30,.92)!important;border-color:#ff8a7a!important}
+#spTag.slow{background:rgba(30,90,60,.92)!important;border-color:#8affb0!important}
 .sm #smTag{font-size:18px}
 
 /* v0.33 휴대폰/태블릿/PC 공통 보정 */
@@ -537,7 +539,7 @@ input[type=range]{touch-action:pan-x!important}
   <div id="hudMid"><span id="hudT">00:00</span><div id="objBar" class="cap"></div><div id="hudBase"><div class="bar"><i id="barB"></i></div></div><i id="barT" style="display:none"></i></div>
   <div id="joyZone"><div id="joyRing"></div><div id="joyKnob"></div></div>
   <button id="btnSummon">소집</button><button id="btnSkill">함성</button><button id="btnCr" style="display:none"></button>
-  <div id="escGo"><i>➡</i><b>오른쪽으로<br>계속 달리세요!</b><i>➡</i></div><div id="cards"></div><div id="evBox"></div><div id="notes"><div id="infoBox"></div><div id="smTag" style="display:none"></div><div id="wxTag" style="display:none"></div><div id="raidTag" style="display:none"></div><div id="coopTag" style="display:none"></div><div id="pauseTag"></div><div id="waitTag" style="display:none"></div><div id="lagTag" style="display:none">📶 방장 화면이 멈춘 것 같아요. 잠시만 기다려 주세요…</div></div>
+  <div id="escGo"><i>➡</i><b>오른쪽으로<br>계속 달리세요!</b><i>➡</i></div><div id="cards"></div><div id="evBox"></div><div id="notes"><div id="infoBox"></div><div id="smTag" style="display:none"></div><div id="spTag" style="display:none"></div><div id="wxTag" style="display:none"></div><div id="raidTag" style="display:none"></div><div id="coopTag" style="display:none"></div><div id="pauseTag"></div><div id="waitTag" style="display:none"></div><div id="lagTag" style="display:none">📶 방장 화면이 멈춘 것 같아요. 잠시만 기다려 주세요…</div></div>
 </div>
 
 <div class="screen" id="sResult">

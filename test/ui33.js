@@ -7,7 +7,7 @@ const only = process.argv[2] ? process.argv[2].split(',') : null;
   for (const [w, h, nm] of VP) {
     if (only && !only.includes(nm)) continue;
     const p = await b.newPage({ viewport: { width: w, height: h } });
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.36'); localStorage.setItem('jd_hid', '1'); localStorage.setItem('jd_cw', JSON.stringify({ tk: 3, sh: 3, own: { gwonyul: 1 }, cos: [], eq: '', pity: 0, pity2: 0, cl: 0, ids: [] })); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.37'); localStorage.setItem('jd_hid', '1'); localStorage.setItem('jd_cw', JSON.stringify({ tk: 3, sh: 3, own: { gwonyul: 1 }, cos: [], eq: '', pity: 0, pity2: 0, cl: 0, ids: [] })); });
     p.on('pageerror', (e) => errs.push(String(e)));
     await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.waitForTimeout(300);
     const shot = async (n) => { await p.screenshot({ path: `/tmp/ui33/${nm}_${n}.png` }); };
