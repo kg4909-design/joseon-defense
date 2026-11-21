@@ -895,7 +895,7 @@ function startEvoQuiz() { // 적장 처치 → 문제 → 정답이면 진화! (
   for (const id of ids) { const p = G.pl[id]; if (p === qr) continue; p.offer = p.bot ? null : qr.offer.slice(); p.qz = p.bot ? null : Object.assign({}, qz); p.qs = 0; p.qrw = ''; p.offT = 45; }
 }
 function evoFinish() { // 정답! 진화할 수 있는 모든 영웅의 무기가 진화해요
-  const nm = []; for (const id of G.order) { const p = G.pl[id]; for (const k of evoElig(p)) { applyCard(p, 'evo_' + k); nm.push((G.order.length > 1 ? p.name + ': ' : '') + '★' + cardName(k)); G.fx.push([p.x, p.y, 90, 'lvl']); } }
+  const nm = []; for (const id of G.order) { const p = G.pl[id]; for (const k of evoElig(p)) { applyCard(p, 'evo_' + k); nm.push((G.order.length > 1 ? p.name + ': ' : '') + '★' + cardName(k)); G.fx.push([p.x, p.y, 90, 'lvl']); G.fx.push([p.x, p.y, 200, 'evo']); } }
   for (const id of G.order) { const o = G.pl[id]; o.offer = null; o.qz = null; } G.chs = {};
   G.info = { id: Date.now() + Math.random(), tt: '⭐ 무기 진화!', tx: nm.join(' · ') || '진화했어요' };
 }
@@ -1609,7 +1609,7 @@ let sel = -1, lastIn = [0, 0], joy = { on: false, id: null, ox: 0, oy: 0, x: 0, 
 let lastPh = '', lastRd = -1, lastOffer = '', lastEvKey = '', draftSel = { start: 0, dur: 300 };
 const cam = { x: 0, y: 0, rd: -1, t0: 0 };
 const ST = (() => { let o = {}; try { o = JSON.parse(localStorage.getItem('jd_set') || '{}'); } catch (e) {} return Object.assign({ nt: 'norm', fxs: 'small', joy: 'm', hand: 'R', q: 'auto', snd: 'on', bgm: 'on', sv: 60, bv: 100 }, o); })();
-let autoLow = false, fAcc = 0, fN = 0, skipF = 0, bossBan = 0, bossName = '', bannerBn = ['적장', ''];
+let evoBan = 0, evoFl = 0, autoLow = false, fAcc = 0, fN = 0, skipF = 0, bossBan = 0, bossName = '', bannerBn = ['적장', ''];
 const isLow = () => ST.q === 'low' || (ST.q === 'auto' && autoLow);
 const JRS = { s: 42, m: 55, l: 72 }; let JR = 55;
 function saveSt() { try { localStorage.setItem('jd_set', JSON.stringify(ST)); } catch (e) {} }
@@ -1660,7 +1660,7 @@ function ICOC(id) { if (id.startsWith('evo_')) id = id.slice(4); if (ICC[id]) re
   m.forEach((row, y) => { for (let x = 0; x < 12; x++) { const ch = row[x]; if (ch && ch !== '.' && PALX[ch]) { g.fillStyle = PALX[ch]; g.fillRect(x, y, 1, 1); } } }); return ICC[id] = c; }
 function ICON(id) { if (id.startsWith('evo_')) id = id.slice(4); if (ICU[id]) return ICU[id]; const c = document.createElement('canvas'); c.width = 48; c.height = 48; const g = c.getContext('2d'); g.imageSmoothingEnabled = false; g.drawImage(ICOC(id), 0, 0, 48, 48); return ICU[id] = c.toDataURL(); }
 // ---- 효과음 (코드로 만든 소리, 파일 없음) ----
-const SFX = { ctx: null, last: {}, TH: { hit: 70, slash: 90, bow: 80, gun: 120, boom: 120, gong: 300, pop: 80, pick: 50, lvl: 300, boss: 1000, night: 1000, cannon: 200 },
+const SFX = { ctx: null, last: {}, TH: { hit: 70, slash: 90, bow: 80, gun: 120, boom: 120, gong: 300, pop: 80, pick: 50, lvl: 300, evo: 900, boss: 1000, night: 1000, cannon: 200 },
   init() { if (this.ctx) return; try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} },
   out() { if (!this._o) { this._o = this.ctx.createGain(); this._o.connect(this.ctx.destination); } this._o.gain.value = Math.max(0, Math.min(1, ST.sv / 100)); return this._o; },
   tone(f0, f1, d, type, v) { const c = this.ctx, o = c.createOscillator(), g = c.createGain(), t = c.currentTime; o.type = type; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + d); g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0008, t + d); o.connect(g); g.connect(this.out()); o.start(t); o.stop(t + d + 0.02); },
@@ -1676,6 +1676,7 @@ const SFX = { ctx: null, last: {}, TH: { hit: 70, slash: 90, bow: 80, gun: 120, 
     else if (n === 'pop') { this.tone(300, 120, 0.1, 'sine', 0.07); }
     else if (n === 'pick') { this.tone(700, 1300, 0.12, 'sine', 0.1); }
     else if (n === 'lvl') { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => this.tone(f, f * 1.01, 0.22, 'triangle', 0.16), i * 90)); }
+    else if (n === 'evo') { [392, 523, 659, 784, 1046, 1318].forEach((f, i) => setTimeout(() => this.tone(f, f * 1.01, 0.3, 'triangle', 0.17), i * 80)); this.tone(98, 60, 0.9, 'sine', 0.28); setTimeout(() => this.tone(1568, 1580, 0.7, 'sine', 0.1), 520); this.noise(0.25, 0.12, 4000); }
     else if (n === 'boss') { this.tone(70, 55, 0.9, 'sawtooth', 0.22); setTimeout(() => this.tone(60, 45, 0.9, 'sawtooth', 0.22), 450); this.noise(0.6, 0.15, 400); }
     else if (n === 'night') { this.tone(300, 150, 1.2, 'sine', 0.15); } }
 };
@@ -2097,7 +2098,7 @@ function pillB(c, txt, x, y, bg, fg, bd, tm, full) {
 const HAUR = { gwonyul: { c: '#ffb13a', r: 2 }, gimsimin: { c: '#5ab4ff', r: 2 }, admiral: { c: '#7fe6ff', r: 2 }, gwakjaeu: { c: '#ff4a3a', r: 2 }, hyujeong: { c: '#ffe27a', r: 2 }, yujeong: { c: '#c28aff', r: 2 }, jinrin: { c: '#ff9a3a', r: 2 } }; // 전설·히든 영웅 기본 후광
 // ----- 라운드 고유 규칙: 지형·병종에 따라 판마다 다른 특징 (게임 규칙이에요) -----
 const SIGD = { mount: ['⛰', '산성', '적이 오르막을 올라와서 조금 느려요 (이동 −10%) · 성이 10% 더 튼튼해요'], plain: ['🌾', '넓은 벌판', '적이 많이 몰려오지만(+15%) 경험치를 15% 더 얻어요'], cav: ['🐎', '기병 돌격', '적 기병이 훨씬 자주 나와요! 대신 영웅 이동 속도 +8%'], sea: ['🌊', '바다 전투', '적 궁수·화포병이 늘어나요. 대신 영웅 사거리 +12%'], guer: ['🌲', '유격전', '기습이 더 잦아요! 대신 영웅 공격력 +10%'] };
-const FXL = { boss: 1.2, lvl: 1.0, gw: 1.4, hk: 1.2, ks: 1.4, hg: 1.2, hj: 1.4, yj: 6, jr: 1.5 };
+const FXL = { evo: 2.2, boss: 1.2, lvl: 1.0, gw: 1.4, hk: 1.2, ks: 1.4, hg: 1.2, hj: 1.4, yj: 6, jr: 1.5 };
 for (const k in LVF) FXL['lf_' + k] = 1.5;
 const AUR = {
   // 후광 (s 없음) — fx: 입자·날개 이펙트 종류
@@ -2616,10 +2617,17 @@ function draw() {
     effects.push({ k: f[3], x: f[0], y: f[1], r: f[2], o: f[4], life: FXL[f[3]] || 0.38, mx: FXL[f[3]] || 0.38 });
     if (f[3] === 'die' && f[4] && f[4] !== 'camp' && !LOW && effects.length < 300) effects.push({ k: 'corpse', x: f[0], y: f[1], ty: f[4], life: 0.55, mx: 0.55 });
     if (f[3] === 'die') SFX.p('pop'); else if (f[3] === 'boom' || f[3] === 'gw' || f[3] === 'hk') SFX.p('boom'); else if (f[3] === 'ks' || f[3] === 'hj' || f[3] === 'yj') SFX.p('lvl'); else if (f[3] === 'hg') SFX.p('puff'); else if (f[3] === 'jr') SFX.p('boom'); else if (f[3] === 'gong') SFX.p('gong'); else if (f[3] === 'lvl') SFX.p('lvl'); else if (f[3] === 'boss') SFX.p('boss'); else if (f[3] === 'puff') SFX.p('gun'); else if (f[3] === 'night') { nightBan = 4.6; SFX.p('night'); }
+    if (f[3] === 'evo') { SFX.p('evo'); shake = Math.max(shake, 0.5); evoBan = 2.4; evoFl = 0.5; }
     if (f[3] === 'gong' || f[3] === 'boom') shake = Math.max(shake, f[3] === 'gong' ? 0.2 : 0.1); if (f[3] === 'boss') { bossBan = 3.6; bossName = ET.boss.n; bannerBn = V.bn || BOSSN[V.rd] || ['적장', '']; } if (f[3] === 'roar' || f[3] === 'boss') shake = Math.max(shake, 0.35); if (f[3] === 'gw' || f[3] === 'hk' || f[3] === 'jr') shake = Math.max(shake, 0.3); }
   V.sh = []; V.fx = [];
   const dt = DT;
   for (let i = effects.length - 1; i >= 0; i--) { const f = effects[i]; f.life -= dt; if (f.life <= 0) { effects.splice(i, 1); continue; } const t = 1 - f.life / f.mx;
+    if (f.k === 'evo') { // 무기 진화 연출: 금빛 기둥 + 퍼지는 고리 + 별빛
+      cx.save(); const R = f.r, up = Math.min(1, t * 5), fd = t < 0.5 ? 1 : 1 - (t - 0.5) / 0.5;
+      cx.globalAlpha = 0.55 * fd; const gr = cx.createLinearGradient(0, f.y - 420 * up, 0, f.y + 10); gr.addColorStop(0, 'rgba(255,240,150,0)'); gr.addColorStop(1, 'rgba(255,214,80,.95)'); cx.fillStyle = gr; cx.fillRect(f.x - 34 * (1 - t * 0.5), f.y - 420 * up, 68 * (1 - t * 0.5), 430 * up);
+      for (let k = 0; k < 3; k++) { const tt = Math.max(0, Math.min(1, t * 1.6 - k * 0.22)); if (tt <= 0 || tt >= 1) continue; cx.globalAlpha = (1 - tt) * 0.9; cx.strokeStyle = k === 1 ? '#ffffff' : '#ffd34d'; cx.lineWidth = 7 * (1 - tt) + 1; cx.beginPath(); cx.ellipse(f.x, f.y + 6, R * tt, R * tt * 0.45, 0, 0, 7); cx.stroke(); }
+      if (!LOW) { cx.fillStyle = '#fff6b0'; const n = 16; for (let k = 0; k < n; k++) { const an = k / n * 6.283 + t * 2.2, rr = 24 + t * 150 * (0.55 + (k % 4) * 0.15), sy = f.y - t * 110 * (0.6 + (k % 3) * 0.3), sz = 4.5 * (1 - t) + 1; cx.globalAlpha = fd * 0.95; cx.save(); cx.translate(f.x + Math.cos(an) * rr, sy + Math.sin(an) * rr * 0.45); cx.rotate(an); cx.beginPath(); for (let q = 0; q < 8; q++) { const r2 = q % 2 ? sz * 0.45 : sz * 1.7, aq = q * Math.PI / 4; cx.lineTo(Math.cos(aq) * r2, Math.sin(aq) * r2); } cx.closePath(); cx.fill(); cx.restore(); } }
+      cx.restore(); continue; }
     if (f.k === 'sh') { const a = f.a, kd = a[5] || ''; const dx = a[2] - a[0], dy = a[3] - a[1], L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
       if (a[9] === 1) { const tt = Math.min(1, t * 1.6); cx.save(); cx.globalAlpha = 0.55 * (1 - tt); cx.strokeStyle = '#ffe27a'; cx.lineWidth = 7 * (1 - tt * 0.6); cx.lineCap = 'round'; cx.beginPath(); cx.moveTo(a[0], a[1]); cx.lineTo(a[2], a[3]); cx.stroke(); cx.globalAlpha = 0.9 * (1 - tt); cx.lineWidth = 3; cx.beginPath(); cx.arc(a[2], a[3], 8 + tt * 30, 0, 7); cx.stroke(); if (!LOW) { cx.fillStyle = '#fff6c0'; for (let k = 0; k < 5; k++) { const an = k * 1.26 + tt * 2; cx.beginPath(); cx.arc(a[2] + Math.cos(an) * (10 + tt * 26), a[3] + Math.sin(an) * (10 + tt * 26), 2.4 * (1 - tt), 0, 7); cx.fill(); } } cx.restore(); }
       if (kd === 'bow' || kd === 'archer' || kd === 'hwa' || kd === 'ebow') { const p = Math.min(1, t * 1.25), x = a[0] + dx * p, y = a[1] + dy * p; cx.strokeStyle = 'rgba(255,255,255,.35)'; cx.lineWidth = 1.5; cx.beginPath(); cx.moveTo(x - ux * 22, y - uy * 22); cx.lineTo(x, y); cx.stroke(); cx.strokeStyle = kd === 'ebow' ? '#ff9a8a' : '#f3e1b0'; cx.lineWidth = 2.5; cx.beginPath(); cx.moveTo(x - ux * 12, y - uy * 12); cx.lineTo(x, y); cx.stroke(); cx.fillStyle = '#fff'; cx.beginPath(); cx.moveTo(x + ux * 5, y + uy * 5); cx.lineTo(x - uy * 3, y + ux * 3); cx.lineTo(x + uy * 3, y - ux * 3); cx.fill(); }
@@ -2699,6 +2707,9 @@ function draw() {
   // 적장 체력바 + 등장 배너
   { const bs = V.du ? null : (V.en || []).find((e) => e[1] === 'boss'); if (bs) { const bw = 300, bx = W / 2 - bw / 2, by = 112; cx.fillStyle = 'rgba(40,20,20,.7)'; rr(bx - 4, by - 4, bw + 8, 24, 12); cx.fill(); cx.fillStyle = '#ff5a4a'; rr(bx, by, bw * Math.max(0.03, bs[4]), 16, 8); cx.fill(); cx.fillStyle = '#fff'; cx.font = 'bold 13px sans-serif'; cx.textAlign = 'center'; cx.fillText('적장 ' + (((bs[8] || V.bn || BOSSN[V.rd] || [''])[0]) || ''), W / 2, by + 13); }
     if (V.du) { const D = V.du, bw = Math.min(W * 0.5, 460), bx = (W - bw) / 2, by = Math.round(H * 0.3); cx.save(); cx.textAlign = 'center'; cx.fillStyle = 'rgba(30,10,10,.78)'; rr(bx - 10, by - 30, bw + 20, 58, 14); cx.fill(); cx.fillStyle = '#ffe9b0'; cx.font = 'bold 17px sans-serif'; cx.fillText('⚔ 일기토 · ' + D.bn + (D.sn ? ' · ' + D.sn : '') + (D.ph === 'warn' ? ' · 준비!' : ' · ' + D.tm + '초'), W / 2, by - 8); cx.fillStyle = 'rgba(0,0,0,.6)'; rr(bx, by + 2, bw, 14, 7); cx.fill(); cx.fillStyle = D.hp > 0.35 ? '#ff6a4d' : '#ffb02e'; rr(bx, by + 2, Math.max(8, bw * Math.max(0, D.hp)), 14, 7); cx.fill(); cx.restore(); }
+    if (evoFl > 0) { cx.save(); cx.globalAlpha = Math.min(0.6, evoFl * 1.4); cx.fillStyle = '#fff6c8'; cx.fillRect(0, 0, W, H); cx.restore(); evoFl -= DT; }
+    if (evoBan > 0) { evoBan -= DT; const tot = 2.4, el = tot - evoBan, a = Math.min(1, evoBan * 2.2, el * 5), pu = 1 + Math.max(0, 0.35 - el) * 1.2; cx.save(); cx.globalAlpha = a * 0.75; const g2 = cx.createLinearGradient(0, 0, W, 0); g2.addColorStop(0, 'rgba(255,200,60,0)'); g2.addColorStop(0.5, 'rgba(255,200,60,.85)'); g2.addColorStop(1, 'rgba(255,200,60,0)'); cx.fillStyle = g2; cx.fillRect(0, 150, W, 100);
+      cx.globalAlpha = a; cx.textAlign = 'center'; cx.translate(W / 2, 214); cx.scale(pu, pu); cx.lineJoin = 'round'; cx.lineWidth = 8; cx.strokeStyle = '#7a3b00'; cx.font = 'bold 46px sans-serif'; cx.strokeText('⭐ 무기 진화! ⭐', 0, 0); cx.fillStyle = '#fffbe0'; cx.fillText('⭐ 무기 진화! ⭐', 0, 0); cx.font = 'bold 17px sans-serif'; cx.lineWidth = 4; cx.strokeText('문제를 맞혀서 더 강해졌어요', 0, 30); cx.fillStyle = '#fff0a0'; cx.fillText('문제를 맞혀서 더 강해졌어요', 0, 30); cx.restore(); }
     if (bossBan > 0) { bossBan -= DT; const tot = 3.6, el = tot - bossBan, a = Math.min(1, bossBan * 2, el * 4), bn = bannerBn, off = Math.max(0, 1 - el * 2.5) * 380; cx.save(); cx.globalAlpha = a; cx.fillStyle = 'rgba(0,0,0,.6)'; cx.fillRect(0, 0, W, 58); cx.fillRect(0, H - 58, W, 58); cx.fillStyle = 'rgba(110,16,16,.9)'; cx.fillRect(0, 188, W, 124);
       cx.textAlign = 'center'; cx.fillStyle = Math.floor(el * 6) % 2 ? '#ffd34d' : '#fff'; cx.font = 'bold 16px sans-serif'; cx.fillText('⚠ WARNING — 적장 등장 ⚠', W / 2 + 70, 214); cx.fillStyle = '#fff'; cx.font = 'bold 48px sans-serif'; cx.fillText(bn[0], W / 2 + 70 + off, 268); cx.fillStyle = '#ffe9a0'; cx.font = 'bold 18px sans-serif'; cx.fillText(bn[1] + ' · 쓰러뜨리면 전투의 흐름이 바뀌어요', W / 2 + 70 - off, 296); cx.restore(); cx.globalAlpha = a; spr(FP + '_boss', 150 - off, 312, 215, {}); cx.globalAlpha = 1; } }
   // 라운드 시작 안내
