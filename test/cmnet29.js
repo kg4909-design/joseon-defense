@@ -7,7 +7,7 @@ const N = 3, FILE = 'file:///home/claude/joseon-defense/index.html';
   const errs = [], pages = [], out = {};
   for (let i = 0; i < N; i++) {
     const ctx = await b.newContext({ viewport: { width: 1180, height: 820 } }); const p = await ctx.newPage();
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.38'); localStorage.setItem('hdg_relay', 'ws://localhost:8798/ws'); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.39'); localStorage.setItem('hdg_relay', 'ws://localhost:8798/ws'); });
     p.on('pageerror', (e) => errs.push(i + ':' + e.message)); p.on('dialog', (d) => d.dismiss());
     await p.goto(FILE); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.fill('#nick', '학생' + (i + 1)); pages.push(p);
   }

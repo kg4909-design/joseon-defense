@@ -7,7 +7,7 @@ const { spawn } = require('child_process');
   const errs = [], pages = [], out = {}, dialogs = [];
   for (let i = 0; i < 3; i++) {
     const ctx = await b.newContext({ viewport: { width: 1180, height: 820 } }); const p = await ctx.newPage();
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.38'); localStorage.setItem('hdg_relay', 'ws://localhost:8798/ws'); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.39'); localStorage.setItem('hdg_relay', 'ws://localhost:8798/ws'); });
     p.on('pageerror', (e) => errs.push(i + ':' + e.message)); p.on('dialog', (d) => { dialogs.push(i + ':' + d.type() + ':' + d.message().slice(0, 30)); d.dismiss(); });
     await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.fill('#nick', '학생' + (i + 1)); pages.push(p);
   }

@@ -35,7 +35,7 @@ const AUDIT = () => {
   const [w, h] = [+process.argv[2] || 906, +process.argv[3] || 411]; const shots = process.argv[4] === 'shots';
   const p = await b.newPage({ viewport: { width: w, height: h }, hasTouch: w < 1000 });
   p.on('pageerror', (e) => console.log('PAGEERR', String(e)));
-  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.38'); });
+  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.39'); });
   await p.goto('file:///home/claude/work/game/dist/index.html?fast=60'); await p.waitForSelector('#bwj-intro', { state: 'detached' });
   const T = async (name) => { await p.waitForTimeout(500); const r = await p.evaluate(AUDIT); console.log(w + 'x' + h, name, r.n, r.issues.length ? JSON.stringify(r.issues) : 'OK'); if (shots) await p.screenshot({ path: `/tmp/ds/f${w}_${name}.png` }); };
   await T('lobby');

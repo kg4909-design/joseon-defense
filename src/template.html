@@ -467,6 +467,35 @@ input[type=range]{touch-action:pan-x!important}
 #stage[data-scr=sBattle] #bwj-badge a.lg{height:28px!important;padding:2px 5px!important}
 #stage[data-scr=sBattle] #bwj-badge img{height:20px!important}
 #stage[data-scr=sBattle] #bwj-badge button{height:28px!important;flex:0 0 auto!important;font-size:12px!important;padding:0 10px!important;border-width:2px!important;box-shadow:0 2px 0 var(--line)!important;opacity:.92}
+
+/* ===== v0.39 전투 HUD 통일 (960×540 무대 좌표) ===== */
+#stage #sBattle{--hp:34px}
+#stage #sBattle #me{zoom:1!important;left:12px!important;top:10px!important;bottom:auto!important;width:260px!important;height:62px!important;box-sizing:border-box;padding:7px 12px!important;gap:10px!important;align-items:center!important}
+#stage #sBattle #meAv{width:44px!important;height:44px!important;flex:0 0 auto;border-radius:50%;border:2px solid var(--line);background:#fff;object-fit:cover}
+#stage #sBattle #me .meR{flex:1 1 auto;min-width:0}
+#stage #sBattle #me .meT{display:flex!important;justify-content:space-between;align-items:baseline;gap:6px;line-height:1.1}
+#stage #sBattle #hudLv{font-size:15px;font-weight:900;white-space:nowrap}
+#stage #sBattle #me .meT span{font-size:11px;font-weight:800;opacity:.7;white-space:nowrap}
+#stage #sBattle #me .bar{height:11px!important;margin:5px 0 0!important}
+#stage #sBattle #hudFoodBox,#stage #sBattle #hudArmy{zoom:1!important;top:80px!important;height:var(--hp);box-sizing:border-box;display:flex!important;align-items:center;justify-content:center;padding:0 10px!important;font-size:15px!important;font-weight:900;white-space:nowrap;line-height:1;margin:0}
+#stage #sBattle #hudFoodBox{left:12px!important;width:118px}
+#stage #sBattle #hudArmy{left:138px!important;width:134px}
+#stage #sBattle #hudWeap{zoom:1!important;left:12px!important;top:122px!important;width:260px!important;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+#stage #sBattle #hudWeap .eq,#stage #sBattle #hudWeap .wc{height:30px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 9px 0 4px;border-radius:99px;font-size:13px;font-weight:800;white-space:nowrap;background:var(--cream);border:2px solid var(--line);color:var(--txt);box-shadow:0 2px 0 rgba(91,70,54,.45)}
+#stage #sBattle #hudWeap .wc{padding:0 10px}
+#stage #sBattle #hudWeap .eq img{width:22px!important;height:22px!important;object-fit:contain;flex:0 0 auto}
+#stage #sBattle #hudWeap .eq.wp{background:#ffe9a0}
+#stage #sBattle #hudWeap .wc.w{background:#e6dcff}
+#stage #sBattle #hudMid{zoom:1!important}
+#stage #sBattle #hudName{right:12px!important;top:10px!important;height:34px;box-sizing:border-box;display:flex;align-items:center;padding:0 16px!important;font-size:15px!important;font-weight:900;line-height:1}
+#stage #sBattle #bwj-badge{right:12px!important;top:50px!important}
+#stage #sBattle #btnGear,#stage #sBattle #btnPause{width:44px!important;height:44px!important;top:82px!important;padding:0!important;border-radius:50%!important;display:flex!important;align-items:center;justify-content:center;font-size:20px!important;line-height:1;letter-spacing:0!important;box-sizing:border-box}
+#stage #sBattle #btnGear{right:12px!important}
+#stage #sBattle #btnPause{right:64px!important;font-size:0!important}
+#stage #sBattle #btnPause::before{content:'';display:block;width:14px;height:16px;box-sizing:border-box;border-left:5px solid var(--txt);border-right:5px solid var(--txt)}
+.sm #stage #sBattle #hudLv,.sm #sBattle #hudLv{font-size:17px}
+.sm #sBattle #hudFoodBox,.sm #sBattle #hudArmy{font-size:16px!important}
+.sm #sBattle #hudWeap .eq,.sm #sBattle #hudWeap .wc{font-size:14px}
 </style>
 </head><body>
 <div id="stage">
