@@ -5,7 +5,7 @@ const only = process.argv[2] ? process.argv[2].split(',') : null;
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   for (const [w, h] of VP) {
     const p = await b.newPage({ viewport: { width: w, height: h }, hasTouch: w < 1000 });
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.34'); localStorage.setItem('jd_sv_1', JSON.stringify({ ts: Date.now(), rd: 0, dur: 180, diff: 'normal', wall: 0, role: 'archer', name: 'a', ver: 'v0.24' })); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.35'); localStorage.setItem('jd_sv_1', JSON.stringify({ ts: Date.now(), rd: 0, dur: 180, diff: 'normal', wall: 0, role: 'archer', name: 'a', ver: 'v0.24' })); });
     const errs = []; p.on('pageerror', (e) => errs.push(String(e)));
     await p.goto('file:///home/claude/work/game/dist/index.html'); await p.waitForTimeout(5500);
     const chk = async (name) => {
