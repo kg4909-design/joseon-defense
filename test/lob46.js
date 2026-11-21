@@ -6,7 +6,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   for (const [w, h] of sizes) {
     const p = await b.newPage({ viewport: { width: w, height: h }, hasTouch: w < 1000 });
     p.on('pageerror', (e) => errs.push(String(e)));
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.37'); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.38'); });
     await p.goto('file:///home/claude/work/game/dist/index.html'); await p.waitForTimeout(5500);
     const r = await p.evaluate(() => { const ids = ['lobTitle','lobMenu','lobBtns','btnSingle','btnRank','btnGearL']; const o = {}; const m = document.getElementById('lobMain'); o.scroll = m.scrollHeight > m.clientHeight + 2; for (const i of ids) { const r = document.getElementById(i).getBoundingClientRect(); o[i] = [Math.round(r.left), Math.round(r.top), Math.round(r.right), Math.round(r.bottom)]; }
       const inside = (id) => { const r = document.getElementById(id).getBoundingClientRect(); return r.right <= innerWidth + 1 && r.left >= -1; };
