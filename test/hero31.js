@@ -4,7 +4,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const errs = [];
   for (const [w, h] of [[1180, 820], [844, 390]]) {
     const p = await b.newPage({ viewport: { width: w, height: h } });
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.35'); localStorage.setItem('jd_hid', '1'); localStorage.setItem('jd_cw', JSON.stringify({ tk: 0, sh: 0, own: { gwonyul: 1, gimsimin: 1 }, cos: [], eq: '', pity: 0, pity2: 0, cl: 0, ids: [] })); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.36'); localStorage.setItem('jd_hid', '1'); localStorage.setItem('jd_cw', JSON.stringify({ tk: 0, sh: 0, own: { gwonyul: 1, gimsimin: 1 }, cos: [], eq: '', pity: 0, pity2: 0, cl: 0, ids: [] })); });
     p.on('pageerror', (e) => errs.push(String(e)));
     await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.waitForTimeout(300);
     const CST = await p.evaluate(() => { const D = window.__dbg; for (let i = 0; i < 30; i++) { const o = ROUND_OBJ[i]; if (o === 'd' || o === 'b') return i; } return -1; }); console.log('castle round idx', CST);

@@ -5,7 +5,7 @@ const { spawn } = require('child_process');
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox', '--disable-background-timer-throttling', '--disable-renderer-backgrounding'] });
   const errs = [], out = {};
   const mk = async (name, extra) => { const ctx = await b.newContext({ viewport: { width: 1180, height: 820 } }); const p = await ctx.newPage();
-    await p.addInitScript((x) => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.35'); localStorage.setItem('hdg_relay', 'ws://localhost:8799/ws'); if (x) localStorage.setItem('jd_last', x); }, extra || null);
+    await p.addInitScript((x) => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.36'); localStorage.setItem('hdg_relay', 'ws://localhost:8799/ws'); if (x) localStorage.setItem('jd_last', x); }, extra || null);
     p.on('pageerror', (e) => errs.push(e.message)); p.on('dialog', (d) => d.dismiss());
     await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.fill('#nick', name); return [ctx, p]; };
   const [, h] = await mk('방장'); const [c2, g] = await mk('친구');
