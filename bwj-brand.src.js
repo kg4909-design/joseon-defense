@@ -12,7 +12,16 @@
     '#bwj-intro .bx{background:#fff;border-radius:18px;padding:18px 28px;box-shadow:0 0 60px rgba(255,255,255,.18);transform:scale(.92);transition:transform 1.6s ease}' +
     '#bwj-intro.in .bx{transform:scale(1)}#bwj-intro img{display:block;height:min(26vh,150px);width:auto}' +
     '#bwj-intro p{position:absolute;bottom:9%;margin:0;color:#aab;font:14px JD,sans-serif;letter-spacing:1px}' +
-    '#bwj-badge{z-index:900;display:flex;align-items:center;gap:6px;font-family:inherit;pointer-events:auto}' +
+    '#bwj-badge{z-index:900;display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-family:inherit;pointer-events:auto}#bwj-badge .r1{display:flex;align-items:center;gap:6px}' +
+    '#bwj-badge button.mg{font:700 12px/1 inherit;font-family:inherit;border-radius:99px;padding:6px 10px;background:rgba(20,22,30,.82);color:#9fe3d4;border:1px solid #5fb8a6;white-space:nowrap}' +
+    '#bwj-gm{position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:14px}#bwj-gm *{box-sizing:border-box}' +
+    '#bwj-gm .bx{max-width:520px;width:100%;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#1d2230;color:#fff;border-radius:16px;padding:18px 20px;font:15px/1.55 JD,sans-serif;box-shadow:0 10px 40px rgba(0,0,0,.6)}' +
+    '#bwj-gm h3{margin:0 0 4px;font-size:19px}#bwj-gm .sub{font-size:13px;color:#9aa;margin-bottom:10px}' +
+    '#bwj-gm .gc{background:#262c3c;border:2px solid #3a4258;border-radius:12px;padding:10px 12px;margin:8px 0;display:flex;gap:10px;align-items:center}#bwj-gm .gc.me{border-color:#5fb8a6}' +
+    '#bwj-gm .gi{flex:1;min-width:0}#bwj-gm .gn{font-weight:800;font-size:16px}#bwj-gm .gd{font-size:13.5px;color:#cbd;margin-top:2px;word-break:keep-all}#bwj-gm .gt{display:inline-block;font-size:11.5px;background:#3d6ef0;border-radius:99px;padding:1px 8px;margin-right:6px;vertical-align:middle}' +
+    '#bwj-gm .go{flex:0 0 auto;font:700 14px JD,sans-serif;border:0;border-radius:10px;padding:9px 13px;background:#2fa58f;color:#fff;text-decoration:none;white-space:nowrap}#bwj-gm .go.off{background:#4b5568;color:#cbd}' +
+    '#bwj-gm .cl{display:block;margin:10px 0 0 auto;font:700 15px JD,sans-serif;border:0;border-radius:10px;padding:10px 16px;background:#4b5568;color:#fff}' +
+    '@media (max-height:520px){#bwj-gm{padding:6px}#bwj-gm .bx{padding:10px 14px}#bwj-gm .gc{padding:6px 10px;margin:5px 0}#bwj-gm .gd{font-size:12.5px}}' +
     '#bwj-badge.fx{position:fixed;right:max(8px,env(safe-area-inset-right,0px));bottom:8px}#bwj-badge.ab{position:absolute;right:8px;top:52px}' +
     '#bwj-badge a.lg{display:block;background:#fff;border-radius:7px;padding:2px 5px;line-height:0;box-shadow:0 2px 8px rgba(0,0,0,.45)}#bwj-badge img{height:24px;width:auto;display:block}' +
     '#bwj-badge button{font:700 12px/1 inherit;font-family:inherit;border:0;border-radius:99px;padding:7px 10px;background:rgba(20,22,30,.82);color:#ffd98a;border:1px solid #c9a24a}' +
@@ -44,11 +53,56 @@
     // --- 배지
     var par = o.parent ? document.querySelector(o.parent) : null;
     var b = el('div', { id: 'bwj-badge', class: par ? 'ab' : 'fx' },
-      '<a class="lg" href="' + INSTA + '" target="_blank" rel="noopener noreferrer" title="만든 사람: 배우자교실 인스타그램"><img alt="배우자교실" src="' + LOGO + '"></a><button type="button">💬 오류 신고·건의</button>');
+      '<div class="r1"><a class="lg" href="' + INSTA + '" target="_blank" rel="noopener noreferrer" title="만든 사람: 배우자교실 인스타그램"><img alt="배우자교실" src="' + LOGO + '"></a><button type="button">💬 오류 신고·건의</button></div><button type="button" class="mg">🎮 다른 게임 해보기</button>');
     (par || document.body).appendChild(b);
     b.querySelector('button').addEventListener('click', function () { openFb(game, ver); });
     watch();
     b.querySelector('button').addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+    var mg = b.querySelector('button.mg');
+    mg.addEventListener('click', function () { openGames(game); });
+    mg.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+  }
+  // ===== 다른 게임 해보기: 배우자교실에서 만든 게임 목록 =====
+  // 새 게임을 만들면 games.json(허브)에 한 줄만 추가하면 모든 게임의 목록에 같이 나타나요. 아래 GAMES는 인터넷이 안 될 때 쓰는 기본 목록이에요.
+  var GAMES_URL = 'https://kg4909-design.github.io/joseon-defense/games.json';
+  var GAMES = [
+    { id: 'joseon-defense', name: '조선의 위기 디펜스', tag: '역사 디펜스', desc: '임진왜란부터 병자호란까지, 친구들과 힘을 합쳐 거점을 지키고 퀴즈를 풀어 무기를 진화시키는 협동 디펜스 게임이에요.', url: 'https://kg4909-design.github.io/joseon-defense/' },
+    { id: 'haesang-sea', name: '해상왕의 바다', tag: '교역·해전', desc: '신라 청해진, 고려 벽란도, 조선 대항해로 이어지는 바다에서 교역하고 싸우고 키우는 동양판 대항해 게임이에요.', url: 'https://haesang-sea.kimsky4409.workers.dev/' }
+  ];
+  function loadGames(cb) {
+    var got = false, list = GAMES.slice();
+    function done(l) { if (got) return; got = true; cb(l); }
+    try {
+      var ac = typeof AbortController !== 'undefined' ? new AbortController() : null, t = ac && setTimeout(function () { ac.abort(); }, 3500);
+      fetch(GAMES_URL, ac ? { signal: ac.signal, cache: 'no-cache' } : { cache: 'no-cache' }).then(function (r) { clearTimeout(t); return r.json(); }).then(function (j) {
+        if (j && Array.isArray(j.games)) { var map = {}; list.forEach(function (g) { map[g.id] = g; }); j.games.forEach(function (g) { if (g && g.id && g.name) map[g.id] = g; }); list = Object.keys(map).map(function (k) { return map[k]; }); }
+        done(list);
+      }, function () { done(list); });
+    } catch (e) { done(list); }
+    setTimeout(function () { done(list); }, 3800);
+  }
+  function openGames(game) {
+    if (document.getElementById('bwj-gm')) return;
+    var m = el('div', { id: 'bwj-gm' }, '<div class="bx"><h3>🎮 배우자교실 게임들</h3><div class="sub">다른 게임도 해 보세요! 누르면 새 창에서 열려요.</div><div id="bwjGl"><div class="sub">불러오는 중…</div></div><button type="button" class="cl">닫기</button></div>');
+    document.body.appendChild(m);
+    m.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+    function close() { m.remove(); }
+    m.querySelector('.cl').onclick = close;
+    m.addEventListener('click', function (e) { if (e.target === m) close(); });
+    loadGames(function (list) {
+      var box = m.querySelector('#bwjGl'); if (!box) return; box.innerHTML = '';
+      list.forEach(function (g) {
+        var me = g.name === game, c = el('div', { class: 'gc' + (me ? ' me' : '') }), i = el('div', { class: 'gi' }), n = el('div', { class: 'gn' }), d = el('div', { class: 'gd' });
+        if (g.tag) { var t = el('span', { class: 'gt' }); t.textContent = g.tag; n.appendChild(t); }
+        n.appendChild(document.createTextNode(g.name)); d.textContent = g.desc || '';
+        i.appendChild(n); i.appendChild(d); c.appendChild(i);
+        var go;
+        if (me) { go = el('span', { class: 'go off' }); go.textContent = '지금 하는 중'; }
+        else if (/^https:\/\//.test(g.url || '')) { go = el('a', { class: 'go', href: g.url, target: '_blank', rel: 'noopener noreferrer' }); go.textContent = '▶ 하러 가기'; }
+        else { go = el('span', { class: 'go off' }); go.textContent = '곧 열려요'; }
+        c.appendChild(go); box.appendChild(c);
+      });
+    });
   }
   // ===== 통합 의견함: 게임 안에서 바로 쓰고, 선생님 답장도 여기서 받아요 =====
   var API = 'https://bwj-feedback.kimsky4409.workers.dev';
@@ -139,5 +193,5 @@
     if (ls('bwj-posted')) api('/api/mine?did=' + did()).then(function (j) { var n = unseen(j.posts), d = m.querySelector('.bwjdot2'); if (d && n > 0) d.textContent = ' ' + n; }, function () {});
     render();
   }
-  window.BWJ = { init: init, openFb: function (g, v) { ensureCss(); openFb(g, v); }, watch: watch };
+  window.BWJ = { init: init, openGames: function (g) { ensureCss(); openGames(g); }, openFb: function (g, v) { ensureCss(); openFb(g, v); }, watch: watch };
 })();

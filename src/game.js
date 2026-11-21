@@ -334,9 +334,12 @@ function applyCard(p, id) {
 }
 const POOL = {}; for (const k in WEAP) if (k !== 'turtle') POOL[k] = 1; for (const k in ABIL) POOL[k] = 1;
 const QALL = (() => { const m = { '삼국 시대': 2, '남북국 시대': 3, '고려 시대': 4, '조선 초기': 5 }; const a = QB.map((x, i) => ({ id: 'b' + i, era: x[0], q: [x[1], x[2], x[3], x[4]] })); ER.forEach((x, i) => a.push({ id: 'e' + i, era: m[x[4]] != null ? m[x[4]] : 5, q: x })); R.forEach((r, i) => a.push({ id: 'r' + i, era: 6 + r.ch, ch: r.ch, q: r.q })); QC.forEach((x, i) => a.push({ id: 'c' + i, era: 50, core: 1, lbl: x[0], q: [x[1], x[2], x[3], x[4]] })); return a; })();
+// 배경이 조선 시대이므로, 지금 챕터보다 뒤 시대 이야기가 들어간 문제는 내지 않아요 (정답·보기·해설 모두 검사)
+const LATE_RE = [[/정유재란|칠천량|명량|노량|백의종군|진린|울돌목/, 1], [/광해군|인조|정묘|후금|강홍립|이괄|정봉수|대동법/, 2], [/병자호란|병자년|청군|삼전도|남한산성|소현|청 태종|심양|척화|삼학사|효종|북벌|볼모/, 3], [/개화|일제|광복|6·25|4·19|동학 농민|3·1 운동|강화도 조약|독립운동|임시 정부|민주화|민주 항쟁/, 9]];
+function isLate(x, ch) { if (x._lt === undefined) x._lt = x.q[0] + ' ' + x.q[1].join(' ') + ' ' + x.q[3]; for (const [re, need] of LATE_RE) if (need > ch && re.test(x._lt)) return true; return false; }
 function nextQuiz() { // 이번 시대 · 지난 시대 · 더 먼저 배운 시대 문제를 섞어 한 문제를 골라요
   const ch = R[G.rd].ch, mx = 6 + ch; if (!G.qseen) { try { G.qseen = JSON.parse(localStorage.getItem('jd_qs') || '{}') || {}; } catch (e) { G.qseen = {}; } }
-  const pool = QALL.filter((x) => x.era <= mx), A = pool.filter((x) => x.era === mx), B = pool.filter((x) => x.era >= 6 && x.era < mx), C = pool.filter((x) => x.era < 6), D = QALL.filter((x) => x.core);
+  const pool = QALL.filter((x) => x.era <= mx && !isLate(x, ch)), A = pool.filter((x) => x.era === mx), B = pool.filter((x) => x.era >= 6 && x.era < mx), C = pool.filter((x) => x.era < 6), D = QALL.filter((x) => x.core && !isLate(x, ch));
   const bk = [A, B, C, D], rr = Math.random(); let b = rr < 0.25 ? 0 : rr < 0.4 ? 1 : rr < 0.65 ? 2 : 3; if (!bk[b].length) b = bk.findIndex((x) => x.length);
   let c = bk[b].filter((x) => !G.qseen[x.id]); if (!c.length) { for (const x of bk[b]) delete G.qseen[x.id]; c = bk[b]; }
   const it = c[rint(c.length)]; G.qseen[it.id] = 1; try { if (Object.keys(G.qseen).length > 500) G.qseen = { [it.id]: 1 }; localStorage.setItem('jd_qs', JSON.stringify(G.qseen)); } catch (e) {} const q = it.q, idx = q[1].map((_, k) => k).sort(() => Math.random() - 0.5);
@@ -1400,15 +1403,16 @@ function cwDraw() {
   cwSave(d); return { id, r, dup, sh, un };
 }
 
-let pvRaf = 0;
+let pvRaf = 0, pvTry = '';
 function startPv() {
   const cv = document.getElementById('cwPv'); if (!cv) return; if (pvRaf) cancelAnimationFrame(pvRaf); const c = cv.getContext('2d'), LOW0 = isLow();
   const loop = () => { if (!document.getElementById('cwPv') || !$('cwBox').classList.contains('on')) { pvRaf = 0; return; }
     const tm = performance.now() / 1000, d = cwLoad(), x = 150 + Math.sin(tm * 0.9) * 78, fy = 92; c.clearRect(0, 0, 300, 120);
     c.fillStyle = 'rgba(0,0,0,.12)'; c.beginPath(); c.ellipse(x, fy, 18, 7, 0, 0, 7); c.fill();
-    const TA = AUR[d.eq2] || null; trailTick('pv', x, fy, TA, tm, LOW0); if (TA) trailDraw(c, 'pv', TA, tm);
-    const A = AUR[d.eq] || null; if (A) drawAura(c, A, x, fy, tm, LOW0);
-    c.fillStyle = '#c0453a'; c.beginPath(); c.arc(x, fy - 28, 11, 0, 7); c.fill(); c.fillStyle = '#f5d2a8'; c.beginPath(); c.arc(x, fy - 40, 8, 0, 7); c.fill(); c.fillStyle = '#3b3b3b'; c.fillRect(x - 9, fy - 50, 18, 5);
+    const pt = pvTry && AUR[pvTry] ? AUR[pvTry] : null; c.save(); c.translate(150, 100); c.scale(1.35, 1.35); c.translate(-150, -100);
+    const TA = (pt && pt.s === 't' ? pt : AUR[d.eq2]) || null; trailTick('pv', x, fy, TA, tm, LOW0); if (TA) trailDraw(c, 'pv', TA, tm);
+    const A = (pt && pt.s !== 't' ? pt : AUR[d.eq]) || null; if (A) drawAura(c, A, x, fy, tm, LOW0);
+    c.fillStyle = '#c0453a'; c.beginPath(); c.arc(x, fy - 28, 11, 0, 7); c.fill(); c.fillStyle = '#f5d2a8'; c.beginPath(); c.arc(x, fy - 40, 8, 0, 7); c.fill(); c.fillStyle = '#3b3b3b'; c.fillRect(x - 9, fy - 50, 18, 5); c.restore();
     pvRaf = requestAnimationFrame(loop); };
   pvRaf = requestAnimationFrame(loop);
 }
@@ -1419,9 +1423,9 @@ function openCw(msg) {
   { const got = Object.keys(LEG).filter((k) => d.own[k]).map((k) => LEG[k].n); h += L ? `<p class="cwn">협동전을 깨면 조각을 얻어요. ${L.need}개를 모으면 전설 영웅 <b>${L.n}</b>이 열려요!${got.length ? '<br>🌟 얻은 전설 영웅: ' + got.join(', ') : ''}</p>` : '<p class="cwn">🌟 전설 영웅을 모두 얻었어요! 조각은 뽑기권으로 바뀌어요.</p>'; }
   h += `<div class="cwd"><button id="cwGo" ${d.tk < 1 ? 'class="dis"' : ''}>🎟 1장으로 뽑기</button><small>확률: 일반 70% · 희귀 25% · 전설 5% · 10번째엔 희귀 이상, 30번째엔 전설 확정 (지금 ${d.pity}/10 · ${d.pity2}/30) · 이미 있는 꾸미기가 나오면 영웅 조각이 돼요</small></div>`;
   h += `<div id="cwRes">${msg || ''}</div><b style="font-size:14px">내 꾸미기 (눌러서 장착)</b><div class="cwg">` + ['', 't'].map((sl) => `<div style="grid-column:1/-1;font-weight:800;font-size:13px;margin-top:4px">${sl ? '👣 이동 흔적 (걸을 때 남아요)' : '✨ 후광 (몸 주변 이펙트)'}</div>` + Object.keys(AUR).filter((k) => (AUR[k].s || '') === sl).map((k) => { const A = AUR[k], has = d.cos.includes(k); return `<button data-a="${k}" class="${has ? '' : 'lk'}${(d.eq === k || d.eq2 === k) ? ' on' : ''}"><i style="border-color:${has ? A.c : '#bbb'}"></i>${has ? A.n : '???'}<small style="color:${RC[A.r]}">${RN[A.r]}</small></button>`; }).join('')).join('') + '</div>';
-  h = `<div style="text-align:center"><canvas id="cwPv" width="300" height="120" style="width:100%;max-width:300px;background:#d9ead0;border-radius:12px"></canvas><div style="font-size:12px;color:#7a6652">장착한 후광·흔적 미리보기</div></div>` + h; $('cwBody').innerHTML = h; startPv();
+  h = `<div style="text-align:center"><canvas id="cwPv" width="300" height="120" style="width:100%;max-width:300px;background:#d9ead0;border-radius:12px"></canvas><div style="font-size:12px;color:#7a6652"><span id="cwPvL">장착한 후광·흔적 미리보기</span> · 아래 꾸미기를 누르면 아직 없는 것도 미리 볼 수 있어요</div></div>` + h; pvTry = ''; $('cwBody').innerHTML = h; startPv();
   $('cwGo').onclick = () => { const r = cwDraw(); if (!r) return; const A = AUR[r.id]; openCw(`<div class="cwp" style="border-color:${RC[r.r]}">✨ <b style="color:${RC[r.r]}">${RN[r.r]}</b> · ${A.n}${r.dup ? ` — 이미 있어서 🧩 조각 +${r.sh}` : ' — 새로 얻었어요!'}${r.un ? '<br>🌟 전설 영웅 ' + LEG[r.un].n + ' 해금!' : ''}</div>`); refreshHid(); };
-  $('cwBody').querySelectorAll('.cwg button').forEach((b) => { b.onclick = () => { const c = cwLoad(); if (!c.cos.includes(b.dataset.a)) return; if (AUR[b.dataset.a].s === 't') { c.eq2 = c.eq2 === b.dataset.a ? '' : b.dataset.a; me.tr = c.eq2; } else { c.eq = c.eq === b.dataset.a ? '' : b.dataset.a; me.aura = c.eq; } cwSave(c); sendProf(); openCw(); }; });
+  $('cwBody').querySelectorAll('.cwg button').forEach((b) => { b.onclick = () => { const c = cwLoad(); if (!c.cos.includes(b.dataset.a)) { pvTry = b.dataset.a; const A = AUR[pvTry], lb = $('cwPvL'); if (lb) lb.innerHTML = '👁 미리보기: <b>' + A.n + '</b> (' + RN[A.r] + ') — 뽑기로 얻으면 쓸 수 있어요'; return; } if (AUR[b.dataset.a].s === 't') { c.eq2 = c.eq2 === b.dataset.a ? '' : b.dataset.a; me.tr = c.eq2; } else { c.eq = c.eq === b.dataset.a ? '' : b.dataset.a; me.aura = c.eq; } cwSave(c); sendProf(); openCw(); }; });
 }
 function hidOK() { try { return localStorage.getItem('jd_hid') === '1'; } catch (e) { return false; } }
 function refreshHid() { for (const k of Object.keys(LEG)) { const lb = $(LEG[k].btn); if (lb) lb.textContent = legOK(k) ? '🌟 ' + LEG[k].n : '🔒 전설'; } const hb = $('roleHid'); if (hb) hb.textContent = hidOK() ? '⭐ 이순신' : '🔒 히든'; }
@@ -2016,7 +2020,7 @@ function draw() {
   if (V.evR) { cx.fillStyle = 'rgba(20,16,40,.85)'; rr(250, 214, 460, 66, 33); cx.fill(); cx.fillStyle = '#fff'; cx.font = 'bold 22px JD, sans-serif'; cx.textAlign = 'center'; cx.fillText('결정: ' + V.evR, 480, 255); }
   cx.restore();
 }
-function boot() { try { if (new URLSearchParams(location.search).get('teacher')) document.body.classList.add('teacher'); } catch (e) {} initLobby(); setupInput(); applySt(); show('sLobby'); window.__dbg = { nextQuiz, applyCard, slotPos, spawn, hsNow, doSummon, addAug, evoElig, evoFinish, startEvoQuiz, pasLoad, pasSave, pasActive, pasSettle, heroStats, heroStats0, MUS, BGM, beginDuel, endDuel, spawnBoss, get G() { return G; }, get V() { return V; }, Net, R, hostCtl, hostMsg, stepBattle, botAI, makeSnap, ER, pickQuiz: nextQuiz, startQuiz, QALL, endRound, gainXp, spawn, UT, ET, pickType, DIFF }; }
+function boot() { try { if (new URLSearchParams(location.search).get('teacher')) document.body.classList.add('teacher'); } catch (e) {} initLobby(); setupInput(); applySt(); show('sLobby'); window.__dbg = { QALL, nextQuiz, applyCard, slotPos, spawn, hsNow, doSummon, addAug, evoElig, evoFinish, startEvoQuiz, pasLoad, pasSave, pasActive, pasSettle, heroStats, heroStats0, MUS, BGM, beginDuel, endDuel, spawnBoss, get G() { return G; }, get V() { return V; }, Net, R, hostCtl, hostMsg, stepBattle, botAI, makeSnap, ER, pickQuiz: nextQuiz, startQuiz, QALL, endRound, gainXp, spawn, UT, ET, pickType, DIFF }; }
 boot();
 lobbyArt();
 if (window.BWJ) BWJ.init({ game: '조선의 위기 디펜스', ver: VER, parent: '#stage' });

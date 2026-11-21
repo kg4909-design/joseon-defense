@@ -1,0 +1,6 @@
+{
+  "games": [
+    { "id": "joseon-defense", "name": "조선의 위기 디펜스", "tag": "역사 디펜스", "desc": "임진왜란부터 병자호란까지, 친구들과 힘을 합쳐 거점을 지키고 퀴즈를 풀어 무기를 진화시키는 협동 디펜스 게임이에요.", "url": "https://kg4909-design.github.io/joseon-defense/" },
+    { "id": "haesang-sea", "name": "해상왕의 바다", "tag": "교역·해전", "desc": "신라 청해진, 고려 벽란도, 조선 대항해로 이어지는 바다에서 교역하고 싸우고 키우는 동양판 대항해 게임이에요.", "url": "https://haesang-sea.kimsky4409.workers.dev/" }
+  ]
+}

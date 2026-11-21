@@ -174,7 +174,7 @@ small{opacity:1;color:var(--sub)}#err{color:#c4452f;min-height:0;margin:2px 0}
 #hudWeap .eq{display:flex;align-items:center;gap:3px;background:rgba(252,244,224,.95);border:2px solid var(--line);border-radius:10px;padding:1px 6px 1px 2px;font-size:12px;font-weight:800;color:var(--txt)}#hudWeap .eq img{width:26px;height:26px;image-rendering:pixelated}#hudWeap .eq.wp{background:#ffe9a0}#hudWeap .eq.ev{border-color:#ff9a00;box-shadow:0 0 8px #ffb300}
 #sLobby,#sRoom,#sBrief,#sResult,#sEnd{overflow-y:auto;-webkit-overflow-scrolling:touch}
 #lobSet{max-width:calc(100vw - 24px);box-sizing:border-box}#lobSet[open]{position:fixed;left:12px;right:12px;bottom:10px;z-index:35;background:var(--cream);border:3px solid var(--line);border-radius:16px;padding:8px 12px}#relayUrl{width:100%!important;max-width:520px;box-sizing:border-box}
-@media (min-width:900px){#sRoom>.row{flex-wrap:nowrap!important}#sRoom>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}#hostBox{flex:0 0 490px;width:490px;max-width:46vw;min-width:320px;margin-top:30px}#hostBox>.row{margin:4px 0!important}#hostBox>b{display:block;margin-bottom:2px}}
+@media (min-width:900px){#rmBody>.row{flex-wrap:nowrap!important}#rmBody>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}#hostBox{flex:0 0 490px;width:490px;max-width:46vw;min-width:320px;margin-top:30px}#hostBox>.row{margin:4px 0!important}#hostBox>b{display:block;margin-bottom:2px}}
 #rsHost{position:sticky;bottom:0;padding:10px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 40%);z-index:3}
 @media (max-height:620px){.screen:not(#sBattle):not(#sLobby){padding:14px 20px}}
 .card.nw,.card.evo{animation:glow .8s infinite alternate!important}@keyframes glow{from{box-shadow:0 5px 0 var(--line),0 0 4px #ffb300}to{box-shadow:0 5px 0 var(--line),0 0 18px #ffb300}}
@@ -286,7 +286,7 @@ input[type=range]{touch-action:pan-x!important}
 #updModal{justify-content:flex-start!important;padding-left:36px!important}
 #updModal .um{width:min(560px,62%)!important}
 #updModal .us{padding-left:44px;min-height:18px}
-#sRoom>.row{flex-wrap:nowrap!important;gap:20px!important}#sRoom>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}
+#rmBody>.row{flex-wrap:nowrap!important;gap:20px!important}#rmBody>.row>div:first-child{flex:1 1 0;min-width:0!important}#roleRow{flex-wrap:wrap}
 #hostBox{flex:0 0 470px!important;width:470px!important;max-width:none!important;min-width:0!important;margin-top:0!important}
 #rsStart{position:sticky;bottom:0;z-index:5;padding:8px 0 6px;background:linear-gradient(rgba(240,232,208,0),rgba(240,232,208,.96) 30%);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 #rsStart button{margin:0}
@@ -294,7 +294,7 @@ input[type=range]{touch-action:pan-x!important}
 #bookTabs{padding-right:210px;flex-wrap:wrap}
 #sBrief,#sResult,#sEnd{padding-right:20px}
 #roleRow{gap:6px!important;margin-top:4px!important}#roleRow button{font-size:15px!important;padding:4px 11px!important}
-#sRoom h2{margin:0 0 4px!important;font-size:26px}#sRoom>.row:first-of-type{margin:0 0 4px!important}#coopInfo{margin-bottom:4px!important;font-size:14px!important}
+#sRoom h2{margin:0 0 4px!important;font-size:26px}#rmBody>.row:first-of-type{margin:0 0 4px!important}#coopInfo{margin-bottom:4px!important;font-size:14px!important}
 #hostBox>.row{margin:5px 0!important}#hostBox select{font-size:15px;padding:4px 8px}#hostBox button{font-size:15px;padding:5px 12px}#roleTip{font-size:13px!important}#plist{margin:4px 0;padding-left:18px}#plist li{font-size:16px}
 #rsStart button{font-size:17px;padding:8px 16px}
 #wxOv{position:absolute;inset:0;pointer-events:none;z-index:2;opacity:0;transition:opacity 1.2s}#wxOv.on{opacity:1}
@@ -346,6 +346,20 @@ input[type=range]{touch-action:pan-x!important}
 @media (max-width:960px){#stage[data-scr=sBattle] #bwj-badge img{height:18px!important}#stage[data-scr=sBattle] #bwj-badge button{font-size:12px!important;padding:5px 9px!important}}
 /* 도감·숙련도 화면: 화면 높이에 맞춰 늘고 줄어서 아래가 잘리지 않게 */
 #sBook.on{display:flex!important;flex-direction:column}#sBook #bookBody{height:auto!important;flex:1 1 0;min-height:0;padding-bottom:28px}
+/* ===== 겹침 방지: 내용(스크롤)과 버튼 줄을 위아래로 나눠서, 버튼이 글자를 덮지 않게 해요 ===== */
+.screen#sRoom.on,.screen#sBrief.on{display:flex;flex-direction:column;overflow:hidden!important;padding-bottom:0!important}
+.scBody{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:8px}
+.scFoot{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0 10px;border-top:2px dashed rgba(91,70,54,.35);background:rgba(244,236,214,.96)}
+.scFoot button{margin:0}#rsStart,#bfBar{position:static!important;background:none!important;padding:0!important;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#rsHost{position:static!important;background:none!important}
+/* 오른쪽 위 배지(로고·의견·다른 게임) 자리를 비워 둬요 */
+#sRoom .scBody,#sBrief .scBody{padding-top:4px}
+@media (min-width:700px){#sRoom #roomLabel,#sRoom #coopInfo{max-width:calc(100% - 250px)}#sBrief #bkChap,#sBrief #bkName,#sBrief #bkPlace{max-width:calc(100% - 250px)}#hostBox{margin-top:76px!important}}
+@media (max-width:699px){#sRoom .scBody,#sBrief .scBody{padding-top:78px}}
+#sEnd h2,#sBook h2,#sResult h2{max-width:calc(100% - 250px)}#bookTabs{padding-right:250px!important}
+#stage[data-scr=sBrief] #bwj-badge,#stage[data-scr=sResult] #bwj-badge,#stage[data-scr=sEnd] #bwj-badge,#stage[data-scr=sRoom] #bwj-badge,#stage[data-scr=sBook] #bwj-badge{top:6px!important}
+#stage[data-scr=sBattle] #bwj-badge button.mg{display:none!important}
+#stage[data-scr=sLobby] #bwj-badge{top:8px!important}
 </style>
 </head><body>
 <div id="stage">
@@ -376,7 +390,7 @@ input[type=range]{touch-action:pan-x!important}
   <div id="fsTip"></div>
 </div>
 
-<div class="screen" id="sRoom">
+<div class="screen" id="sRoom"><div class="scBody" id="rmBody">
   <h2 id="roomLabel"></h2><div class="row" style="margin:-4px 0 8px"><button id="btnCopy" class="sec" style="display:none">🔗 초대 링크 복사</button></div><div id="coopInfo" style="margin-bottom:10px;font-size:16px"></div>
   <div class="row" style="align-items:flex-start;gap:30px">
     <div style="min-width:300px"><b>참가자</b><ul id="plist"></ul>
@@ -390,11 +404,11 @@ input[type=range]{touch-action:pan-x!important}
       <div class="note" style="margin-top:6px;font-size:13px">🤝 협동전: 친구마다 역할(수비·유격·보급)이 생기고, 성 방어 라운드에서 보급기지 2곳을 함께 부숴야 해요. 미션은 라운드마다 달라요(🏕 이중 전선·🔥 쌍둥이 봉화·⚡ 속전속결). 깨면 🎟 뽑기권과 🧩 전설 영웅 조각을 받아요.</div></div>
     <div id="guestBox" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div>
   </div>
-  <div style="margin:10px 0 4px"><button id="btnLeave" class="sec">나가기</button></div>
-  <div id="rsStart"><button id="btnStart">게임 시작</button><button id="btnStartE" class="sec">♾ 무한 모드로 시작</button><button id="btnCoop" class="sec">🤝 협동전으로 시작</button></div>
+  </div><div class="scFoot" id="rmFoot"><button id="btnLeave" class="sec">나가기</button>
+  <div id="rsStart"><button id="btnStart">게임 시작</button><button id="btnStartE" class="sec">♾ 무한 모드로 시작</button><button id="btnCoop" class="sec">🤝 협동전으로 시작</button></div></div>
 </div>
 
-<div class="screen" id="sBrief">
+<div class="screen" id="sBrief"><div class="scBody" id="bfBody">
   <div id="bkChap" class="tag" style="background:#e0a030"></div>
   <h2 id="bkName" style="margin-top:8px"></h2>
   <div id="bkPlace" style="opacity:.85"></div><div id="bkSrc" style="margin:6px 0"></div>
@@ -403,7 +417,7 @@ input[type=range]{touch-action:pan-x!important}
   <div class="panel" id="bkClue"></div>
   <div id="bkGoal" style="margin:8px 0"></div>
   <div id="bQ"><div class="panel" id="bqText" style="margin-bottom:4px"></div><div id="bqOpts"></div><div id="bqWhy" style="margin:4px 0;min-height:20px"></div></div>
-  <div id="bfBar"><button id="btnFight">전투 시작!</button><div id="bkWait" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div></div>
+  </div><div class="scFoot"><div id="bfBar"><button id="btnFight">전투 시작!</button><div id="bkWait" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div></div></div>
 </div>
 
 <div id="setBox"><h3>⚙ 설정</h3>
