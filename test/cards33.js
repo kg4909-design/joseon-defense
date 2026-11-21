@@ -4,7 +4,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const errs = [];
   for (const [w, h] of [[1180, 820], [1766, 936], [844, 390], [667, 375]]) {
     const p = await b.newPage({ viewport: { width: w, height: h } });
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.39'); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.40'); });
     p.on('pageerror', (e) => errs.push(String(e)));
     await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.click('#btnSingle'); await p.waitForTimeout(300);
     await p.evaluate(() => { window.__dbg.hostCtl('start', { start: 0, dur: 240, diff: 'normal', wall: 0, coop: true, bots: 3, cl: 1 }); }); await p.waitForTimeout(500);

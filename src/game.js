@@ -1,7 +1,8 @@
 'use strict';
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
-const VER = 'v0.39';
+const VER = 'v0.40';
 const UPDATES = [
+  { v: 'v0.40', d: '11/21', t: ['🐞 탈출 미션에서 방패병에 포위되거나 일기토에서 져서 적이 몰려왔을 때, 위아래로만 움직여지던 문제를 고쳤어요(가로 이동만 느려지던 계산 오류). 이제 어느 방향이든 똑같이 움직이고, 적이 많이 붙어 있으면 모든 방향이 조금 느려져요', '👀 퀴즈·카드 고르는 중에 스킬·소집 버튼이 거의 안 보이던 것을 조금 더 또렷하게 바꿨어요(누를 수는 없어요)'] },
   { v: 'v0.39', d: '11/21', t: ['🎨 전투 화면 위쪽·왼쪽 표시를 한 규칙으로 다시 정리했어요. 영웅 카드(레벨 · 직업) → 군량·병력 → 장비 순으로 같은 폭·같은 높이로 줄을 맞췄고, 오른쪽은 스테이지 이름 → 의견함 → 일시정지·설정 → 지도 순으로 위에서 아래로 정렬했어요', '⏸ 일시정지 버튼 모양이 잘리던 것을 고쳐 설정 버튼과 같은 크기의 둥근 버튼으로 맞췄어요. 왼쪽에 길게 나오던 "궁수 · 시작 무기" 글은 영웅 카드의 직업 이름으로 합쳤어요'] },
   { v: 'v0.38', d: '11/21', t: ['⚠ 탈출 미션의 매복 카운트다운을 없앴어요. 이제 앞쪽에서 불쑥 "⚠ 매복!" 하고 나타나요', '⚔ 적장을 못 잡고 끝나면 다음 판에도 같은 적장이 다시 나와요. 일기토에서 지면 적장이 퇴각하며 병력을 보내는데, 이 병력은 조금 약해졌어요'] },
   { v: 'v0.37', d: '11/21', t: ['⏩ 적이 빨라지고 느려지는 이벤트를 더 확실하게 바꿨어요(빠를 땐 약 1.9배, 느릴 땐 약 3분의 1). 화면 위에 남은 시간이 표시돼요', '⚔ 보스 일기토가 더 아파졌어요. 쉬움 < 보통 < 어려움 순으로 피해가 세지고 공격 종류도 늘어나요(쉬움은 단순하게, 어려움은 처음부터 다양하게 + 두 공격을 연달아). 못 깰 정도는 아니에요', '🛡 방패병 포위는 뚫기 전까지 풀리지 않아요. 방패병 하나를 부수고 빠져나오면 이벤트 방패병이 모두 사라져요'] },
@@ -780,7 +781,7 @@ function stepBattle(dt) {
     if (p.hp <= 0 && p.sa && p.sa.armor_guard === 2 && !p.rv && G.obj !== 'e') { p.rv = 1; p.hp = p.mx * 0.5; p.fz = 3; G.fx.push([p.x, p.y, 70, 'lvl']); G.info = { id: Date.now() + Math.random(), tt: '🛡 철벽 수비! ' + p.name + ' 다시 일어났어요', tx: '갑옷과 방패의 힘으로 한 번 되살아나요' }; }
     if (p.hp <= 0) { if (G.castle) p.down = 10; else if (G.lives > 0) { G.lives--; p.down = 6; } else p.down = 1e9; p.hp = 0; G.fx.push([p.x, p.y, 30, 'die']); continue; }
     if (S.reg > 0 && p.hp < p.mx) p.hp = Math.min(p.mx, p.hp + p.mx * S.reg * dt);
-    let spm = 1; if (G.obj === 'e') { let nn = 0; for (const e of G.en) if (Math.abs(e.x - p.x) < 40 && Math.abs(e.y - p.y) < 40) nn++; spm = Math.max(0.4, 1 - 0.1 * nn) * 0.6; if (G.ring && !G.ring.brk) spm = 0; p.x += S.sp * 0.38 * spm * dt; }
+    let spm = 1; if (G.obj === 'e') { let nn = 0; for (const e of G.en) if (Math.abs(e.x - p.x) < 40 && Math.abs(e.y - p.y) < 40) nn++; spm = Math.max(0.55, 1 - 0.07 * nn); p.x += (G.ring && !G.ring.brk ? 0 : S.sp * 0.38 * spm * 0.6) * dt; }
     p.x = Math.max(20, Math.min(G.ww - 20, p.x + p.mvx * S.sp * spm * (G.wxHm || 1) * dt)); p.y = Math.max(30, Math.min(G.wh - 30, p.y + p.mvy * S.sp * (G.wxHm || 1) * dt)); }
   // 무기 (탕탕특공대식 성장 무기 · 영웅마다 고유 무기 1개로 시작)
   for (const id of G.order) { const p = G.pl[id]; if (p.down > 0) continue; const S = heroStats(p), c = p.cards, sy = p.sy || {}, sa = p.sa || {}, dta = dt * S.as, mulOf = (k) => S.dmg * (sy[k] ? 1.15 : 1), mul = S.dmg, ao = S.aoe, VL = (c.volley | 0) + Math.floor(pasLv(p, 'pj') / 2); CRIT = S.crit;

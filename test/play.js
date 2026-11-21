@@ -1,7 +1,7 @@
 const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwright');
 (async () => {
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
-  const p = await b.newPage({ viewport: { width: 1280, height: 720 } }); await p.addInitScript(() => { try { { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.39'); }; } catch (e) {} }); const errs = []; p.on('pageerror', (e) => errs.push(e.message));
+  const p = await b.newPage({ viewport: { width: 1280, height: 720 } }); await p.addInitScript(() => { try { { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.40'); }; } catch (e) {} }); const errs = []; p.on('pageerror', (e) => errs.push(e.message));
   await p.goto('file:///home/claude/work/game/dist/index.html?fast=400'); await p.waitForSelector('#bwj-intro', { state: 'detached' });
   await p.fill('#nick', '하늘'); await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on'); await p.click('#btnStart'); await p.waitForSelector('#sBrief.on'); await p.click('#bqOpts .qo'); await p.click('#btnFight'); await p.waitForSelector('#sBattle.on');
   await p.evaluate(() => { const G = __dbg.G; G.food = 400; for (let i = 0; i < 8; i++) doSummon(false); G.evDone = [true, true]; });
