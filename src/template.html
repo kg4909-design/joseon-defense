@@ -496,6 +496,8 @@ input[type=range]{touch-action:pan-x!important}
 .sm #stage #sBattle #hudLv,.sm #sBattle #hudLv{font-size:17px}
 .sm #sBattle #hudFoodBox,.sm #sBattle #hudArmy{font-size:16px!important}
 .sm #sBattle #hudWeap .eq,.sm #sBattle #hudWeap .wc{font-size:14px}
+/* v0.41 모달 안 스크롤: 전체 touch-action:none 때문에 휴대폰에서 못 내리던 문제 */
+.pp,.pp *,#cwBox,#cwBox *,.modal,.modal *{touch-action:pan-y}
 </style>
 </head><body>
 <div id="stage">

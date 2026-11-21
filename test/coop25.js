@@ -2,7 +2,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
 (async () => {
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const p = await b.newPage({ viewport: { width: 1180, height: 820 } });
-  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.40'); });
+  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.41'); });
   const errs = []; p.on('pageerror', (e) => errs.push(String(e)));
   const rows = [];
   for (const rdIdx of [2, 8]) for (const np of [1, 2, 3, 4]) {
