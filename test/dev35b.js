@@ -5,7 +5,7 @@ const VP = { phone: [851, 393], tab: [1280, 800] };
   for (const [n, [w, h]] of Object.entries(VP)) {
     const ctx = await b.newContext({ viewport: { width: w, height: h }, hasTouch: true, isMobile: w < 900 });
     const p = await ctx.newPage(); const errs = []; p.on('pageerror', (e) => errs.push(String(e)));
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_hid', '1'); localStorage.setItem('jd_upd_seen', 'v0.33'); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_hid', '1'); localStorage.setItem('jd_upd_seen', 'v0.34'); });
     await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.waitForTimeout(500);
     await p.screenshot({ path: `/tmp/t35_${n}_lobby.png` });
     await p.click('#btnSingle'); await p.waitForTimeout(300);
