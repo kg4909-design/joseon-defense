@@ -1,7 +1,8 @@
 'use strict';
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
-const VER = 'v0.41';
+const VER = 'v0.42';
 const UPDATES = [
+  { v: 'v0.42', d: '11/23', t: ['🐞 목숨(하트)이 없을 때 한 번 쓰러지면 그 판이 끝날 때까지 못 움직이던 문제를 고쳤어요. 이제 25초 뒤에 체력 60%로 되살아나요(모두 동시에 쓰러지면 그 판이 끝나요)', '🐞 쓰러졌을 때 "1000000000초 뒤 복귀"처럼 이상한 숫자가 뜨던 것을 고쳤어요. 쓰러지면 화면 위에 "💀 쓰러졌어요 · N초 뒤 되살아나요"가 크게 보여요'] },
   { v: 'v0.41', d: '11/21', t: ['🐞 휴대폰에서 내 보관함(꾸미기)·설정 같은 팝업 안의 목록을 손가락으로 내릴 수 없던 문제를 고쳤어요. 이제 다른 꾸미기도 아래로 밀어서 볼 수 있어요'] },
   { v: 'v0.40', d: '11/21', t: ['🐞 탈출 미션에서 방패병에 포위되거나 일기토에서 져서 적이 몰려왔을 때, 위아래로만 움직여지던 문제를 고쳤어요(가로 이동만 느려지던 계산 오류). 이제 어느 방향이든 똑같이 움직이고, 적이 많이 붙어 있으면 모든 방향이 조금 느려져요', '👀 퀴즈·카드 고르는 중에 스킬·소집 버튼이 거의 안 보이던 것을 조금 더 또렷하게 바꿨어요(누를 수는 없어요)'] },
   { v: 'v0.39', d: '11/21', t: ['🎨 전투 화면 위쪽·왼쪽 표시를 한 규칙으로 다시 정리했어요. 영웅 카드(레벨 · 직업) → 군량·병력 → 장비 순으로 같은 폭·같은 높이로 줄을 맞췄고, 오른쪽은 스테이지 이름 → 의견함 → 일시정지·설정 → 지도 순으로 위에서 아래로 정렬했어요', '⏸ 일시정지 버튼 모양이 잘리던 것을 고쳐 설정 버튼과 같은 크기의 둥근 버튼으로 맞췄어요. 왼쪽에 길게 나오던 "궁수 · 시작 무기" 글은 영웅 카드의 직업 이름으로 합쳤어요'] },
@@ -780,7 +781,7 @@ function stepBattle(dt) {
     if (p.offer && (!p.qz || id === G.qzr)) { p.offT -= dt; if (p.offT <= 0) { if (p.qz && p.qs === 0) resolveQuiz(false); else if (p.qz) applyShared(p, p.offer[rint(p.offer.length)]); else { applyCard(p, p.offer[rint(p.offer.length)]); p.offer = null; } } }
     if (p.down > 0) { p.down -= dt; if (p.down <= 0) { p.down = 0; p.hp = p.mx * (G.castle ? 0.5 : 0.6); p.fz = 3; } continue; }
     if (p.hp <= 0 && p.sa && p.sa.armor_guard === 2 && !p.rv && G.obj !== 'e') { p.rv = 1; p.hp = p.mx * 0.5; p.fz = 3; G.fx.push([p.x, p.y, 70, 'lvl']); G.info = { id: Date.now() + Math.random(), tt: '🛡 철벽 수비! ' + p.name + ' 다시 일어났어요', tx: '갑옷과 방패의 힘으로 한 번 되살아나요' }; }
-    if (p.hp <= 0) { if (G.castle) p.down = 10; else if (G.lives > 0) { G.lives--; p.down = 6; } else p.down = 1e9; p.hp = 0; G.fx.push([p.x, p.y, 30, 'die']); continue; }
+    if (p.hp <= 0) { if (G.castle) p.down = 10; else if (G.lives > 0) { G.lives--; p.down = 6; } else p.down = 25; p.hp = 0; G.fx.push([p.x, p.y, 30, 'die']); continue; }
     if (S.reg > 0 && p.hp < p.mx) p.hp = Math.min(p.mx, p.hp + p.mx * S.reg * dt);
     let spm = 1; if (G.obj === 'e') { let nn = 0; for (const e of G.en) if (Math.abs(e.x - p.x) < 40 && Math.abs(e.y - p.y) < 40) nn++; spm = Math.max(0.55, 1 - 0.07 * nn); p.x += (G.ring && !G.ring.brk ? 0 : S.sp * 0.38 * spm * 0.6) * dt; }
     p.x = Math.max(20, Math.min(G.ww - 20, p.x + p.mvx * S.sp * spm * (G.wxHm || 1) * dt)); p.y = Math.max(30, Math.min(G.wh - 30, p.y + p.mvy * S.sp * (G.wxHm || 1) * dt)); }
@@ -873,7 +874,7 @@ function stepBattle(dt) {
   if (G.cmS && !G.cmD) beaconStep(dt);
   subStep(dt, hs2, hs); evStep(dt, hs2, hs);
   const dead = G.en.filter((e) => e.hp <= 0); for (const e of dead) enemyDeath(e); G.en = G.en.filter((e) => e.hp > 0);
-  const camps = G.en.filter((e) => e.t === 'camp' && !e.sm).length, wipe = !G.castle && G.lives <= 0 && G.order.every((id) => G.pl[id].down > 1e8);
+  const camps = G.en.filter((e) => e.t === 'camp' && !e.sm).length, wipe = !G.castle && G.lives <= 0 && G.order.every((id) => G.pl[id].down > 0);
   if (G.castle) { G.repCd = Math.max(0, (G.repCd || 0) - dt);
     if (G.bInv > 0) { G.bInv -= dt; if (G.baseHp < G.bInvHp) G.baseHp = G.bInvHp; G.bhQ = 6; G.bfx = (G.bfx || 0) - dt; if (G.bfx <= 0) { G.bfx = 0.6; G.fx.push([G.ax, G.ay, 90, 'lvl']); } }
     else { const fr = G.baseHp / G.baseMax; for (let k = 1; k >= 0; k--) if (!G.bm[k] && fr <= (k ? 0.33 : 0.66) && G.baseHp > 0) { G.bm[0] = true; G.bm[k] = true; G.bInv = G.dif.bi; G.bInvHp = G.baseHp; const M = [['🛡 의병이 성을 지키기 위해 고군분투합니다!', '잠시 동안 성이 안전해요. 그 틈에 전열을 정비하세요!'], ['🛡 성벽 위로 의병들이 몰려들었어요!', '백성들이 힘을 모아 잠시 성을 지켜요'], ['🛡 승병과 백성이 성문을 막아 냅니다!', '잠깐 숨을 돌릴 수 있어요. 성 수리 버튼도 눌러 보세요']][rint(3)]; G.info = { id: Date.now() + Math.random(), tt: (k ? '⚠️ 성이 위태로워요! ' : '') + M[0], tx: M[1] }; G.fx.push([G.ax, G.ay, 100, 'lvl']); break; } } }
@@ -1637,6 +1638,7 @@ function updateHUD() {
   const p = myP(); if (!p) return; const r = R[V.rd]; $('sBattle').classList.toggle('noarmy', V.obj === 'e');
   $('hudName').textContent = V.endless ? '♾ ' + ((V.er | 0) + 1) + '라운드' : r.nm; const rem = V.endless ? Math.ceil(60 - (V.t % 60)) : Math.max(0, Math.ceil(V.dur - V.t)); $('hudT').textContent = String(Math.floor(rem / 60)).padStart(2, '0') + ':' + String(rem % 60).padStart(2, '0');
   { const ov = $('wxOv'), wt = $('wxTag'); if (ov) { ov.className = V.ph === 'battle' && V.wx ? 'on ' + V.wx : ''; } if (wt) { const tx = V.ph === 'battle' ? [V.wx ? ({ rain: '🌧 비', fog: '🌫 안개', night: '🌙 밤' }[V.wx]) : '', V.mor ? '😞 사기 하락 ' + V.mor + '초' : ''].filter(Boolean).join(' · ') : ''; wt.textContent = tx; wt.style.display = tx ? 'block' : 'none'; } }
+  { const dt2 = $('dnTag'), mp = V.pl && V.pl.find((q) => q.id === Net.id); if (V.ph === 'battle' && mp && mp.down > 0) { dt2.style.display = 'block'; dt2.textContent = mp.down > 9999 ? '💀 쓰러졌어요' : '💀 쓰러졌어요 · ' + Math.ceil(mp.down) + '초 뒤 되살아나요'; } else dt2.style.display = 'none'; }
   { const sp = $('spTag'); if (V.ph === 'battle' && (V.sf > 0 || V.ss > 0)) { const fast = V.sf > 0; sp.style.display = 'block'; sp.className = fast ? '' : 'slow'; sp.textContent = fast ? '⏩ 적이 빠르게 몰려와요 · ' + V.sf + '초' : '🐢 적이 느리게 나와요 · ' + V.ss + '초'; } else sp.style.display = 'none'; }
   { const st = $('smTag'), m = V.sm; if (V.ph === 'battle' && m && m.k) { st.style.display = 'block'; st.textContent = '🎯 ' + m.n + ' · ' + (m.k === 'ref' || m.k === 'twin' ? m.a + '%' : m.a + '/' + m.b) + ' · ⏱' + m.t + '초'; } else if (V.ph === 'battle' && m && m.nt != null && !m.late) { st.style.display = 'block'; st.textContent = '🎯 다음 서브미션까지 ' + m.nt + '초 · 성공 ' + m.ok + '번'; } else st.style.display = 'none'; }
   $('escGo').style.display = (V.obj === 'e' && V.ph === 'battle') ? 'flex' : 'none';
@@ -1988,7 +1990,7 @@ function draw() {
       if (mine && p.cards) { const ks = ORD.filter((k) => p.cards[k]); cx.imageSmoothingEnabled = false; ks.forEach((k, i) => { const ix = q[0] - ks.length * 8 + i * 16; cx.fillStyle = 'rgba(30,22,10,.65)'; rr(ix - 1, fy - H * SPS - 43, 16, 16, 3); cx.fill(); cx.drawImage(ICOC(k), ix, fy - H * SPS - 42, 14, 14); }); cx.imageSmoothingEnabled = true; }
       pillB(cx, mine ? '★ ' + p.name : p.name, q[0], fy - H * SPS - 20, mine ? '#ffd34d' : 'rgba(20,18,40,.75)', mine ? '#2b2440' : '#fff', p.bd, tm, mine || ST.fxs === 'big');
       cx.fillStyle = 'rgba(0,0,0,.55)'; rr(q[0] - 20, fy - H * SPS - 11, 40, 5, 2.5); cx.fill(); cx.fillStyle = '#7dffa0'; rr(q[0] - 20, fy - H * SPS - 11, 40 * Math.max(0.05, p.hp / p.mx), 5, 2.5); cx.fill();
-      if (dn) pill(Math.ceil(p.down) + '초 뒤 복귀', q[0], fy + 14, 'rgba(20,18,40,.8)', '#fff'); }]); }
+      if (dn) pill(p.down > 9999 ? '쓰러짐' : Math.ceil(p.down) + '초 뒤 복귀', q[0], fy + 14, 'rgba(20,18,40,.8)', '#fff'); }]); }
   DL.sort((A, B) => A[0] - B[0]); for (const d of DL) d[1]();
   if (V !== lastPjV) { lastPjV = V; pjT = tm; } const pdt = Math.min(0.2, tm - pjT);
   for (const b of V.pj || []) { if (b[4] === 'cannon') { const x = b[0] + b[2] * pdt, y = b[1] + b[3] * pdt; cx.strokeStyle = 'rgba(255,60,40,' + (0.55 + 0.3 * Math.sin(tm * 10)) + ')'; cx.lineWidth = 3; cx.setLineDash([8, 6]); cx.beginPath(); cx.arc(b[5], b[6], b[7] || 80, 0, 7); cx.stroke(); cx.setLineDash([]); cx.fillStyle = 'rgba(255,60,40,.12)'; cx.fill(); if ((b[7] || 80) <= 100) { cx.fillStyle = '#2b2b2b'; cx.beginPath(); cx.arc(x, y - 6, 7, 0, 7); cx.fill(); cx.strokeStyle = '#ff9a3a'; cx.lineWidth = 2; cx.stroke(); } continue; }

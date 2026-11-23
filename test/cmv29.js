@@ -4,7 +4,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const errs = [];
   for (const [w, h] of [[1180, 820], [844, 390]]) {
     const p = await b.newPage({ viewport: { width: w, height: h } });
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.41'); localStorage.setItem('jd_cw', JSON.stringify({ tk: 0, sh: 10, own: { gwonyul: 1 }, cos: ['a_gold', 'a_fire'], eq: 'a_fire', pity: 0, pity2: 0, cl: 0, ids: [] })); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.42'); localStorage.setItem('jd_cw', JSON.stringify({ tk: 0, sh: 10, own: { gwonyul: 1 }, cos: ['a_gold', 'a_fire'], eq: 'a_fire', pity: 0, pity2: 0, cl: 0, ids: [] })); });
     p.on('pageerror', (e) => errs.push(String(e)));
     await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.click('#btnSingle'); await p.waitForTimeout(300);
     await p.evaluate(() => { me.role = 'gwonyul'; sendProf(); });

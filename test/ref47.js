@@ -3,7 +3,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const p = await b.newPage({ viewport: { width: 851, height: 393 } }); const errs = [];
   p.on('pageerror', (e) => errs.push(String(e)));
-  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.41'); localStorage.setItem('jd_hid', '1'); });
+  await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.42'); localStorage.setItem('jd_hid', '1'); });
   await p.goto('file:///home/claude/work/game/dist/index.html'); await p.waitForTimeout(500);
   await p.click('#btnSingle'); await p.waitForTimeout(300);
   const r = await p.evaluate(() => { const D = window.__dbg, G = D.G; D.hostCtl('start', { start: 0, dur: 300, diff: 'easy', coop: false, bots: 0 }); D.hostCtl('fight'); G.evDone = [true, true]; G.bossTimes = []; G.sm = { cur: null, nt: 0.1, last: 'x', ok: 0, no: 0 }; let ok = false;
