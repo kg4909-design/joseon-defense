@@ -14,20 +14,20 @@ const host = await conn(true), c1 = await conn(false); // client 쪽 소켓은 {
 const hs = host; // Response.webSocket = client(=a). 서버 소켓은 room.socks에 있음
 const [hSock, cSock] = [...room.socks.values()];
 // 1) 전투처럼 메시지가 계속 오가면 10분이 지나도 유지
-for (let i = 0; i < 40; i++) { hSock.l.message({ data: JSON.stringify({ to: 'all', d: { s: 1 } }) }); tick(60000); }
-chk('40분 수업 동안 메시지가 오가면 방 유지', room.socks.size === 2 && !hSock.closed);
+for (let i = 0; i < 25; i++) { hSock.l.message({ data: JSON.stringify({ to: 'all', d: { s: 1 } }) }); tick(60000); }
+chk('25분 동안 메시지가 오가면 방 유지', room.socks.size === 2 && !hSock.closed);
 chk('친구에게 메시지 전달', cSock.out.some((m) => m.d && m.d.s === 1));
 // 2) 10분 넘게 조용하면 닫힘
-tick(8 * 60000);
-chk('7분 넘게 조용하면 방 닫힘', room.socks.size === 0 && hSock.closed && cSock.closed);
+tick(6 * 60000);
+chk('5분 넘게 조용하면 방 닫힘', room.socks.size === 0 && hSock.closed && cSock.closed);
 chk('닫힘 알림(sys:closed, why:idle) 전달', cSock.out.some((m) => m.sys === 'closed' && m.why === 'idle'));
 chk('닫힌 뒤 타이머 정리', timers.size === 0);
 // 3) 같은 코드로 새 방 만들기 가능
 const h2 = await conn(true); chk('닫힌 뒤 같은 코드로 새로 만들기', room.hostId === 'p3');
 // 4) 최대 3시간
 const [s2] = [...room.socks.values()];
-for (let i = 0; i < 80; i++) { s2.l.message({ data: JSON.stringify({ to: 'all', d: { s: 1 } }) }); tick(60000); }
-chk('1시간 넘으면 계속 활발해도 닫힘', room.socks.size === 0 && s2.closed);
+for (let i = 0; i < 40; i++) { s2.l.message({ data: JSON.stringify({ to: 'all', d: { s: 1 } }) }); tick(60000); }
+chk('30분 넘으면 계속 활발해도 닫힘', room.socks.size === 0 && s2.closed);
 // 5) 방장이 나가면 타이머도 정리
 const h3 = await conn(true); const [s3] = [...room.socks.values()]; s3.l.close(); chk('방장 퇴장 시 타이머 정리', timers.size === 0 && !room.hostId);
 Date.now = realNow; console.log(ok ? 'ALL OK' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
