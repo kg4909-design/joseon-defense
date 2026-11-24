@@ -14,8 +14,27 @@ export default {
   }
 };
 
+// 무료 한도(Durable Objects 계산 시간)를 아끼기 위한 자동 정리:
+//  - IDLE_MS: 이 시간 동안 아무 메시지도 안 오가면 방을 닫음(전투 중에는 방장이 초당 15번 보내므로 해당 없음)
+//  - MAX_MS : 방 하나가 최대 이 시간까지만 열려 있음(깜빡 잊고 켜 둔 방 방지)
+const IDLE_MS = 10 * 60 * 1000, MAX_MS = 3 * 60 * 60 * 1000, CHECK_MS = 30 * 1000;
+
 export class Room {
-  constructor() { this.socks = new Map(); this.hostId = null; this.seq = 0; }
+  constructor() { this.socks = new Map(); this.hostId = null; this.seq = 0; this.last = 0; this.born = 0; this.timer = null; }
+  startTimer() {
+    if (this.timer) return; this.last = this.born = Date.now();
+    this.timer = setInterval(() => {
+      const n = Date.now();
+      if (!this.socks.size) return this.stopTimer();
+      if (n - this.last > IDLE_MS) this.shutdown('idle'); else if (n - this.born > MAX_MS) this.shutdown('max');
+    }, CHECK_MS);
+  }
+  stopTimer() { if (this.timer) { clearInterval(this.timer); this.timer = null; } }
+  shutdown(why) {
+    this.bcast({ sys: 'closed', why });
+    for (const s of this.socks.values()) try { s.close(1000, why); } catch {}
+    this.socks.clear(); this.hostId = null; this.stopTimer();
+  }
   async fetch(req) {
     const url = new URL(req.url);
     const create = url.searchParams.get('create') === '1';
@@ -28,10 +47,11 @@ export class Room {
     if (this.socks.size >= 4) { reject('full'); return new Response(null, { status: 101, webSocket: client }); }
     const id = 'p' + (++this.seq);
     if (create) this.hostId = id;
-    this.socks.set(id, server);
+    this.socks.set(id, server); this.last = Date.now(); this.startTimer();
     server.send(JSON.stringify({ sys: 'hello', id, host: this.hostId, peers: [...this.socks.keys()] }));
     this.bcast({ sys: 'join', id }, id);
     server.addEventListener('message', (ev) => {
+      this.last = Date.now();
       let m; try { m = JSON.parse(ev.data); } catch { return; }
       const out = JSON.stringify({ from: id, d: m.d });
       if (m.to === 'all') { for (const [k, s] of this.socks) if (k !== id) try { s.send(out); } catch {} }
@@ -39,8 +59,9 @@ export class Room {
     });
     const leave = () => {
       if (!this.socks.delete(id)) return;
-      if (id === this.hostId) { this.bcast({ sys: 'closed' }); for (const s of this.socks.values()) try { s.close(1000, 'host left'); } catch {} this.socks.clear(); this.hostId = null; }
+      if (id === this.hostId) { this.bcast({ sys: 'closed' }); for (const s of this.socks.values()) try { s.close(1000, 'host left'); } catch {} this.socks.clear(); this.hostId = null; this.stopTimer(); }
       else this.bcast({ sys: 'leave', id });
+      if (!this.socks.size) this.stopTimer();
     };
     server.addEventListener('close', leave); server.addEventListener('error', leave);
     return new Response(null, { status: 101, webSocket: client });
