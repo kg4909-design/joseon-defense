@@ -1044,8 +1044,9 @@ const QERA = ["선사 시대","고조선과 여러 나라","삼국 시대","남�
 <script>
 'use strict';
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
-const VER = 'v0.42';
+const VER = 'v0.43';
 const UPDATES = [
+  { v: 'v0.43', d: '11/25', t: ['🐞 키보드가 안 먹히거나 한쪽으로만 계속 가던 문제를 고쳤어요. 한글 입력 상태에서도 W·A·S·D가 움직이고, 다른 창에 갔다 오면 눌린 키가 풀려요','🚪 이미 시작한 방에 들어가면 화면만 보이고 못 움직이던 문제를 안내로 바꿨어요. "게임 중이에요" 알림이 뜨고 처음 화면으로 돌아가요. 끊겼다가 같은 탭으로 돌아오면 그대로 이어서 해요','📣 방이 닫히면 이유(오래 조용함/시간 제한)를 알려줘요. 방 하나는 최대 50분까지 열려 있어요'] },
   { v: 'v0.42', d: '11/23', t: ['🐞 목숨(하트)이 없을 때 한 번 쓰러지면 그 판이 끝날 때까지 못 움직이던 문제를 고쳤어요. 이제 25초 뒤에 체력 60%로 되살아나요(모두 동시에 쓰러지면 그 판이 끝나요)', '🐞 쓰러졌을 때 "1000000000초 뒤 복귀"처럼 이상한 숫자가 뜨던 것을 고쳤어요. 쓰러지면 화면 위에 "💀 쓰러졌어요 · N초 뒤 되살아나요"가 크게 보여요'] },
   { v: 'v0.41', d: '11/21', t: ['🐞 휴대폰에서 내 보관함(꾸미기)·설정 같은 팝업 안의 목록을 손가락으로 내릴 수 없던 문제를 고쳤어요. 이제 다른 꾸미기도 아래로 밀어서 볼 수 있어요'] },
   { v: 'v0.40', d: '11/21', t: ['🐞 탈출 미션에서 방패병에 포위되거나 일기토에서 져서 적이 몰려왔을 때, 위아래로만 움직여지던 문제를 고쳤어요(가로 이동만 느려지던 계산 오류). 이제 어느 방향이든 똑같이 움직이고, 적이 많이 붙어 있으면 모든 방향이 조금 느려져요', '👀 퀴즈·카드 고르는 중에 스킬·소집 버튼이 거의 안 보이던 것을 조금 더 또렷하게 바꿨어요(누를 수는 없어요)'] },
@@ -1086,7 +1087,7 @@ const DEFAULT_RELAY = 'wss://history-defense-relay.kimsky4409.workers.dev/ws'; /
 // ---------- 네트워크 ----------
 const Net = {
   ws: null, id: 'me', host: true, mode: 'single', room: '', peers: ['me'],
-  onData: () => {}, onJoin: () => {}, onLeave: () => {}, onClosed: () => {}, onDrop: null, gotClosed: false,
+  onData: () => {}, onJoin: () => {}, onLeave: () => {}, onClosed: () => {}, onDrop: null, why: '', gotClosed: false,
   connect(url, room, create) {
     return new Promise((res, rej) => {
       let ws; try { ws = new WebSocket(url + (url.includes('?') ? '&' : '?') + 'room=' + encodeURIComponent(room) + (create ? '&create=1' : '')); } catch (e) { rej('주소가 올바르지 않아요'); return; }
@@ -1096,7 +1097,7 @@ const Net = {
         else if (m.sys === 'err') rej({ exists: '이미 있는 방 코드예요', noroom: '그런 방이 없어요', full: '방이 가득 찼어요(최대 4명)' }[m.code] || '입장 실패');
         else if (m.sys === 'join') { Net.peers.push(m.id); Net.onJoin(m.id); }
         else if (m.sys === 'leave') { Net.peers = Net.peers.filter((x) => x !== m.id); Net.onLeave(m.id); }
-        else if (m.sys === 'closed') { Net.gotClosed = true; Net.onClosed(); }
+        else if (m.sys === 'closed') { Net.gotClosed = true; Net.why = m.why || ''; Net.onClosed(); }
         else if (m.d) Net.onData(m.from, m.d); };
       ws.onerror = () => { if (!ok) rej('연결에 실패했어요. 릴레이 주소를 확인해 주세요'); };
       ws.onclose = () => { if (!ok || Net.gotClosed) return; if (Net.host || !Net.onDrop) Net.onClosed(); else Net.onDrop(); };
@@ -2168,10 +2169,10 @@ function initLobby() {
 }
 // 끊겼던 친구가 같은 기기·같은 탭으로 다시 들어오면 영웅을 그대로 돌려줘요
 function rejoin(from, d) {
-  const tk = String(d.tk || ''); if (!tk) return; const p = G.order.map((id) => G.pl[id]).find((x) => x && x.tk === tk); if (!p || p.id === G.order[0]) return;
+  const tk = String(d.tk || ''); if (!tk) return false; const p = G.order.map((id) => G.pl[id]).find((x) => x && x.tk === tk); if (!p || p.id === G.order[0]) return false;
   const old = p.id; G.pl[from] = p; delete G.pl[old]; p.id = from; G.order = G.order.map((x) => (x === old ? from : x)); p.away = 0;
   if (G.ev && G.ev.votes[old] != null) { G.ev.votes[from] = G.ev.votes[old]; delete G.ev.votes[old]; } if (G.ans && G.ans[old] != null) { G.ans[from] = G.ans[old]; delete G.ans[old]; }
-  G.info = { id: Date.now() + Math.random(), tt: '🔌 ' + p.name + ' 다시 들어왔어요', tx: '이어서 함께 싸워요!' };
+  G.info = { id: Date.now() + Math.random(), tt: '🔌 ' + p.name + ' 다시 들어왔어요', tx: '이어서 함께 싸워요!' }; return true;
 }
 function sendProf() { sendHost({ k: 'prof', name: me.name, role: me.role, tk: TK, aura: me.aura || '', tr: me.tr || '', lf: myCos().lf, bd: myCos().bd, ps: pasActive() }); }
 async function startAs(mode) {
@@ -2189,14 +2190,14 @@ async function startAs(mode) {
       Net.rcode = code; await Net.connect(url, code, mode === 'create');
     }
   } catch (e) { $('err').textContent = typeof e === 'string' ? e : '연결 실패'; return; }
-  Net.onClosed = () => { LASTROOM.clear(); alert('방이 닫혔어요. 처음 화면으로 돌아갑니다.'); location.reload(); };
+  Net.onClosed = () => { LASTROOM.clear(); alert((Net.why === 'idle' ? '한참 아무 신호가 없어서 방이 자동으로 닫혔어요.' : Net.why === 'max' ? '방은 최대 50분까지만 열려 있어서 시간이 다 되어 닫혔어요.' : '방이 닫혔어요.') + ' 처음 화면으로 돌아갑니다.'); location.reload(); };
   if (Net.host) {
     G = newG(); addPlayer(Net.id, me.name, me.role);
     G.pl[Net.id].tk = TK; G.pl[Net.id].aura = AUR[me.aura] && AUR[me.aura].s !== 't' ? me.aura : ''; G.pl[Net.id].trail = AUR[me.tr] && AUR[me.tr].s === 't' ? me.tr : ''; { const mc = myCos(); G.pl[Net.id].lvfx = mc.lf; G.pl[Net.id].bdr = mc.bd; G.pl[Net.id].ps = pasActive(); }
     Net.onJoin = () => {}; Net.onLeave = (id) => { const p = G.pl[id]; if (!p) return; if (G.ph === 'lobby' || G.ph === 'end' || id === G.order[0]) { delete G.pl[id]; G.order = G.order.filter((x) => x !== id); if (G.ev) delete G.ev.votes[id]; } else { p.away = Date.now(); p.mvx = p.mvy = 0; G.info = { id: Date.now() + Math.random(), tt: '📶 ' + p.name + ' 연결이 끊겼어요', tx: '3분 안에 다시 들어오면 이어서 할 수 있어요.' }; } };
-    Net.onData = (from, d) => { if (d.k === 'prof' && !G.pl[from] && G.ph !== 'lobby') { rejoin(from, d); return; } hostMsg(from, d); };
+    Net.onData = (from, d) => { if (d.k === 'prof' && !G.pl[from] && G.ph !== 'lobby') { if (!rejoin(from, d)) Net.send(from, { k: 'late' }); return; } hostMsg(from, d); };
     setInterval(hostTick, 1000 / 30); setInterval(hostBroadcast, 1000 / 15);
-  } else { Net.onData = (from, d) => { if (d.s) { V = d.s; lastSnapAt = performance.now(); } }; Net.onDrop = reconnectLoop; sendProf(); saveLast(); setInterval(() => { if (Net.ws && Net.ws.readyState === 1) saveLast(); }, 30000); }
+  } else { Net.onData = (from, d) => { if (d.k === 'late') { LASTROOM.clear(); alert('이 방은 지금 게임 중이에요. 방장이 다음 판을 시작하기 전(대기실)에 다시 들어와 주세요. 처음 화면으로 돌아갑니다.'); location.reload(); return; } if (d.s) { V = d.s; lastSnapAt = performance.now(); } }; Net.onDrop = reconnectLoop; sendProf(); saveLast(); setInterval(() => { if (Net.ws && Net.ws.readyState === 1) saveLast(); }, 30000); }
   keepAwake(); if (Net.host && Net.mode === 'online') window.addEventListener('beforeunload', (e) => { if (G && G.order.length > 1) { e.preventDefault(); e.returnValue = ''; } });
   $('roomLabel').textContent = Net.mode === 'online' ? '방 코드  ' + Net.room : '혼자 하기'; $('btnCopy').style.display = Net.mode === 'online' && Net.host ? 'inline-block' : 'none'; $('btnCopy').onclick = () => { const u = new URL(location.href.split('#')[0]); u.search = ''; u.searchParams.set('room', Net.room); if ($('relayUrl').value && $('relayUrl').value !== DEFAULT_RELAY) u.searchParams.set('relay', $('relayUrl').value.trim()); const t = u.toString(); const ok = () => { $('btnCopy').textContent = '✅ 복사했어요!'; setTimeout(() => ($('btnCopy').textContent = '🔗 초대 링크 복사'), 1800); }; try { navigator.clipboard.writeText(t).then(ok, () => prompt('이 주소를 복사해 친구에게 보내세요', t)); } catch (e) { prompt('이 주소를 복사해 친구에게 보내세요', t); } };
   $('hostBox').style.display = Net.host ? 'block' : 'none'; $('rsStart').style.display = Net.host ? 'flex' : 'none'; $('guestBox').style.display = Net.host ? 'none' : 'block';
@@ -2297,8 +2298,10 @@ function setupInput() {
   z.addEventListener('pointermove', (e) => { if (!joy.on || e.pointerId !== joy.id) return; const [x, y] = pt(e); joy.x = x; joy.y = y; let dx = x - joy.ox, dy = y - joy.oy; const l = Math.hypot(dx, dy); if (l > JR) { dx *= JR / l; dy *= JR / l; } knob.style.left = joy.ox + dx - 24 + 'px'; knob.style.top = joy.oy + dy - 24 + 'px'; });
   const up = (e) => { if (e.pointerId !== joy.id) return; joy.on = false; ring.style.display = knob.style.display = 'none'; };
   z.addEventListener('pointerup', up); z.addEventListener('pointercancel', up);
-  addEventListener('keydown', (e) => { keys[e.key.toLowerCase()] = 1; if (e.key === ' ') sendHost({ k: 'skill' }); if (e.key === 'Enter') sendHost({ k: 'summon' }); });
-  addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = 0; });
+  const KN = (e) => { const c = e.code || ''; return c === 'KeyW' ? 'w' : c === 'KeyA' ? 'a' : c === 'KeyS' ? 's' : c === 'KeyD' ? 'd' : e.key.toLowerCase(); };
+  addEventListener('keydown', (e) => { keys[KN(e)] = 1; if (e.key === ' ') sendHost({ k: 'skill' }); if (e.key === 'Enter') sendHost({ k: 'summon' }); });
+  addEventListener('keyup', (e) => { keys[KN(e)] = 0; });
+  const clearKeys = () => { keys = {}; }; addEventListener('blur', clearKeys); document.addEventListener('visibilitychange', () => { if (document.hidden) clearKeys(); });
   $('btnSummon').onpointerdown = () => sendHost({ k: 'summon' }); $('btnUp').onpointerdown = () => sendHost({ k: 'upg' }); $('btnRep').onpointerdown = () => sendHost({ k: 'rep' });
   $('btnSkill').onpointerdown = () => sendHost({ k: 'skill' });
   $('btnCr').onpointerdown = () => sendHost({ k: 'cr' });

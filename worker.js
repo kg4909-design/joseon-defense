@@ -16,8 +16,8 @@ export default {
 
 // 무료 한도(Durable Objects 계산 시간)를 아끼기 위한 자동 정리:
 //  - IDLE_MS: 이 시간(5분) 동안 아무 메시지도 안 오가면 방을 닫음(전투 중에는 방장이 초당 15번 보내므로 해당 없음)
-//  - MAX_MS : 방 하나가 최대 이 시간(30분)까지만 열려 있음(깜빡 잊고 켜 둔 방 방지)
-const IDLE_MS = 5 * 60 * 1000, MAX_MS = 30 * 60 * 1000, CHECK_MS = 30 * 1000;
+//  - MAX_MS : 방 하나가 최대 이 시간(50분)까지만 열려 있음(깜빡 잊고 켜 둔 방 방지)
+const IDLE_MS = 5 * 60 * 1000, MAX_MS = 50 * 60 * 1000, CHECK_MS = 30 * 1000;
 
 export class Room {
   constructor() { this.socks = new Map(); this.hostId = null; this.seq = 0; this.last = 0; this.born = 0; this.timer = null; }
