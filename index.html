@@ -502,6 +502,10 @@ input[type=range]{touch-action:pan-x!important}
 /* v0.41 모달 안 스크롤: 전체 touch-action:none 때문에 휴대폰에서 못 내리던 문제 */
 .pp,.pp *,#cwBox,#cwBox *,.modal,.modal *{touch-action:pan-y}
 #dnTag{background:rgba(40,30,70,.94)!important;border-color:#b9a8ff!important;color:#fff!important}
+#roleCar{display:flex;align-items:center;gap:8px;margin-top:6px}
+#roleCar button{height:var(--hL,54px);padding:0 14px!important;font-size:22px!important;background:var(--cream2)!important;color:var(--txt)!important;border:2px solid var(--line)!important;box-shadow:0 3px 0 var(--line)!important;flex:0 0 auto}
+#roleCar #rcCur{flex:1 1 0;min-width:0;font-size:19px!important;background:var(--orange)!important;line-height:1.1}
+#roleCar #rcCur.lk{background:var(--cream2)!important}
 </style>
 </head><body>
 <div id="stage">
@@ -538,14 +542,15 @@ input[type=range]{touch-action:pan-x!important}
     <div style="min-width:300px"><b>참가자</b><ul id="plist"></ul>
       <div style="margin-top:8px"><b>내 역할</b><div class="row" id="roleRow" style="margin-top:6px"><button data-r="archer">궁수</button><button data-r="militia">의병</button><button data-r="monk">승병</button><button data-r="gunner">화포수</button><button data-r="admiral" id="roleHid">🔒 히든</button><button data-r="gwonyul" id="roleLeg">🔒 전설</button><button data-r="gimsimin" id="roleLeg2">🔒 전설</button><button data-r="gwakjaeu" id="roleLeg3">🔒 전설</button><button data-r="hyujeong" id="roleLeg4">🔒 전설</button><button data-r="yujeong" id="roleLeg5">🔒 전설</button><button data-r="jinrin" id="roleLeg6">🔒 전설</button></div>
       <div id="roleTip" style="margin-top:6px;font-size:15px"></div><div id="pasTip" style="margin-top:6px;font-size:14px;background:#fff6d6;border-radius:10px;padding:4px 8px"></div></div></div>
-    <div id="hostBox"><b>방장 설정</b>
+    <div id="hostBox"><b id="hostTitle">방장 설정</b>
       <div class="row" style="margin:10px 0">시작 챕터 <select id="selStart"></select></div>
-      <div class="row" style="margin:10px 0">시작 시나리오 <select id="selScn"></select></div><div id="scnInfo" class="note" style="margin:0 0 6px;font-size:13px"></div>
+      <div class="row" id="rowScn" style="margin:10px 0">시작 시나리오 <select id="selScn"></select></div><div id="scnInfo" class="note" style="margin:0 0 6px;font-size:13px"></div>
       <div class="row" style="margin:10px 0">전투 시간 <select id="selDur"><option value="300">5분 (기본)</option><option value="180">3분</option><option value="120">2분 (짧게)</option></select></div>
       <div class="row" style="margin:10px 0">난이도 <div class="row" id="diffRow" style="gap:6px"><button data-d="easy">쉬움</button><button data-d="normal" class="on">보통</button><button data-d="hard">어려움</button></div></div><small id="diffTip"></small>
-      <div class="row" style="margin:6px 0;gap:6px">🤝 전투 장면 <select id="selCmScn"></select></div><div class="row" style="margin:6px 0;gap:6px">🎯 임무 <select id="selCmObj"></select></div><div id="cmInfo" class="note" style="margin:0 0 6px;font-size:13px"></div>
-      <div class="row" style="margin:6px 0;gap:6px">🤝 협동 <select id="selCl"><option value="1">난이도 1 연습</option><option value="2" selected>난이도 2 도전</option><option value="3">난이도 3 극한</option></select> <select id="selBots"><option value="0">봇 없음</option><option value="2">총 2명(봇 채움)</option><option value="3" selected>총 3명(봇 채움)</option><option value="4">총 4명(봇 채움)</option></select></div>
-      <div class="note" style="margin-top:6px;font-size:13px">🤝 협동전: 친구마다 역할(수비·유격·보급)이 생기고, 성 방어 라운드에서 보급기지 2곳을 함께 부숴야 해요. 미션은 라운드마다 달라요(🏕 이중 전선·🔥 쌍둥이 봉화·🔥 창고 습격). 깨면 🎟 뽑기권과 🧩 전설 영웅 조각을 받아요.</div></div>
+      <div class="note" id="soloNote" style="display:none;margin-top:6px;font-size:14px;background:#fff6d6;border-radius:10px;padding:6px 10px">📜 역사의 흐름대로 시나리오를 차례로 깨요. 한 챕터를 끝까지 깨면 그 시대와 관련된 <b>전설 영웅</b>을 만나요!</div>
+      <div class="row" id="rowCmScn" style="margin:6px 0;gap:6px">🤝 전투 장면 <select id="selCmScn"></select></div><div class="row" id="rowCmObj" style="margin:6px 0;gap:6px">🎯 임무 <select id="selCmObj"></select></div><div id="cmInfo" class="note" style="margin:0 0 6px;font-size:13px"></div>
+      <div class="row" id="rowCoop" style="margin:6px 0;gap:6px">🤝 협동 <select id="selCl"><option value="1">난이도 1 연습</option><option value="2" selected>난이도 2 도전</option><option value="3">난이도 3 극한</option></select> <select id="selBots"><option value="0">봇 없음</option><option value="2">총 2명(봇 채움)</option><option value="3" selected>총 3명(봇 채움)</option><option value="4">총 4명(봇 채움)</option></select></div>
+      <div class="note" id="coopNote" style="margin-top:6px;font-size:13px">🤝 협동전: 친구마다 역할(수비·유격·보급)이 생기고, 성 방어 라운드에서 보급기지 2곳을 함께 부숴야 해요. 미션은 라운드마다 달라요(🏕 이중 전선·🔥 쌍둥이 봉화·🔥 창고 습격). 깨면 🎟 뽑기권과 🧩 전설 영웅 조각을 받아요.</div></div>
     <div id="guestBox" style="display:none;font-size:20px">방장이 시작하길 기다리는 중…</div>
   </div>
   </div><div class="scFoot" id="rmFoot"><button id="btnLeave" class="sec">나가기</button>
@@ -1046,8 +1051,9 @@ const QERA = ["선사 시대","고조선과 여러 나라","삼국 시대","남�
 <script>
 'use strict';
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
-const VER = 'v0.44';
+const VER = 'v0.45';
 const UPDATES = [
+  { v: 'v0.45', d: '11/26', t: ['🙋 혼자 하기와 🏠 방 만들기를 나눴어요. 혼자 하기는 챕터·전투 시간·난이도만 고르면 역사 순서대로 시나리오를 쭉 깨요. 시나리오·전투 장면·임무 선택과 협동전은 방 만들기에서 해요','🌟 혼자 하기에서 한 챕터를 끝까지 깨면 그 시대와 관련된 전설 영웅을 얻어요(임진왜란: 권율→김시민→곽재우→휴정→유정 중 아직 없는 영웅, 정유재란: 진린). 정묘·병자호란은 아직 전설 영웅이 없어서 🎟 뽑기권 3장을 받아요. 챕터마다 한 번씩만 받아요','◀ ▶ 내 역할을 한 칸씩 넘겨 가며 골라요. 버튼이 너무 많던 화면이 깔끔해졌어요'] },
   { v: 'v0.44', d: '11/26', t: ['🗺 시나리오를 직접 고를 수 있어요! 방 설정에서 시작 챕터를 고르면 그 챕터의 시나리오(예: 평양성 탈환)가 나와요. 어떤 임무인지도 미리 보여줘요','🤝 협동전은 전투 장면(30개 중)과 임무(성을 지켜라·탈출·버텨라·적장·창고 습격)를 따로 고르거나 🎲 랜덤으로 할 수 있어요. 임무를 골랐다면 전투 전에 알려줘요'] },
   { v: 'v0.43', d: '11/25', t: ['🐞 키보드가 안 먹히거나 한쪽으로만 계속 가던 문제를 고쳤어요. 한글 입력 상태에서도 W·A·S·D가 움직이고, 다른 창에 갔다 오면 눌린 키가 풀려요','🚪 이미 시작한 방에 들어가면 화면만 보이고 못 움직이던 문제를 안내로 바꿨어요. "게임 중이에요" 알림이 뜨고 처음 화면으로 돌아가요. 끊겼다가 같은 탭으로 돌아오면 그대로 이어서 해요','📣 방이 닫히면 이유(오래 조용함/시간 제한)를 알려줘요. 방 하나는 최대 50분까지 열려 있어요'] },
   { v: 'v0.42', d: '11/23', t: ['🐞 목숨(하트)이 없을 때 한 번 쓰러지면 그 판이 끝날 때까지 못 움직이던 문제를 고쳤어요. 이제 25초 뒤에 체력 60%로 되살아나요(모두 동시에 쓰러지면 그 판이 끝나요)', '🐞 쓰러졌을 때 "1000000000초 뒤 복귀"처럼 이상한 숫자가 뜨던 것을 고쳤어요. 쓰러지면 화면 위에 "💀 쓰러졌어요 · N초 뒤 되살아나요"가 크게 보여요'] },
@@ -1935,7 +1941,7 @@ function stepBattle(dt) {
 }
 function endRound(win) {
   if (!G.endless && G.bossOut && !G.bossDead && G.bn) G.carryBoss = G.bn; // 못 잡은 적장은 다음에도 다시 나와요
-  G.baseHp = Math.max(0, G.baseHp); G.ph = 'result'; G.res = { win, rd: G.rd, id: Date.now() + '' + rint(1000) }; if (win && G.cm && !G.endless) { const m = G.cmM ? 1 : 0; G.res.rw = { sh: (G.cl || 1) + m, tk: 1 + m + ((G.cl || 1) >= 2 ? 1 : 0) }; } G.en = []; G.ev = null; if (!G.endless) { G.res.rs = { sm: G.sm ? G.sm.ok | 0 : 0, s3: G.s3 | 0, du: G.duWins | 0, cm: G.cm ? 1 : 0, hd: G.dif === DIFF.hard ? 1 : 0, ch: win ? [9, 19, 24, 29].indexOf(G.rd) : -1, kc: G.kc | 0, lv: G.lvC | 0, t: Math.floor(G.t), al: G.altN | 0, bk: G.bossDead ? 1 : 0 }; if (G.daily && !G.dailyDone) { G.dailyDone = 1; G.res.dl = { sc: (win ? 1000 : 0) + (G.kc | 0) * 4 + (G.sm ? G.sm.ok | 0 : 0) * 200 + (G.castle ? Math.round(Math.max(0, G.baseHp) / G.baseMax * 300) : 0) + (G.qokT | 0) * 30 }; } }
+  G.baseHp = Math.max(0, G.baseHp); G.ph = 'result'; G.res = { win, rd: G.rd, id: Date.now() + '' + rint(1000) }; if (win && !G.endless && !G.cm && !G.daily && Net.mode === 'single' && G.rd === CH_END[R[G.rd].ch]) G.res.chr = R[G.rd].ch + 1; if (win && G.cm && !G.endless) { const m = G.cmM ? 1 : 0; G.res.rw = { sh: (G.cl || 1) + m, tk: 1 + m + ((G.cl || 1) >= 2 ? 1 : 0) }; } G.en = []; G.ev = null; if (!G.endless) { G.res.rs = { sm: G.sm ? G.sm.ok | 0 : 0, s3: G.s3 | 0, du: G.duWins | 0, cm: G.cm ? 1 : 0, hd: G.dif === DIFF.hard ? 1 : 0, ch: win ? [9, 19, 24, 29].indexOf(G.rd) : -1, kc: G.kc | 0, lv: G.lvC | 0, t: Math.floor(G.t), al: G.altN | 0, bk: G.bossDead ? 1 : 0 }; if (G.daily && !G.dailyDone) { G.dailyDone = 1; G.res.dl = { sc: (win ? 1000 : 0) + (G.kc | 0) * 4 + (G.sm ? G.sm.ok | 0 : 0) * 200 + (G.castle ? Math.round(Math.max(0, G.baseHp) / G.baseMax * 300) : 0) + (G.qokT | 0) * 30 }; } }
   G.lvq = 0; for (const id of G.order) { const p = G.pl[id]; p.offer = null; p.qz = null; p.mo = null;  }
   if (G.es) { G.es.tot = Math.floor(G.t); G.es.r = G.er + 1; G.es.over = true; G.es.clear = !!win; G.ph = 'end'; }
   else saveGame('auto', win ? G.rd + 1 : G.rd);
@@ -2170,12 +2176,17 @@ function initLobby() {
   let diffSel = 'normal'; const DT_ = { easy: '적이 적고 약해요 · 영웅 체력 +30% · 시작 군량 +50', normal: '기본 난이도예요', hard: '적이 많고 강해요 · 영웅 체력 −10% · 시작 군량 −20' };
   const setDiff = (d) => { diffSel = d; document.querySelectorAll('#diffRow button').forEach((x) => x.classList.toggle('on', x.dataset.d === d)); $('diffTip').textContent = DT_[d]; }; document.querySelectorAll('#diffRow button').forEach((b) => (b.onclick = () => setDiff(b.dataset.d))); setDiff('normal');
   const roleTip = (r) => { const R0 = ROLE[r]; $('roleTip').innerHTML = `<b>${R0.n}</b> — ${R0.d}<br>` + R0.tag.map((x) => `<span class="tg">${x}</span>`).join('') + `<br>🔥 스킬 <b>${SKILL[r].n}</b> — ${SKILL[r].d}`; }; roleTip('archer'); pasTip(); refreshHid();
-  $('btnStart').onclick = () => { const cs = +$('selStart').value, nn = cs === 0 || cs === 10 ? 10 : 5, sv = +$('selScn').value; draftSel = { start: sv >= 0 ? sv : cs + rint(nn), dur: +$('selDur').value, diff: diffSel }; hostCtl('start', draftSel); };
+  $('btnStart').onclick = () => { const cs = +$('selStart').value, nn = cs === 0 || cs === 10 ? 10 : 5, sv = +$('selScn').value; draftSel = { start: Net.mode === 'single' ? cs : sv >= 0 ? sv : cs + rint(nn), dur: +$('selDur').value, diff: diffSel }; hostCtl('start', draftSel); };
   $('btnCoop').onclick = () => { draftSel = { start: +$('selStart').value, scn: +$('selCmScn').value, obj: $('selCmObj').value, dur: +$('selDur').value, diff: diffSel, coop: true, bots: +$('selBots').value, cl: +$('selCl').value }; hostCtl('start', draftSel); };
   $('btnStartE').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel, endless: true }; hostCtl('start', draftSel); };
   $('btnLeave').onclick = () => { if (confirmLeave()) { LASTROOM.clear(); location.reload(); } };
   document.querySelectorAll('#roleRow button').forEach((b) => { b.onclick = () => { if (LEG[b.dataset.r] && !legOK(b.dataset.r)) { const c = cwLoad(), tg = cwTarget(c), k = b.dataset.r; $('roleTip').innerHTML = tg === k ? `🔒 <b>전설 영웅 ${LEG[k].n}</b> — 협동전을 깨서 영웅 조각 ${LEG[k].need}개를 모으면 열려요! (지금 ${c.sh}/${LEG[k].need})` : `🔒 <b>전설 영웅 ${LEG[k].n}</b> — 먼저 전설 영웅 ‘${LEG[tg].n}’을 열면 조각이 ‘${LEG[k].n}’ 쪽으로 모여요!`; return; } if (b.dataset.r === 'admiral' && !hidOK()) { $('roleTip').innerHTML = '🔒 <b>히든 영웅</b> — 모든 라운드를 끝까지 깨면 열려요!'; return; } me.role = b.dataset.r; sendProf(); roleTip(b.dataset.r); pasTip(); document.querySelectorAll('#roleRow button').forEach((x) => x.classList.toggle('on', x === b)); }; });
   document.querySelector('#roleRow button').classList.add('on');
+  { const rr = $('roleRow'); rr.style.setProperty('display', 'none', 'important'); const btns = [...rr.querySelectorAll('button')]; let ci = Math.max(0, btns.findIndex((b) => b.dataset.r === me.role));
+    const car = document.createElement('div'); car.id = 'roleCar'; car.innerHTML = '<button id="rcPrev" aria-label="이전 역할">◀</button><button id="rcCur"></button><button id="rcNext" aria-label="다음 역할">▶</button>'; rr.parentNode.insertBefore(car, rr.nextSibling);
+    rcSync = () => { const b = btns[ci], lk = /🔒/.test(b.textContent), on = b.dataset.r === me.role, cur = $('rcCur'); cur.classList.toggle('lk', lk); cur.innerHTML = (on ? '✔ ' : '') + esc(b.textContent) + `<small style="display:block;font-size:12px;opacity:.75;font-weight:700">${ci + 1} / ${btns.length}${on ? ' · 선택됨' : lk ? ' · 잠겨 있어요' : ' · 눌러서 선택'}</small>`; };
+    const go = (d) => { ci = (ci + d + btns.length) % btns.length; btns[ci].click(); rcSync(); };
+    $('rcPrev').onclick = () => go(-1); $('rcNext').onclick = () => go(1); $('rcCur').onclick = () => { btns[ci].click(); rcSync(); }; rcSync(); }
   { const lr = LASTROOM.get(), rb = $('btnResume'); if (lr && rb) { rb.style.display = 'inline-block'; rb.textContent = '🔌 방 ' + lr.code + ' 이어하기'; rb.onclick = () => { try { sessionStorage.setItem('hdg_tk', lr.tk); } catch (e) {} TK = lr.tk; $('nick').value = lr.name || $('nick').value; $('roomCode').value = lr.code; if (lr.url && lr.url !== DEFAULT_RELAY) $('relayUrl').value = lr.url; startAs('join'); }; } }
 }
 // 끊겼던 친구가 같은 기기·같은 탭으로 다시 들어오면 영웅을 그대로 돌려줘요
@@ -2211,6 +2222,7 @@ async function startAs(mode) {
   } else { Net.onData = (from, d) => { if (d.k === 'late') { LASTROOM.clear(); alert('이 방은 지금 게임 중이에요. 방장이 다음 판을 시작하기 전(대기실)에 다시 들어와 주세요. 처음 화면으로 돌아갑니다.'); location.reload(); return; } if (d.s) { V = d.s; lastSnapAt = performance.now(); } }; Net.onDrop = reconnectLoop; sendProf(); saveLast(); setInterval(() => { if (Net.ws && Net.ws.readyState === 1) saveLast(); }, 30000); }
   keepAwake(); if (Net.host && Net.mode === 'online') window.addEventListener('beforeunload', (e) => { if (G && G.order.length > 1) { e.preventDefault(); e.returnValue = ''; } });
   $('roomLabel').textContent = Net.mode === 'online' ? '방 코드  ' + Net.room : '혼자 하기'; $('btnCopy').style.display = Net.mode === 'online' && Net.host ? 'inline-block' : 'none'; $('btnCopy').onclick = () => { const u = new URL(location.href.split('#')[0]); u.search = ''; u.searchParams.set('room', Net.room); if ($('relayUrl').value && $('relayUrl').value !== DEFAULT_RELAY) u.searchParams.set('relay', $('relayUrl').value.trim()); const t = u.toString(); const ok = () => { $('btnCopy').textContent = '✅ 복사했어요!'; setTimeout(() => ($('btnCopy').textContent = '🔗 초대 링크 복사'), 1800); }; try { navigator.clipboard.writeText(t).then(ok, () => prompt('이 주소를 복사해 친구에게 보내세요', t)); } catch (e) { prompt('이 주소를 복사해 친구에게 보내세요', t); } };
+  { const solo = Net.mode === 'single'; ['rowScn', 'scnInfo', 'rowCmScn', 'rowCmObj', 'cmInfo', 'rowCoop', 'coopNote', 'btnCoop'].forEach((id) => { const e = $(id); if (e) e.style.display = solo ? 'none' : ''; }); $('soloNote').style.display = solo ? 'block' : 'none'; $('hostTitle').textContent = solo ? '게임 설정' : '방장 설정'; }
   $('hostBox').style.display = Net.host ? 'block' : 'none'; $('rsStart').style.display = Net.host ? 'flex' : 'none'; $('guestBox').style.display = Net.host ? 'none' : 'block';
   show('sRoom'); requestAnimationFrame(frame);
 }
@@ -2378,7 +2390,7 @@ function buildResult() {
   const r = R[V.rd], win = V.res.win; show('sResult'); $('sResult').scrollTop = 0;
   $('rsTitle').textContent = win ? (r.df ? '버텨 냈어요!' : '승리!') : (V.res.cmf ? ({ b: '봉화를 못 올렸어요…', r: '시간 안에 끝내지 못했어요…' }[V.res.cmk] || '보급기지를 못 부쉈어요…') : '거점이 무너졌어요…');
   $('rsTitle').style.color = win ? '#2f6b2a' : '#a8322a';
-  { const rw = $('rsReward'), c = cwCredit(); if (c) { rw.style.display = 'block'; const tn = c.tg ? LEG[c.tg].n : '', tl = c.tgNow ? ` (${c.have}/${LEG[c.tgNow].need})` : ''; rw.innerHTML = `🎁 협동 보상 · 🎟 뽑기권 +${c.tk}${c.sh ? ` · 🧩 ${tn ? tn + ' 조각' : '(전설 완성→뽑기권으로)'} +${c.sh}${tn ? tl : ''}` : ''}${c.un ? `<br>🌟 전설 영웅 ${LEG[c.un].n} 해금!` : ''}<br><small>보관함에서 뽑기를 해 보세요!</small>`; } else rw.style.display = 'none'; }
+  { const rw = $('rsReward'), c = cwCredit(), h = chCredit(); if (h && !h.again) { rw.style.display = 'block'; rw.innerHTML = `🏆 ${CH[h.ch].n} 챕터를 모두 깼어요!<br>` + (h.k ? `🌟 전설 영웅 <b>${LEG[h.k].n}</b> 해금! <small>(내 역할에서 고를 수 있어요)</small>` : h.none ? `🎟 뽑기권 +${h.tk} <small>(이 시대 전설 영웅은 아직 없어요)</small>` : `🎟 뽑기권 +${h.tk} <small>(이 시대 전설 영웅을 이미 다 가졌어요)</small>`); } else if (c) { rw.style.display = 'block'; const tn = c.tg ? LEG[c.tg].n : '', tl = c.tgNow ? ` (${c.have}/${LEG[c.tgNow].need})` : ''; rw.innerHTML = `🎁 협동 보상 · 🎟 뽑기권 +${c.tk}${c.sh ? ` · 🧩 ${tn ? tn + ' 조각' : '(전설 완성→뽑기권으로)'} +${c.sh}${tn ? tl : ''}` : ''}${c.un ? `<br>🌟 전설 영웅 ${LEG[c.un].n} 해금!` : ''}<br><small>보관함에서 뽑기를 해 보세요!</small>`; } else rw.style.display = 'none'; }
   { const nx = R[V.rd + 1], ch = CH[r.ch];
     const SRCT = { '교': '📗 교과서', '지': '📘 지도서', '보': '📙 교과서 밖 보충 · 선생님과 확인해요' }, TH = { mount: '⛰️', sea: '🌊', plain: '🌾', river: '🏞️' };
     const FIC = { d: '영웅을 소환하고 카드로 강해지며 성을 지키는 것은 게임을 위해 만든 규칙이에요.', e: '달려서 탈출하는 임무는 게임용 연출이에요.', s: '제한 시간 동안 버티는 방식과 영웅·카드는 게임을 위해 만든 규칙이에요.', r: '보급창고를 부수는 임무는 게임을 위해 만든 규칙이에요.', b: '적장과의 일기토(1:1 대결)와 장수의 공격 모습은 게임용 연출이에요.' };
@@ -2416,6 +2428,7 @@ function updateResult() {
   document.querySelectorAll('.qo').forEach((b) => { const i = +b.dataset.i; if (mine != null) { b.disabled = true; b.classList.toggle('ok', i === r.q[2]); b.classList.toggle('no', i === mine && i !== r.q[2]); } });
   $('qWhy').innerHTML = mine != null ? `${mine === r.q[2] ? '⭕ 정답!' : '❌ 아쉬워요'} ${esc(r.q[3])}<br><small>답한 친구 ${n}/${V.pl.length}명 · 정답자 1명당 다음 판 군량 +15</small>` : `<small>답한 친구 ${n}/${V.pl.length}명</small>`;
 }
+const CH_END = [9, 19, 24, 29], CH_LEG = [['gwonyul', 'gimsimin', 'gwakjaeu', 'hyujeong', 'yujeong'], ['jinrin'], [], []]; // 챕터 마지막 시나리오 번호 / 챕터와 관련된 전설 영웅(교과서·지도서·설계안 근거 인물)
 const LEG = { gwonyul: { need: 10, n: '권율', btn: 'roleLeg' }, gimsimin: { need: 12, n: '김시민', btn: 'roleLeg2' }, gwakjaeu: { need: 12, n: '곽재우', btn: 'roleLeg3' }, hyujeong: { need: 12, n: '휴정', btn: 'roleLeg4' }, yujeong: { need: 14, n: '유정', btn: 'roleLeg5' }, jinrin: { need: 14, n: '진린', btn: 'roleLeg6' } };
 // ----- 영웅 꾸미기 이펙트 (후광: 발밑 고리+입자·날개 / 이동 흔적: 걸을 때 남는 자국) -----
 const RB = (t, i) => { const s = Math.sin(t * 12.9898 + i * 78.233) * 43758.5453; return s - Math.floor(s); };
@@ -2530,6 +2543,15 @@ function cwCredit() { // 결과 화면에서 이 기기에 보상을 한 번만 
   const d = cwLoad(); if (d.ids.includes(r.id)) return null; d.ids.push(r.id); if (d.ids.length > 40) d.ids.shift();
   const t0 = cwTarget(d), un = cwAddSh(d, r.rw.sh); d.tk += r.rw.tk; d.cl++; cwSave(d); return (cwShown[r.id] = { tk: r.rw.tk, sh: r.rw.sh, un, have: d.sh, tg: t0, tgNow: cwTarget(d), all: d.tk });
 }
+const chShown = {};
+function chCredit() { // 혼자하기에서 챕터를 끝까지 깨면 그 시대의 전설 영웅(없으면 뽑기권)을 이 기기에 한 번만 줘요
+  const r = V && V.res; if (!r || !r.win || !r.chr || !r.id) return null; if (chShown[r.id]) return chShown[r.id];
+  let D = { done: {} }; try { D = JSON.parse(localStorage.getItem('jd_chc') || 'null') || D; } catch (e) {} D.done = D.done || {}; const ch = r.chr - 1;
+  if (D.done[ch]) return (chShown[r.id] = { ch, again: true });
+  const d = cwLoad(), k = (CH_LEG[ch] || []).find((x) => !d.own[x]) || ''; let tk = 0; if (k) d.own[k] = 1; else { tk = 3; d.tk += tk; }
+  cwSave(d); D.done[ch] = 1; try { localStorage.setItem('jd_chc', JSON.stringify(D)); } catch (e) {} refreshHid();
+  return (chShown[r.id] = { ch, k, tk, none: !(CH_LEG[ch] || []).length });
+}
 function cwDraw() {
   const d = cwLoad(); if (d.tk < 1) return null; d.tk--; d.pity++; d.pity2++; let r;
   if (d.pity2 >= 30) r = 2; else if (d.pity >= 10) r = Math.random() < 0.2 ? 2 : 1; else { const x = Math.random(); r = x < 0.05 ? 2 : x < 0.3 ? 1 : 0; }
@@ -2564,7 +2586,8 @@ function openCw(msg) {
   $('cwBody').querySelectorAll('.cwg button').forEach((b) => { b.onclick = () => { const c = cwLoad(); if (!c.cos.includes(b.dataset.a)) { pvTry = b.dataset.a; const A = AUR[pvTry], lb = $('cwPvL'); if (lb) lb.innerHTML = '👁 미리보기: <b>' + A.n + '</b> (' + RN[A.r] + ') — 뽑기로 얻으면 쓸 수 있어요'; return; } if (AUR[b.dataset.a].s === 't') { c.eq2 = c.eq2 === b.dataset.a ? '' : b.dataset.a; me.tr = c.eq2; } else { c.eq = c.eq === b.dataset.a ? '' : b.dataset.a; me.aura = c.eq; } cwSave(c); sendProf(); openCw(); }; });
 }
 function hidOK() { try { return localStorage.getItem('jd_hid') === '1'; } catch (e) { return false; } }
-function refreshHid() { for (const k of Object.keys(LEG)) { const lb = $(LEG[k].btn); if (lb) lb.textContent = legOK(k) ? '🌟 ' + LEG[k].n : '🔒 전설'; } const hb = $('roleHid'); if (hb) hb.textContent = hidOK() ? '⭐ 이순신' : '🔒 히든'; }
+let rcSync = () => {};
+function refreshHid() { for (const k of Object.keys(LEG)) { const lb = $(LEG[k].btn); if (lb) lb.textContent = legOK(k) ? '🌟 ' + LEG[k].n : '🔒 전설'; } const hb = $('roleHid'); if (hb) hb.textContent = hidOK() ? '⭐ 이순신' : '🔒 히든'; rcSync(); }
 function rankLoad() { try { return JSON.parse(localStorage.getItem('jd_rank') || '[]'); } catch (e) { return []; } }
 function fmtT(t) { return String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); }
 function buildEnd() {

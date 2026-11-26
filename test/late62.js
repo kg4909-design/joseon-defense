@@ -5,7 +5,7 @@ const { spawn } = require('child_process');
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const errs = [], out = { dialogs: [] };
   const mk = async (name) => { const ctx = await b.newContext({ viewport: { width: 1180, height: 820 } }); const p = await ctx.newPage();
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.44'); localStorage.setItem('hdg_relay', 'ws://localhost:8798/ws'); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.45'); localStorage.setItem('hdg_relay', 'ws://localhost:8798/ws'); });
     p.on('pageerror', (e) => errs.push(e.message)); p.on('dialog', (d) => { out.dialogs.push(d.message()); d.dismiss(); });
     await p.goto('file:///home/claude/joseon-defense/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.fill('#nick', name); return p; };
   const h = await mk('방장'); await h.click('#btnCreate'); await h.waitForSelector('#sRoom.on');

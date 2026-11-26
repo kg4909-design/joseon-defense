@@ -229,3 +229,9 @@
 - 협동전: 전투 장면(🎲 30개 랜덤 또는 챕터별 optgroup) + 임무(🎲 랜덤 또는 d/e/s/b/r) 따로 선택. hostCtl('start', {scn, obj}). 임무를 골랐으면 브리핑에서 비밀 문구 대신 공개(스냅샷 s.sec)
 - '새 시나리오 한 판 더': 방장이 고정한 항목(scn/obj)은 유지, 랜덤인 항목만 새로 뽑음(G.cmSel)
 - 시험: `node test/scn63.js` (기능), `node test/scnshot63.js` (폰·태블릿 캡처)
+
+## v0.45 혼자하기 / 방 만들기 구분, 챕터 보상, 역할 넘기기
+- 혼자하기(Net.mode==='single'): 시작 시나리오·전투 장면·임무·협동 설정·협동전 버튼 숨김(#rowScn,#rowCmScn,#rowCmObj,#cmInfo,#rowCoop,#coopNote,#btnCoop). 챕터 첫 시나리오부터 역사 순서대로 진행. 방 만들기는 기존 방장 설정 전부 유지
+- 챕터 올클리어 보상: endRound에서 solo·일반·비무한·비일일 판의 챕터 마지막 시나리오(CH_END=[9,19,24,29]) 승리 시 res.chr 설정 → 각 기기 chCredit()이 localStorage jd_chc(챕터별 1회)로 지급. CH_LEG: 임진왜란 [권율,김시민,곽재우,휴정,유정] 중 아직 없는 영웅 1명, 정유재란 [진린], 정묘·병자 [] → 뽑기권 +3(전설 영웅 없음 안내). 이순신(히든)은 기존 조건 유지
+- 역할 선택: 기존 #roleRow 버튼은 숨기고(내부 로직 재사용) ◀ [현재 역할] ▶ 한 칸씩 넘김(#roleCar). 잠긴 역할은 잠금 안내만 뜨고 선택은 유지
+- 시험: `node test/solo64.js`(혼자 화면·넘기기·챕터 보상), `node test/scn63.js`(방 만들기 시나리오 선택), `node test/shot64.js`(폰·태블릿 캡처)
