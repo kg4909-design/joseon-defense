@@ -5,7 +5,7 @@ const { spawn } = require('child_process');
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const errs = [], o = {};
   const room = async () => { const p = await b.newPage({ viewport: { width: 1180, height: 820 } });
-    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.45'); localStorage.setItem('hdg_relay', 'ws://localhost:8797/ws'); });
+    await p.addInitScript(() => { localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.46'); localStorage.setItem('hdg_relay', 'ws://localhost:8797/ws'); });
     p.on('pageerror', (e) => errs.push(e.message)); p.on('dialog', (d) => d.dismiss());
     await p.goto('file:///home/claude/work/game/dist/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); await p.fill('#nick', '방장');
     await p.click('#btnCreate'); await p.waitForSelector('#sRoom.on'); return p; };

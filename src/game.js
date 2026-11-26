@@ -1,7 +1,8 @@
 'use strict';
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
-const VER = 'v0.45';
+const VER = 'v0.46';
 const UPDATES = [
+  { v: 'v0.46', d: '11/26', t: ['🌟 전설 영웅 2명 추가! 정봉수(정묘호란 · 용골산성 의병장, 패시브: 곁에 동료가 많을수록 받는 피해↓ · 스킬 용골산 결사항전) · 임경업(병자호란 · 백마산성 방어, 패시브: 성 가까이에서 공격력↑ · 스킬 백마산성 방어진). 교과서 밖 보충 인물이에요','🏆 혼자 하기에서 챕터를 끝까지 깨면 그 시대 전설 영웅 1명을 받아요: 임진왜란 → 권율 · 정유재란 → 진린 · 정묘호란 → 정봉수 · 병자호란 → 임경업','⭐ 네 영웅(권율·진린·정봉수·임경업)을 모두 모으면 히든 영웅 이순신이 열려요! 김시민·곽재우·휴정·유정은 협동전 조각으로만 얻어요','🎨 정봉수·임경업 그림은 임시예요. 곧 새 그림으로 바뀔 예정이에요'] },
   { v: 'v0.45', d: '11/26', t: ['🙋 혼자 하기와 🏠 방 만들기를 나눴어요. 혼자 하기는 챕터·전투 시간·난이도만 고르면 역사 순서대로 시나리오를 쭉 깨요. 시나리오·전투 장면·임무 선택과 협동전은 방 만들기에서 해요','🌟 혼자 하기에서 한 챕터를 끝까지 깨면 그 시대와 관련된 전설 영웅을 얻어요(임진왜란: 권율→김시민→곽재우→휴정→유정 중 아직 없는 영웅, 정유재란: 진린). 정묘·병자호란은 아직 전설 영웅이 없어서 🎟 뽑기권 3장을 받아요. 챕터마다 한 번씩만 받아요','◀ ▶ 내 역할을 한 칸씩 넘겨 가며 골라요. 버튼이 너무 많던 화면이 깔끔해졌어요'] },
   { v: 'v0.44', d: '11/26', t: ['🗺 시나리오를 직접 고를 수 있어요! 방 설정에서 시작 챕터를 고르면 그 챕터의 시나리오(예: 평양성 탈환)가 나와요. 어떤 임무인지도 미리 보여줘요','🤝 협동전은 전투 장면(30개 중)과 임무(성을 지켜라·탈출·버텨라·적장·창고 습격)를 따로 고르거나 🎲 랜덤으로 할 수 있어요. 임무를 골랐다면 전투 전에 알려줘요'] },
   { v: 'v0.43', d: '11/25', t: ['🐞 키보드가 안 먹히거나 한쪽으로만 계속 가던 문제를 고쳤어요. 한글 입력 상태에서도 W·A·S·D가 움직이고, 다른 창에 갔다 오면 눌린 키가 풀려요','🚪 이미 시작한 방에 들어가면 화면만 보이고 못 움직이던 문제를 안내로 바꿨어요. "게임 중이에요" 알림이 뜨고 처음 화면으로 돌아가요. 끊겼다가 같은 탭으로 돌아오면 그대로 이어서 해요','📣 방이 닫히면 이유(오래 조용함/시간 제한)를 알려줘요. 방 하나는 최대 50분까지 열려 있어요'] },
@@ -87,7 +88,9 @@ const ROLE = { // 영웅(플레이어) — 시작할 때 고유 무기 1개만 �
   yujeong:{ n: '유정', c: '#c28aff', rg: 220, dmg: 30, rt: 1.0, hp: 420, sp: 100, aoe: 35, tag: ['전설 영웅', '시작 무기: 철퇴', '패시브: 받는 피해 -15%'], d: '사명대사! 아주 단단한 승병장이에요 (협동전 보상 조각 14개 모으면 열려요)' },
   jinrin:{ n: '진린', c: '#ff9a3a', rg: 360, dmg: 34, rt: 0.95, hp: 300, sp: 100, aoe: 60, tag: ['전설 영웅', '교과서 밖 보충', '시작 무기: 대포', '패시브: 폭발 범위 +15%'], d: '명나라 수군 도독! 조선 수군과 함께 싸운 연합군 장수예요 (협동전 보상 조각 14개 모으면 열려요)' },
   gimsimin:{ n: '김시민', c: '#4aa3ff', rg: 300, dmg: 28, rt: 0.8, hp: 330, sp: 104, aoe: 30, tag: ['전설 영웅', '시작 무기: 대포', '패시브: 성 근처 피해 -30%'], d: '진주대첩의 수성 명장! 성을 지키는 데 강해요 (협동전 보상 조각 12개로 열려요)' },
-  admiral:{ n: '이순신', c: '#ffd84a', rg: 250, dmg: 38, rt: 0.55, hp: 300, sp: 118, aoe: 0,  tag: ['히든 영웅', '시작 무기: 거북선', '패시브: 체력 낮을수록 강해져요'], d: '거북선의 포로 사방의 적을 쓸어요 (모든 라운드를 깨면 열려요)' }
+  jeongbongsu:{ n: '정봉수', c: '#3fbf7f', rg: 270, dmg: 27, rt: 0.85, hp: 340, sp: 106, aoe: 0, tag: ['전설 영웅', '교과서 밖 보충', '시작 무기: 투석', '패시브: 곁에 동료가 있을수록 받는 피해 감소'], d: '정묘호란 때 용골산성에서 의병을 이끌고 후금군을 물리친 의병장이에요 (혼자 하기에서 정묘호란 챕터를 깨면 열려요)' },
+  imgyeongeop:{ n: '임경업', c: '#9fb8ff', rg: 300, dmg: 31, rt: 0.8, hp: 360, sp: 110, aoe: 0, tag: ['전설 영웅', '교과서 밖 보충', '시작 무기: 창', '패시브: 성 가까이에서 공격력 +15%'], d: '의주 백마산성을 지킨 장수예요 (혼자 하기에서 병자호란 챕터를 깨면 열려요)' },
+  admiral:{ n: '이순신', c: '#ffd84a', rg: 250, dmg: 38, rt: 0.55, hp: 300, sp: 118, aoe: 0,  tag: ['히든 영웅', '시작 무기: 거북선', '패시브: 체력 낮을수록 강해져요'], d: '거북선의 포로 사방의 적을 쓸어요 (네 챕터의 전설 영웅 권율·진린·정봉수·임경업을 모두 모으면 열려요)' }
 
 };
 const DIFF = { easy: { n: '쉬움', sc: 0.45, hp: 0.6, sp: 0.55, dm: 0.5, fd: 50, hh: 1.4, bs: 2, bb: 0.5, rc: 40, rh: 0.35, bi: 4, pr: 0.2 }, normal: { n: '보통', sc: 0.7, hp: 0.9, sp: 0.78, dm: 0.8, fd: 20, hh: 1.15, bs: 1.4, bb: 0.75, rc: 50, rh: 0.3, bi: 3, pr: 0.3 }, hard: { n: '어려움', sc: 1, hp: 1.2, sp: 1.0, dm: 1.1, fd: -10, hh: 1, bs: 1, bb: 1.1, rc: 70, rh: 0.25, bi: 1.5, pr: 0.45 } };
@@ -140,7 +143,7 @@ const CARDS = [
 const WEAP = { bow: 1, cannon: 1, sword: 1, buddha: 1, spear: 1, flail: 1, bomb: 1, hwacha: 1, musket: 1, rocket: 1, stone: 1, nu: 1, turtle: 1 };
 const ABIL = { volley: 1, armor: 1, horse: 1, gong: 1, powder: 1, train: 1, forge: 1, guard: 1, medic: 1, crit: 1, study: 1, spirit: 1, scout: 1 };
 const WMAX = 4, AMAX = 4; // 무기 최대 4, 능력 최대 4 (빌드 선택!)
-const START = { gwakjaeu: 'sword', hyujeong: 'buddha', yujeong: 'flail', jinrin: 'cannon', gimsimin: 'cannon', gwonyul: 'hwacha', archer: 'bow', militia: 'sword', monk: 'buddha', gunner: 'cannon', admiral: 'turtle' };
+const START = { jeongbongsu: 'stone', imgyeongeop: 'spear', gwakjaeu: 'sword', hyujeong: 'buddha', yujeong: 'flail', jinrin: 'cannon', gimsimin: 'cannon', gwonyul: 'hwacha', archer: 'bow', militia: 'sword', monk: 'buddha', gunner: 'cannon', admiral: 'turtle' };
 // 시너지: 짝이 모두 있으면 보너스, 둘 다 Lv5면 특수 능력!
 const SYN = [
   { k: 'bow_nu', w: 1, a: 'bow', b: 'nu', n: '궁노 합동', d: '두 무기 공격력 +15%', sd: '활은 3갈래, 쇠뇌는 화살이 더 늘어나요', t: '활과 쇠뇌를 함께 쓰는 사수 부대' },
@@ -236,7 +239,7 @@ function hjAura(p) { for (const id of G.order) { const h = G.pl[id]; if (h && h.
 function heroStats0(p) { // 카드·시너지 반영 스탯
   const b = ROLE[p.role], c = p.cards, n = (k) => c[k] || 0, sa = p.sa || {};
   const lowHp = 1 - Math.max(0, p.hp) / p.mx;
-  const dmg = (p.cr === 'ranger' ? 1.1 : 1) * (p.role === 'admiral' ? 1 + 0.5 * lowHp : 1) * (gwAura(p) ? 1.1 : 1) * (p.bfT > 0 ? 1.3 : 1) * (1 + 0.06 * ((p.mer && p.mer.dmg) || 0)) * (1 + 0.3 * n('forge')) * (1 + 0.12 * n('gong')) * (G.buffAtk > 0 ? 1.4 : 1) * (G.t < (G.moraleT || 0) ? 0.85 : 1) * (1 + 0.12 * n('spirit') * lowHp) * (1 + (sa.gong_spirit ? 0.06 : 0) + (sa.gong_spirit === 2 ? 0.3 : 0) + (sa.powder_forge === 2 ? 0.15 : 0));
+  const dmg = (p.cr === 'ranger' ? 1.1 : 1) * (p.role === 'admiral' ? 1 + 0.5 * lowHp : 1) * (p.role === 'imgyeongeop' && G.castle && Math.hypot(p.x - G.ax, p.y - G.ay) < 320 ? 1.15 : 1) * (gwAura(p) ? 1.1 : 1) * (p.bfT > 0 ? 1.3 : 1) * (1 + 0.06 * ((p.mer && p.mer.dmg) || 0)) * (1 + 0.3 * n('forge')) * (1 + 0.12 * n('gong')) * (G.buffAtk > 0 ? 1.4 : 1) * (G.t < (G.moraleT || 0) ? 0.85 : 1) * (1 + 0.12 * n('spirit') * lowHp) * (1 + (sa.gong_spirit ? 0.06 : 0) + (sa.gong_spirit === 2 ? 0.3 : 0) + (sa.powder_forge === 2 ? 0.15 : 0));
   const WR = { bow: 260, nu: 290, cannon: 380, musket: 370, rocket: 400, stone: 270, turtle: 360, hwacha: 340, spear: 150, flail: 120, bomb: 340 };
   let rg = 0; for (const k in WR) if (c[k]) rg = Math.max(rg, WR[k]); if (c.sword) rg = Math.max(rg, 133 + 12 * c.sword + (c.evo_sword ? 45 : 0)); if (c.buddha) rg = Math.max(rg, 105 + 16 * c.buddha + (c.evo_buddha ? 40 : 0));
   return { rg, dmg, as: (1 + 0.12 * n('train')) * (1 + (sa.train_crit ? 0.08 : 0)),
@@ -279,7 +282,7 @@ function heroStats(p) { const S = heroStats0(p), sg = G && G.sig, L = (k) => pas
   const ag = (G && G.aug) || {}; if (ag.dm) S.dmg *= 1 + ag.dm; if (ag.as) S.as *= 1 + ag.as; if (ag.cr) S.crit = Math.min(0.8, S.crit + ag.cr); if (ag.sp) S.sp *= 1 + ag.sp; if (ag.rg) S.reg += ag.rg;
   if (sg === 'sea' && S.rg) S.rg *= 1.12; if (sg === 'cav') S.sp *= 1.08; if (sg === 'guer') S.dmg *= 1.1; return S; }
 let CRIT = 0; // 지금 공격 중인 영웅의 급소 확률
-function hurt(p, v) { if (p.away) return; let m = 1 - Math.min(0.55, 0.08 * ((p.cards && p.cards.guard) || 0)); if (pasLv(p, 'dr')) m *= 1 - 0.02 * pasLv(p, 'dr'); if (p.sdT > 0) m *= 0.4; if (p.role === 'yujeong') m *= 0.85; if (p.role === 'gimsimin' && G.castle && Math.hypot(p.x - G.ax, p.y - G.ay) < 320) m *= 0.7; p.hp -= v * m; }
+function hurt(p, v) { if (p.away) return; let m = 1 - Math.min(0.55, 0.08 * ((p.cards && p.cards.guard) || 0)); if (pasLv(p, 'dr')) m *= 1 - 0.02 * pasLv(p, 'dr'); if (p.sdT > 0) m *= 0.4; if (p.role === 'yujeong') m *= 0.85; if (p.role === 'jeongbongsu') { let kn = 0; for (const id of G.order) { const h = G.pl[id]; if (h && h !== p && h.hp > 0 && !h.away && Math.hypot(h.x - p.x, h.y - p.y) < 260) kn++; } m *= 1 - 0.05 * Math.min(3, kn); } if (p.role === 'gimsimin' && G.castle && Math.hypot(p.x - G.ax, p.y - G.ay) < 320) m *= 0.7; p.hp -= v * m; }
 function xpMul() { let m = G.sig === 'plain' ? 1.15 : 1; for (const id of G.order) { const p = G.pl[id], sa = p.sa || {}; m = Math.max(m, 1 + 0.1 * ((p.mer && p.mer.xp) || 0) + 0.15 * (p.cards.study || 0) + (sa.medic_study ? 0.05 : 0) + (sa.medic_study === 2 ? 0.2 : 0)); } return m * (1 + 0.03 * pasMax('xp')) * (G.mod === 'haste' ? 1.25 : 1); }
 function roadY(x, ww, wh) { return wh * 0.5 + Math.sin(x / ww * Math.PI * 4) * 130; }
 function escGo(hs2) { // 탈출: 살아있는 사람 친구 모두가 오른쪽 끝에 닿아야 다음 구간으로 넘어가요 (봇은 제외)
@@ -555,6 +558,8 @@ const SKILL = {
   hyujeong: { n: '격문', cd: 20, d: '나라를 지키자는 글로 동료를 북돋아 체력을 회복시키고 6초 동안 공격력을 올려요' },
   yujeong: { n: '호국 결계', cd: 22, d: '6초 동안 사라지지 않는 결계를 펼쳐 안의 적을 느리게 하고 계속 다치게 해요' },
   jinrin: { n: '명군 지원 포격', cd: 22, d: '명나라 수군의 대포가 여러 곳에 포탄을 떨어뜨려요' },
+  jeongbongsu: { n: '용골산 결사항전', cd: 20, d: '활과 돌을 일제히 쏘아 주변 적에게 피해를 주고, 근처 동료는 6초 동안 공격력이 올라요' },
+  imgyeongeop: { n: '백마산성 방어진', cd: 22, d: '주변 적에게 피해를 주고 잠깐 멈춰 세워요. 성 체력도 조금 회복해요' },
   gimsimin: { n: '진주성 철벽', cd: 20, d: '성 체력을 회복하고, 주변 동료에게 5초간 방패막을 쳐요. 가까운 적은 밀려나요' }
 };
 function cmText() {
@@ -589,6 +594,8 @@ function castSkill(p) {
   else if (k === 'hyujeong') { for (const q of G.order) { const h = G.pl[q]; if (h.hp > 0 && !h.away && Math.hypot(h.x - p.x, h.y - p.y) < 420) { h.hp = Math.min(h.mx, h.hp + h.mx * 0.15); h.bfT = 6 * durM(p); G.fx.push([h.x, h.y, 50, 'lvl']); } } G.fx.push([p.x, p.y, 420, 'hj']); }
   else if (k === 'yujeong') { p.zT = 6 * durM(p); p.zx = p.x; p.zy = p.y; p.zk = 0; for (const e of near(p.x, p.y, 210)) e.slw = Math.max(e.slw || 0, G.t + 3 * durM(p)); G.fx.push([p.x, p.y, 210, 'yj']); }
   else if (k === 'jinrin') { const t = near(p.x, p.y, 460).sort(() => Math.random() - 0.5).slice(0, 8); for (const e of t) { for (const e2 of near(e.x, e.y, 90)) dmgEnemy(e2, dm(60)); G.fx.push([e.x, e.y, 90, 'boom']); } G.fx.push([p.x, p.y, 460, 'jr']); }
+  else if (k === 'jeongbongsu') { for (const e of near(p.x, p.y, 300).slice(0, 14)) { dmgEnemy(e, dm(45)); G.fx.push([e.x, e.y - 14, 26, 'hit']); } for (const q of G.order) { const h = G.pl[q]; if (h.hp > 0 && !h.away && Math.hypot(h.x - p.x, h.y - p.y) < 360) { h.bfT = 6 * durM(p); G.fx.push([h.x, h.y, 50, 'lvl']); } } G.fx.push([p.x, p.y, 300, 'gw']); }
+  else if (k === 'imgyeongeop') { for (const e of near(p.x, p.y, 340)) { if (e.t === 'camp') continue; dmgEnemy(e, dm(40)); if (e.t === 'boss') e.slw = Math.max(e.slw || 0, G.t + 3 * durM(p)); else e.st = 1.6 * durM(p); G.fx.push([e.x, e.y - 14, 26, 'hit']); } if (G.castle) { G.baseHp = Math.min(G.baseMax, G.baseHp + G.baseMax * 0.06); G.fx.push([G.ax, G.ay, 110, 'lvl']); } G.fx.push([p.x, p.y, 340, 'hk']); }
   else if (k === 'gimsimin') { if (G.castle) { G.baseHp = Math.min(G.baseMax, G.baseHp + G.baseMax * 0.12); G.fx.push([G.ax, G.ay, 110, 'lvl']); } for (const q of G.order) { const h = G.pl[q]; if (h.hp > 0 && !h.away && Math.hypot(h.x - p.x, h.y - p.y) < 260) { h.sdT = 5; G.fx.push([h.x, h.y, 50, 'lvl']); } } for (const e of near(p.x, p.y, 170)) { if (e.t === 'camp' || e.t === 'boss') continue; const a = Math.atan2(e.y - p.y, e.x - p.x), q2 = clampW(e.x + Math.cos(a) * 70, e.y + Math.sin(a) * 70); e.x = q2[0]; e.y = q2[1]; e.slw = Math.max(e.slw || 0, G.t + 2 * durM(p)); } G.fx.push([p.x, p.y, 260, 'ks']); }
   else { for (const e of near(p.x, p.y, 125)) { dmgEnemy(e, dm(70)); e.st = 1.6 * durM(p); } G.fx.push([p.x, p.y, 125, 'roar']); }
 }
@@ -1129,7 +1136,7 @@ function initLobby() {
   $('btnCoop').onclick = () => { draftSel = { start: +$('selStart').value, scn: +$('selCmScn').value, obj: $('selCmObj').value, dur: +$('selDur').value, diff: diffSel, coop: true, bots: +$('selBots').value, cl: +$('selCl').value }; hostCtl('start', draftSel); };
   $('btnStartE').onclick = () => { draftSel = { start: +$('selStart').value, dur: +$('selDur').value, diff: diffSel, endless: true }; hostCtl('start', draftSel); };
   $('btnLeave').onclick = () => { if (confirmLeave()) { LASTROOM.clear(); location.reload(); } };
-  document.querySelectorAll('#roleRow button').forEach((b) => { b.onclick = () => { if (LEG[b.dataset.r] && !legOK(b.dataset.r)) { const c = cwLoad(), tg = cwTarget(c), k = b.dataset.r; $('roleTip').innerHTML = tg === k ? `🔒 <b>전설 영웅 ${LEG[k].n}</b> — 협동전을 깨서 영웅 조각 ${LEG[k].need}개를 모으면 열려요! (지금 ${c.sh}/${LEG[k].need})` : `🔒 <b>전설 영웅 ${LEG[k].n}</b> — 먼저 전설 영웅 ‘${LEG[tg].n}’을 열면 조각이 ‘${LEG[k].n}’ 쪽으로 모여요!`; return; } if (b.dataset.r === 'admiral' && !hidOK()) { $('roleTip').innerHTML = '🔒 <b>히든 영웅</b> — 모든 라운드를 끝까지 깨면 열려요!'; return; } me.role = b.dataset.r; sendProf(); roleTip(b.dataset.r); pasTip(); document.querySelectorAll('#roleRow button').forEach((x) => x.classList.toggle('on', x === b)); }; });
+  document.querySelectorAll('#roleRow button').forEach((b) => { b.onclick = () => { if (LEG[b.dataset.r] && LEG[b.dataset.r].solo !== undefined && !legOK(b.dataset.r)) { $('roleTip').innerHTML = `🔒 <b>전설 영웅 ${LEG[b.dataset.r].n}</b> — 혼자 하기에서 <b>${CH[LEG[b.dataset.r].solo].n}</b> 챕터를 끝까지 깨면 열려요!`; return; } if (LEG[b.dataset.r] && !legOK(b.dataset.r)) { const c = cwLoad(), tg = cwTarget(c), k = b.dataset.r; $('roleTip').innerHTML = tg === k ? `🔒 <b>전설 영웅 ${LEG[k].n}</b> — 협동전을 깨서 영웅 조각 ${LEG[k].need}개를 모으면 열려요! (지금 ${c.sh}/${LEG[k].need})` : `🔒 <b>전설 영웅 ${LEG[k].n}</b> — 먼저 전설 영웅 ‘${LEG[tg].n}’을 열면 조각이 ‘${LEG[k].n}’ 쪽으로 모여요!`; return; } if (b.dataset.r === 'admiral' && !hidOK()) { $('roleTip').innerHTML = `🔒 <b>히든 영웅</b> — 권율·진린·정봉수·임경업을 모두 모으면 열려요! (지금 ${CH_HERO.filter((x) => legOK(x)).length}/4)`; return; } me.role = b.dataset.r; sendProf(); roleTip(b.dataset.r); pasTip(); document.querySelectorAll('#roleRow button').forEach((x) => x.classList.toggle('on', x === b)); }; });
   document.querySelector('#roleRow button').classList.add('on');
   { const rr = $('roleRow'); rr.style.setProperty('display', 'none', 'important'); const btns = [...rr.querySelectorAll('button')]; let ci = Math.max(0, btns.findIndex((b) => b.dataset.r === me.role));
     const car = document.createElement('div'); car.id = 'roleCar'; car.innerHTML = '<button id="rcPrev" aria-label="이전 역할">◀</button><button id="rcCur"></button><button id="rcNext" aria-label="다음 역할">▶</button>'; rr.parentNode.insertBefore(car, rr.nextSibling);
@@ -1339,7 +1346,7 @@ function buildResult() {
   const r = R[V.rd], win = V.res.win; show('sResult'); $('sResult').scrollTop = 0;
   $('rsTitle').textContent = win ? (r.df ? '버텨 냈어요!' : '승리!') : (V.res.cmf ? ({ b: '봉화를 못 올렸어요…', r: '시간 안에 끝내지 못했어요…' }[V.res.cmk] || '보급기지를 못 부쉈어요…') : '거점이 무너졌어요…');
   $('rsTitle').style.color = win ? '#2f6b2a' : '#a8322a';
-  { const rw = $('rsReward'), c = cwCredit(), h = chCredit(); if (h && !h.again) { rw.style.display = 'block'; rw.innerHTML = `🏆 ${CH[h.ch].n} 챕터를 모두 깼어요!<br>` + (h.k ? `🌟 전설 영웅 <b>${LEG[h.k].n}</b> 해금! <small>(내 역할에서 고를 수 있어요)</small>` : h.none ? `🎟 뽑기권 +${h.tk} <small>(이 시대 전설 영웅은 아직 없어요)</small>` : `🎟 뽑기권 +${h.tk} <small>(이 시대 전설 영웅을 이미 다 가졌어요)</small>`); } else if (c) { rw.style.display = 'block'; const tn = c.tg ? LEG[c.tg].n : '', tl = c.tgNow ? ` (${c.have}/${LEG[c.tgNow].need})` : ''; rw.innerHTML = `🎁 협동 보상 · 🎟 뽑기권 +${c.tk}${c.sh ? ` · 🧩 ${tn ? tn + ' 조각' : '(전설 완성→뽑기권으로)'} +${c.sh}${tn ? tl : ''}` : ''}${c.un ? `<br>🌟 전설 영웅 ${LEG[c.un].n} 해금!` : ''}<br><small>보관함에서 뽑기를 해 보세요!</small>`; } else rw.style.display = 'none'; }
+  { const rw = $('rsReward'), c = cwCredit(), h = chCredit(); if (h && !h.again) { rw.style.display = 'block'; rw.innerHTML = `🏆 ${CH[h.ch].n} 챕터를 모두 깼어요!<br>` + (h.k ? `🌟 전설 영웅 <b>${LEG[h.k].n}</b> 해금! <small>(내 역할에서 고를 수 있어요)</small>` : h.none ? `🎟 뽑기권 +${h.tk} <small>(이 시대 전설 영웅은 아직 없어요)</small>` : `🎟 뽑기권 +${h.tk} <small>(이 시대 전설 영웅을 이미 가지고 있어요)</small>`) + (h.hid ? '<br>⭐ 히든 영웅 <b>이순신</b> 해금! 네 영웅을 모두 모았어요' : ''); } else if (c) { rw.style.display = 'block'; const tn = c.tg ? LEG[c.tg].n : '', tl = c.tgNow ? ` (${c.have}/${LEG[c.tgNow].need})` : ''; rw.innerHTML = `🎁 협동 보상 · 🎟 뽑기권 +${c.tk}${c.sh ? ` · 🧩 ${tn ? tn + ' 조각' : '(전설 완성→뽑기권으로)'} +${c.sh}${tn ? tl : ''}` : ''}${c.un ? `<br>🌟 전설 영웅 ${LEG[c.un].n} 해금!` : ''}<br><small>보관함에서 뽑기를 해 보세요!</small>`; } else rw.style.display = 'none'; }
   { const nx = R[V.rd + 1], ch = CH[r.ch];
     const SRCT = { '교': '📗 교과서', '지': '📘 지도서', '보': '📙 교과서 밖 보충 · 선생님과 확인해요' }, TH = { mount: '⛰️', sea: '🌊', plain: '🌾', river: '🏞️' };
     const FIC = { d: '영웅을 소환하고 카드로 강해지며 성을 지키는 것은 게임을 위해 만든 규칙이에요.', e: '달려서 탈출하는 임무는 게임용 연출이에요.', s: '제한 시간 동안 버티는 방식과 영웅·카드는 게임을 위해 만든 규칙이에요.', r: '보급창고를 부수는 임무는 게임을 위해 만든 규칙이에요.', b: '적장과의 일기토(1:1 대결)와 장수의 공격 모습은 게임용 연출이에요.' };
@@ -1377,8 +1384,8 @@ function updateResult() {
   document.querySelectorAll('.qo').forEach((b) => { const i = +b.dataset.i; if (mine != null) { b.disabled = true; b.classList.toggle('ok', i === r.q[2]); b.classList.toggle('no', i === mine && i !== r.q[2]); } });
   $('qWhy').innerHTML = mine != null ? `${mine === r.q[2] ? '⭕ 정답!' : '❌ 아쉬워요'} ${esc(r.q[3])}<br><small>답한 친구 ${n}/${V.pl.length}명 · 정답자 1명당 다음 판 군량 +15</small>` : `<small>답한 친구 ${n}/${V.pl.length}명</small>`;
 }
-const CH_END = [9, 19, 24, 29], CH_LEG = [['gwonyul', 'gimsimin', 'gwakjaeu', 'hyujeong', 'yujeong'], ['jinrin'], [], []]; // 챕터 마지막 시나리오 번호 / 챕터와 관련된 전설 영웅(교과서·지도서·설계안 근거 인물)
-const LEG = { gwonyul: { need: 10, n: '권율', btn: 'roleLeg' }, gimsimin: { need: 12, n: '김시민', btn: 'roleLeg2' }, gwakjaeu: { need: 12, n: '곽재우', btn: 'roleLeg3' }, hyujeong: { need: 12, n: '휴정', btn: 'roleLeg4' }, yujeong: { need: 14, n: '유정', btn: 'roleLeg5' }, jinrin: { need: 14, n: '진린', btn: 'roleLeg6' } };
+const CH_END = [9, 19, 24, 29], CH_LEG = [['gwonyul'], ['jinrin'], ['jeongbongsu'], ['imgyeongeop']]; // 챕터 마지막 시나리오 번호 / 챕터와 관련된 전설 영웅(교과서·지도서·설계안 근거 인물)
+const LEG = { gwonyul: { need: 10, n: '권율', btn: 'roleLeg', solo: 0 }, gimsimin: { need: 12, n: '김시민', btn: 'roleLeg2' }, gwakjaeu: { need: 12, n: '곽재우', btn: 'roleLeg3' }, hyujeong: { need: 12, n: '휴정', btn: 'roleLeg4' }, yujeong: { need: 14, n: '유정', btn: 'roleLeg5' }, jinrin: { need: 14, n: '진린', btn: 'roleLeg6', solo: 1 }, jeongbongsu: { need: 14, n: '정봉수', btn: 'roleLeg7', solo: 2 }, imgyeongeop: { need: 14, n: '임경업', btn: 'roleLeg8', solo: 3 } };
 // ----- 영웅 꾸미기 이펙트 (후광: 발밑 고리+입자·날개 / 이동 흔적: 걸을 때 남는 자국) -----
 const RB = (t, i) => { const s = Math.sin(t * 12.9898 + i * 78.233) * 43758.5453; return s - Math.floor(s); };
 function ptc(cx, x, y, r, col, al) { cx.globalAlpha = Math.max(0, al); cx.fillStyle = col; cx.beginPath(); cx.arc(x, y, Math.max(0.5, r), 0, 7); cx.fill(); }
@@ -1464,7 +1471,7 @@ function pillB(c, txt, x, y, bg, fg, bd, tm, full) {
   c.font = 'bold 12px JD, sans-serif'; const w = c.measureText(txt).width + 14; c.fillStyle = bg; { const l = x - w / 2, tp = y - 9, hh = 18, r0 = 9; c.beginPath(); c.moveTo(l + r0, tp); c.arcTo(l + w, tp, l + w, tp + hh, r0); c.arcTo(l + w, tp + hh, l, tp + hh, r0); c.arcTo(l, tp + hh, l, tp, r0); c.arcTo(l, tp, l + w, tp, r0); c.closePath(); } c.fill(); c.fillStyle = fg; c.textAlign = 'center'; c.fillText(txt, x, y + 4.5);
   if (bd && BRD[bd]) drawBorder(c, bd, x, y, w, 18, tm, full);
 }
-const HAUR = { gwonyul: { c: '#ffb13a', r: 2 }, gimsimin: { c: '#5ab4ff', r: 2 }, admiral: { c: '#7fe6ff', r: 2 }, gwakjaeu: { c: '#ff4a3a', r: 2 }, hyujeong: { c: '#ffe27a', r: 2 }, yujeong: { c: '#c28aff', r: 2 }, jinrin: { c: '#ff9a3a', r: 2 } }; // 전설·히든 영웅 기본 후광
+const HAUR = { gwonyul: { c: '#ffb13a', r: 2 }, gimsimin: { c: '#5ab4ff', r: 2 }, admiral: { c: '#7fe6ff', r: 2 }, gwakjaeu: { c: '#ff4a3a', r: 2 }, hyujeong: { c: '#ffe27a', r: 2 }, yujeong: { c: '#c28aff', r: 2 }, jinrin: { c: '#ff9a3a', r: 2 }, jeongbongsu: { c: '#3fbf7f', r: 2 }, imgyeongeop: { c: '#9fb8ff', r: 2 } }; // 전설·히든 영웅 기본 후광
 // ----- 라운드 고유 규칙: 지형·병종에 따라 판마다 다른 특징 (게임 규칙이에요) -----
 const SIGD = { mount: ['⛰', '산성', '적이 오르막을 올라와서 조금 느려요 (이동 −10%) · 성이 10% 더 튼튼해요'], plain: ['🌾', '넓은 벌판', '적이 많이 몰려오지만(+15%) 경험치를 15% 더 얻어요'], cav: ['🐎', '기병 돌격', '적 기병이 훨씬 자주 나와요! 대신 영웅 이동 속도 +8%'], sea: ['🌊', '바다 전투', '적 궁수·화포병이 늘어나요. 대신 영웅 사거리 +12%'], guer: ['🌲', '유격전', '기습이 더 잦아요! 대신 영웅 공격력 +10%'] };
 const FXL = { evo: 2.2, boss: 1.2, lvl: 1.0, gw: 1.4, hk: 1.2, ks: 1.4, hg: 1.2, hj: 1.4, yj: 6, jr: 1.5 };
@@ -1484,7 +1491,7 @@ const RN = ['일반', '희귀', '전설'], RC = ['#7a6a55', '#2f78c8', '#c98a00'
 function cwLoad() { try { const d = JSON.parse(localStorage.getItem('jd_cw') || 'null'); if (d && typeof d === 'object') return { tk: d.tk | 0, sh: d.sh | 0, own: d.own || {}, cos: Array.isArray(d.cos) ? d.cos : [], eq: AUR[d.eq] && AUR[d.eq].s !== 't' ? d.eq : '', eq2: AUR[d.eq2] && AUR[d.eq2].s === 't' ? d.eq2 : '', pity: d.pity | 0, pity2: d.pity2 | 0, cl: d.cl | 0, ids: Array.isArray(d.ids) ? d.ids : [] }; } catch (e) {} return { tk: 0, sh: 0, own: {}, cos: [], eq: '', eq2: '', pity: 0, pity2: 0, cl: 0, ids: [] }; }
 function cwSave(d) { try { localStorage.setItem('jd_cw', JSON.stringify(d)); } catch (e) {} }
 function legOK(k) { return !!cwLoad().own[k]; }
-function cwTarget(d) { return Object.keys(LEG).find((k) => !d.own[k]) || ''; }
+function cwTarget(d) { return Object.keys(LEG).find((k) => LEG[k].solo === undefined && !d.own[k]) || ''; }
 function cwAddSh(d, n) { let un = ''; while (n > 0) { const k = cwTarget(d); if (!k) { d.tk += n; break; } const take = Math.min(n, LEG[k].need - d.sh); d.sh += take; n -= take; if (d.sh >= LEG[k].need) { d.own[k] = 1; d.sh = 0; un = un || k; } } return un; }
 const cwShown = {};
 function cwCredit() { // 결과 화면에서 이 기기에 보상을 한 번만 넣어요
@@ -1498,8 +1505,8 @@ function chCredit() { // 혼자하기에서 챕터를 끝까지 깨면 그 시�
   let D = { done: {} }; try { D = JSON.parse(localStorage.getItem('jd_chc') || 'null') || D; } catch (e) {} D.done = D.done || {}; const ch = r.chr - 1;
   if (D.done[ch]) return (chShown[r.id] = { ch, again: true });
   const d = cwLoad(), k = (CH_LEG[ch] || []).find((x) => !d.own[x]) || ''; let tk = 0; if (k) d.own[k] = 1; else { tk = 3; d.tk += tk; }
-  cwSave(d); D.done[ch] = 1; try { localStorage.setItem('jd_chc', JSON.stringify(D)); } catch (e) {} refreshHid();
-  return (chShown[r.id] = { ch, k, tk, none: !(CH_LEG[ch] || []).length });
+  const hid0 = hidOK(); cwSave(d); D.done[ch] = 1; try { localStorage.setItem('jd_chc', JSON.stringify(D)); } catch (e) {} refreshHid();
+  return (chShown[r.id] = { ch, k, tk, none: !(CH_LEG[ch] || []).length, hid: !hid0 && hidOK() });
 }
 function cwDraw() {
   const d = cwLoad(); if (d.tk < 1) return null; d.tk--; d.pity++; d.pity2++; let r;
@@ -1534,7 +1541,8 @@ function openCw(msg) {
   $('cwGo').onclick = () => { const r = cwDraw(); if (!r) return; const A = AUR[r.id]; openCw(`<div class="cwp" style="border-color:${RC[r.r]}">✨ <b style="color:${RC[r.r]}">${RN[r.r]}</b> · ${A.n}${r.dup ? ` — 이미 있어서 🧩 조각 +${r.sh}` : ' — 새로 얻었어요!'}${r.un ? '<br>🌟 전설 영웅 ' + LEG[r.un].n + ' 해금!' : ''}</div>`); refreshHid(); };
   $('cwBody').querySelectorAll('.cwg button').forEach((b) => { b.onclick = () => { const c = cwLoad(); if (!c.cos.includes(b.dataset.a)) { pvTry = b.dataset.a; const A = AUR[pvTry], lb = $('cwPvL'); if (lb) lb.innerHTML = '👁 미리보기: <b>' + A.n + '</b> (' + RN[A.r] + ') — 뽑기로 얻으면 쓸 수 있어요'; return; } if (AUR[b.dataset.a].s === 't') { c.eq2 = c.eq2 === b.dataset.a ? '' : b.dataset.a; me.tr = c.eq2; } else { c.eq = c.eq === b.dataset.a ? '' : b.dataset.a; me.aura = c.eq; } cwSave(c); sendProf(); openCw(); }; });
 }
-function hidOK() { try { return localStorage.getItem('jd_hid') === '1'; } catch (e) { return false; } }
+const CH_HERO = ['gwonyul', 'jinrin', 'jeongbongsu', 'imgyeongeop'];
+function hidOK() { try { return localStorage.getItem('jd_hid') === '1' || CH_HERO.every((k) => legOK(k)); } catch (e) { return false; } }
 let rcSync = () => {};
 function refreshHid() { for (const k of Object.keys(LEG)) { const lb = $(LEG[k].btn); if (lb) lb.textContent = legOK(k) ? '🌟 ' + LEG[k].n : '🔒 전설'; } const hb = $('roleHid'); if (hb) hb.textContent = hidOK() ? '⭐ 이순신' : '🔒 히든'; rcSync(); }
 function rankLoad() { try { return JSON.parse(localStorage.getItem('jd_rank') || '[]'); } catch (e) { return []; } }
@@ -1550,9 +1558,8 @@ function buildEnd() {
     { const key = e.tot + ':' + e.k + ':' + e.r; if (key !== lastEndKey) { lastEndKey = key; const mp = V.pl.find((x) => x.id === Net.id); let wl = 0; if (mp) for (const k in WEAP) wl = Math.max(wl, (mp.cards && mp.cards[k]) | 0); lastEndPas = sumHtml(V.sum) + '<br>' + pasResHtml(pasSettle({ food: V.food, win: e.clear, kc: e.k, lv: V.lc, t: e.tot, al: V.an, bk: 0, wl, es: 1 })); pasTip(); } $('endText').innerHTML += '<p>' + lastEndPas + '</p>'; }
     hostOnly('btnEndless', false); return;
   }
-  try { localStorage.setItem('jd_hid', '1'); } catch (e) {} refreshHid();
   $('endH').textContent = '끝까지 지켜 냈어요! 🎉';
-  $('endText').innerHTML = CH.map((c) => `<p><b>${c.n}</b> — ${esc(c.sum)} <small>(${c.pg})</small></p>`).join('') + '<p><b>⭐ 히든 영웅 이순신 해금!</b> 방에서 역할을 고를 때 이순신을 고를 수 있어요. 거북선의 포로 싸워요.</p><p><b>이제 무한 모드로 돌입합니다!</b> 30라운드가 끝없이 이어지고 적이 계속 강해져요. 버틴 시간·처치 수·퀴즈 정답으로 랭킹을 겨뤄 보세요.</p>';
+  $('endText').innerHTML = CH.map((c) => `<p><b>${c.n}</b> — ${esc(c.sum)} <small>(${c.pg})</small></p>`).join('') + (hidOK() ? '<p><b>⭐ 히든 영웅 이순신!</b> 역할을 고를 때 이순신을 고를 수 있어요. 거북선의 포로 싸워요.</p>' : '<p><small>🔒 네 챕터의 전설 영웅(권율·진린·정봉수·임경업)을 모두 모으면 히든 영웅 이순신이 열려요. 혼자 하기에서 챕터를 끝까지 깨 보세요!</small></p>') + '<p><b>이제 무한 모드로 돌입합니다!</b> 30라운드가 끝없이 이어지고 적이 계속 강해져요. 버틴 시간·처치 수·퀴즈 정답으로 랭킹을 겨뤄 보세요.</p>';
   hostOnly('btnEndless', true);
 }
 
@@ -1566,7 +1573,7 @@ function dexRec() { // 도감: 이 기기에서 만난 시너지·영웅·적장
   if (V.ph === 'battle') { d.bn = d.bn || {}; for (const e of V.en || []) if (e[1] === 'boss') { const nm = (e[8] || V.bn || BOSSN[V.rd] || [''])[0]; if (nm && !d.bn[nm]) { d.bn[nm] = 1; ch = true; } } }
   if (ch) try { localStorage.setItem('jd_dex', JSON.stringify(d)); } catch (e) {}
 }
-const HERO_BLURB = { gwakjaeu: '임진왜란 때 가장 먼저 의병을 일으킨 홍의장군 곽재우예요. 붉은 옷을 입고 날쌔게 싸웠어요.', hyujeong: '서산대사 휴정은 임진왜란이 나자 승려들에게 나라를 지키자는 글을 보내 승병을 일으키게 했어요.', yujeong: '사명대사 유정은 휴정의 제자로 승병을 이끌었고, 전쟁이 끝난 뒤 일본에 가서 포로를 데려오는 데 힘썼어요.', jinrin: '명나라 수군 장수 진린은 정유재란 때 조선 수군과 연합해 노량해전에서 이순신과 함께 싸웠어요. (교과서 밖 보충)', gimsimin: '진주대첩(1592)을 이끈 진주목사 김시민이에요. 3천여 명의 군사로 2만여 명의 왜군을 막아 냈어요.', gwonyul: '행주대첩(1593)을 이끈 장군 권율이에요. 화차로 불화살을 쏟아부어요.', archer: '활을 쏘는 사수예요. 멀리서 일직선의 적을 꿰뚫어요.', militia: '나라를 지키려고 스스로 일어난 백성 군대, 의병이에요. 환도로 앞의 적을 베어요.', monk: '임진왜란 때 서산대사 휴정, 사명대사 유정 같은 스님들이 승병을 이끌고 싸웠어요.', gunner: '화약 무기인 화포(대포)를 다루는 병사예요. 한 방에 무리를 날려요.', admiral: '이순신(1545~1598)은 조선 수군을 이끈 장수예요. 한산도 대첩을 이끌었고 노량 해전에서 전사했어요.' };
+const HERO_BLURB = { jeongbongsu: '정봉수는 정묘호란(1627) 때 용골산성에서 의병장으로 추대되어, 의병과 피난민을 이끌고 후금군의 공격을 막아 냈어요. (교과서 밖 보충)', imgyeongeop: '임경업은 의주부윤으로 백마산성을 고쳐 쌓고 지켰어요. 병자호란(1636) 때 청군은 백마산성을 공격하지 않고 비켜 한양 쪽으로 내려갔어요. (교과서 밖 보충)', gwakjaeu: '임진왜란 때 가장 먼저 의병을 일으킨 홍의장군 곽재우예요. 붉은 옷을 입고 날쌔게 싸웠어요.', hyujeong: '서산대사 휴정은 임진왜란이 나자 승려들에게 나라를 지키자는 글을 보내 승병을 일으키게 했어요.', yujeong: '사명대사 유정은 휴정의 제자로 승병을 이끌었고, 전쟁이 끝난 뒤 일본에 가서 포로를 데려오는 데 힘썼어요.', jinrin: '명나라 수군 장수 진린은 정유재란 때 조선 수군과 연합해 노량해전에서 이순신과 함께 싸웠어요. (교과서 밖 보충)', gimsimin: '진주대첩(1592)을 이끈 진주목사 김시민이에요. 3천여 명의 군사로 2만여 명의 왜군을 막아 냈어요.', gwonyul: '행주대첩(1593)을 이끈 장군 권율이에요. 화차로 불화살을 쏟아부어요.', archer: '활을 쏘는 사수예요. 멀리서 일직선의 적을 꿰뚫어요.', militia: '나라를 지키려고 스스로 일어난 백성 군대, 의병이에요. 환도로 앞의 적을 베어요.', monk: '임진왜란 때 서산대사 휴정, 사명대사 유정 같은 스님들이 승병을 이끌고 싸웠어요.', gunner: '화약 무기인 화포(대포)를 다루는 병사예요. 한 방에 무리를 날려요.', admiral: '이순신(1545~1598)은 조선 수군을 이끈 장수예요. 한산도 대첩을 이끌었고 노량 해전에서 전사했어요.' };
 
 // ===== 업적·칭호·일일 도전 (v0.33) — 이 기기에만 저장돼요 =====
 const ACH = [
@@ -1635,7 +1642,7 @@ function buildBook(tab) {
   if (tab === 'syn') {
     const got = SYN.filter((y) => d.s[y.k]).length; h = `<p class="bk-n">발견한 시너지 ${got}/${SYN.length} — 두 카드를 함께 가지면 보너스, 능력 짝은 둘 다 Lv.5면 특별 효과가 열려요!<br>⚔ <b>무기 진화</b>: 무기를 Lv.5로 키우고 그 무기의 <b>짝 능력</b>(카드에 ★로 표시)을 1개 이상 가진 채 적장을 쓰러뜨리면 문제가 나와요. 맞히면 진화!</p><div class="bk-g">` + SYN.map((y) => { const lv = d.s[y.k] | 0; return `<div class="bk-c${lv ? '' : ' lk'}"><div class="bk-i"><img src="${ICON(y.a)}"><span>+</span><img src="${ICON(y.b)}"></div><b>${lv ? esc(y.n) : '???'}</b><span>${lv ? esc(y.d) : '아직 못 찾았어요'}</span><small>${lv ? esc(y.t) : (WEAP[y.a] ? '무기 + 무기' : '능력 + 능력') + ' 조합'}</small><em>${y.w ? (lv ? '두 무기를 함께 쓰면 공격력 보너스!' : '') : lv === 2 ? '⭐ 특별 효과 발견: ' + esc(y.sd) : lv ? '🔒 둘 다 Lv.5 → ' + esc(y.sd) : ''}</em></div>`; }).join('') + '</div>';
   } else if (tab === 'hero') {
-    h = '<div class="bk-g">' + Object.keys(ROLE).map((k) => { const r = ROLE[k], ok = k === 'admiral' ? hidOK() : LEG[k] ? legOK(k) : d.h[k]; return `<div class="bk-c${ok ? '' : ' lk'}"><b>${ok ? esc(r.n) : '???'}</b><span>${ok ? esc(HERO_BLURB[k]) : (k === 'admiral' ? '모든 라운드를 깨면 열려요' : LEG[k] ? '협동전 보상 조각 ' + LEG[k].need + '개로 열려요' : '아직 써 보지 않았어요')}</span><small>${ok ? esc(r.tag.join(' · ')) : ''}</small></div>`; }).join('') + '</div>';
+    h = '<div class="bk-g">' + Object.keys(ROLE).map((k) => { const r = ROLE[k], ok = k === 'admiral' ? hidOK() : LEG[k] ? legOK(k) : d.h[k]; return `<div class="bk-c${ok ? '' : ' lk'}"><b>${ok ? esc(r.n) : '???'}</b><span>${ok ? esc(HERO_BLURB[k]) : (k === 'admiral' ? '네 챕터 영웅을 모두 모으면 열려요' : LEG[k] ? (LEG[k].solo !== undefined ? '혼자 하기 ' + CH[LEG[k].solo].n + ' 챕터를 깨면 열려요' : '협동전 보상 조각 ' + LEG[k].need + '개로 열려요') : '아직 써 보지 않았어요')}</span><small>${ok ? esc(r.tag.join(' · ')) : ''}</small></div>`; }).join('') + '</div>';
   } else if (tab === 'boss') {
     const seen = {}; BOSSN.concat(BOSS_EXTRA).forEach((b, i) => { if (!b) return; const x = (seen[b[0]] = seen[b[0]] || { d: b[1], r: [], ok: 0 }); if (i < BOSSN.length) x.r.push(i); if ((d.bn || {})[b[0]] || d.b[i]) x.ok = 1; });
     const ks = Object.keys(seen); h = `<p class="bk-n">만난 적장 ${ks.filter((k) => seen[k].ok).length}/${ks.length} — 적장 설명은 교과서 밖 보충이라 선생님 확인이 필요해요.</p><div class="bk-g">` + ks.map((k) => { const x = seen[k]; return `<div class="bk-c${x.ok ? '' : ' lk'}"><b>${x.ok ? esc(k) : '???'}</b><span>${x.ok ? esc(x.d) : '아직 만나지 못했어요'}</span><small>${x.ok ? (x.r.length ? '출현: ' + x.r.map((i) => esc(R[i].nm)).join(', ') : '무한 모드 최종 보스') : ''}</small></div>`; }).join('') + '</div>';
@@ -1806,7 +1813,7 @@ const IMG = {}, IMGW = {}, FACE = new Map(), KICK = new Map();
 (function () { const S = window.SPR || {}; for (const k in S) { const im = new Image(); im.src = S[k].d; IMG[k] = im; } })();
 const FOEP = { 왜군: 'jp', 후금군: 'hg', 청군: 'qg' }, ETK = { grunt: 'inf', shoot: 'rng', cav: 'cav', tank: 'tank', shld: 'tank', boss: 'boss' };
 const EH = { camp: 70, grunt: 52, shoot: 52, cav: 62, tank: 60, shld: 66, boss: 86 };
-const RSP = { archer: 'h_archer', militia: 'h_militia', monk: 'h_monk', gunner: 'h_cannon', admiral: 'h_admiral', gwonyul: 'h_gwonyul', gimsimin: 'h_gimsimin', yujeong: 'h_yujeong', jinrin: 'h_jinrin', gwakjaeu: 'h_gwakjaeu', hyujeong: 'h_hyujeong' };
+const RSP = { archer: 'h_archer', militia: 'h_militia', monk: 'h_monk', gunner: 'h_cannon', admiral: 'h_admiral', gwonyul: 'h_gwonyul', gimsimin: 'h_gimsimin', yujeong: 'h_yujeong', jinrin: 'h_jinrin', gwakjaeu: 'h_gwakjaeu', hyujeong: 'h_hyujeong', jeongbongsu: 'h_jeongbongsu', imgyeongeop: 'h_imgyeongeop' };
 const fr10 = (tm, ph) => Math.floor(tm * 10 + ph);
 const USP = { bow: 'u_bow', spear: 'u_spear', gun: 'u_gun', cannon: 'u_cannon', cav: 'u_cav' };
 const GR = {}, OUT = 5;

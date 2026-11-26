@@ -3,7 +3,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   const errs = [], o = {};
   const fresh = async (w, h) => { const p = await b.newPage({ viewport: { width: w || 1180, height: h || 820 } });
-    await p.addInitScript(() => { if (!sessionStorage.getItem('x')) { sessionStorage.setItem('x', '1'); localStorage.removeItem('jd_cw'); localStorage.removeItem('jd_chc'); } localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.45'); });
+    await p.addInitScript(() => { if (!sessionStorage.getItem('x')) { sessionStorage.setItem('x', '1'); localStorage.removeItem('jd_cw'); localStorage.removeItem('jd_chc'); } localStorage.setItem('jd_tut', '1'); localStorage.setItem('jd_upd_seen', 'v0.46'); });
     p.on('pageerror', (e) => errs.push(e.message)); await p.goto('file:///home/claude/work/game/dist/index.html'); await p.waitForSelector('#bwj-intro', { state: 'detached' }); return p; };
   let p = await fresh();
   await p.click('#btnSingle'); await p.waitForSelector('#sRoom.on');
@@ -21,5 +21,7 @@ const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwrig
   const clear = async (rd) => { await p.evaluate((rd) => { const D = __dbg; D.hostCtl('start', { start: rd, dur: 300, diff: 'normal', wall: 0 }); D.G.ph = 'battle'; D.endRound(true); }, rd); await p.waitForTimeout(900); return p.evaluate(() => [document.getElementById('rsReward').style.display, document.getElementById('rsReward').textContent, JSON.parse(localStorage.getItem('jd_cw') || '{}').own]); };
   o.mid = await clear(5); o.ch0 = await clear(9); await clear(5); o.ch0again = await clear(9); o.ch1 = await clear(19); o.ch2 = await clear(24); o.ch3 = await clear(29);
   o.tk = await p.evaluate(() => JSON.parse(localStorage.getItem('jd_cw')).tk);
+  o.hid = await p.evaluate(() => [__dbg.hidOK ? __dbg.hidOK() : 'nodbg', document.querySelector('#roleRow button[data-r="admiral"]').className]);
+  await p.evaluate(() => { document.querySelector('#roleRow button[data-r="jeongbongsu"]').click(); }); o.tip = await p.textContent('#roleTip');
   console.log(JSON.stringify(o, null, 1)); console.log('ERR', JSON.stringify(errs)); await b.close();
 })();
