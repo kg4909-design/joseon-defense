@@ -1,7 +1,8 @@
 'use strict';
 // ====== 조선의 위기 디펜스 : 클라이언트 + 호스트 시뮬레이션 ======
-const VER = 'v0.46';
+const VER = 'v0.47';
 const UPDATES = [
+  { v: 'v0.47', d: '11/27', t: ['🐞 탈출 미션에서 오른쪽 끝(깃발 근처)에 가면 자꾸 뒤로 돌려보내지던 문제를 고쳤어요. 방패병 포위 중에는 구간 이동을 하지 않고, 이동할 때 포위 중심도 같이 옮겨요','🐞 퀴즈·카드를 고르는 중에 스페이스·엔터를 누르면 스킬이 나가던 문제를 고쳤어요 (문제 푸는 중에는 스킬·소집 키가 잠겨요)','🔌 방 만들기·방 입장을 눌렀을 때 서버가 응답하지 않아도 이제 “연결 중…”이 보이고, 10초 뒤에는 이유와 함께 알려줘요. 연속으로 눌러도 방이 여러 개 만들어지지 않아요'] },
   { v: 'v0.46', d: '11/26', t: ['🌟 전설 영웅 2명 추가! 정봉수(정묘호란 · 용골산성 의병장, 패시브: 곁에 동료가 많을수록 받는 피해↓ · 스킬 용골산 결사항전) · 임경업(병자호란 · 백마산성 방어, 패시브: 성 가까이에서 공격력↑ · 스킬 백마산성 방어진). 교과서 밖 보충 인물이에요','🏆 혼자 하기에서 챕터를 끝까지 깨면 그 시대 전설 영웅 1명을 받아요: 임진왜란 → 권율 · 정유재란 → 진린 · 정묘호란 → 정봉수 · 병자호란 → 임경업','⭐ 네 영웅(권율·진린·정봉수·임경업)을 모두 모으면 히든 영웅 이순신이 열려요! 김시민·곽재우·휴정·유정은 협동전 조각으로만 얻어요','🎨 정봉수·임경업 그림은 임시예요. 곧 새 그림으로 바뀔 예정이에요'] },
   { v: 'v0.45', d: '11/26', t: ['🙋 혼자 하기와 🏠 방 만들기를 나눴어요. 혼자 하기는 챕터·전투 시간·난이도만 고르면 역사 순서대로 시나리오를 쭉 깨요. 시나리오·전투 장면·임무 선택과 협동전은 방 만들기에서 해요','🌟 혼자 하기에서 한 챕터를 끝까지 깨면 그 시대와 관련된 전설 영웅을 얻어요(임진왜란: 권율→김시민→곽재우→휴정→유정 중 아직 없는 영웅, 정유재란: 진린). 정묘·병자호란은 아직 전설 영웅이 없어서 🎟 뽑기권 3장을 받아요. 챕터마다 한 번씩만 받아요','◀ ▶ 내 역할을 한 칸씩 넘겨 가며 골라요. 버튼이 너무 많던 화면이 깔끔해졌어요'] },
   { v: 'v0.44', d: '11/26', t: ['🗺 시나리오를 직접 고를 수 있어요! 방 설정에서 시작 챕터를 고르면 그 챕터의 시나리오(예: 평양성 탈환)가 나와요. 어떤 임무인지도 미리 보여줘요','🤝 협동전은 전투 장면(30개 중)과 임무(성을 지켜라·탈출·버텨라·적장·창고 습격)를 따로 고르거나 🎲 랜덤으로 할 수 있어요. 임무를 골랐다면 전투 전에 알려줘요'] },
@@ -50,16 +51,18 @@ const Net = {
   connect(url, room, create) {
     return new Promise((res, rej) => {
       let ws; try { ws = new WebSocket(url + (url.includes('?') ? '&' : '?') + 'room=' + encodeURIComponent(room) + (create ? '&create=1' : '')); } catch (e) { rej('주소가 올바르지 않아요'); return; }
-      let ok = false; Net.ws = ws; Net.gotClosed = false;
+      let ok = false, dead = false; Net.ws = ws; Net.gotClosed = false;
+      const fail = (m) => { if (ok || dead) return; dead = true; clearTimeout(tm); try { ws.close(); } catch (e) {} rej(m); };
+      const tm = setTimeout(() => fail('서버가 응답하지 않아요. 잠시 뒤에 다시 눌러 보세요 (오늘 사용량이 많으면 한국시간 오전 9시에 풀려요)'), 10000);
       ws.onmessage = (ev) => { const m = JSON.parse(ev.data);
-        if (m.sys === 'hello') { ok = true; Net.id = m.id; Net.host = m.host === m.id; Net.mode = 'online'; Net.room = room; Net.peers = m.peers; res(); }
-        else if (m.sys === 'err') rej({ exists: '이미 있는 방 코드예요', noroom: '그런 방이 없어요', full: '방이 가득 찼어요(최대 4명)' }[m.code] || '입장 실패');
+        if (m.sys === 'hello') { ok = true; clearTimeout(tm); Net.id = m.id; Net.host = m.host === m.id; Net.mode = 'online'; Net.room = room; Net.peers = m.peers; res(); }
+        else if (m.sys === 'err') fail({ exists: '이미 있는 방 코드예요', noroom: '그런 방이 없어요', full: '방이 가득 찼어요(최대 4명)' }[m.code] || '입장 실패');
         else if (m.sys === 'join') { Net.peers.push(m.id); Net.onJoin(m.id); }
         else if (m.sys === 'leave') { Net.peers = Net.peers.filter((x) => x !== m.id); Net.onLeave(m.id); }
         else if (m.sys === 'closed') { Net.gotClosed = true; Net.why = m.why || ''; Net.onClosed(); }
         else if (m.d) Net.onData(m.from, m.d); };
-      ws.onerror = () => { if (!ok) rej('연결에 실패했어요. 릴레이 주소를 확인해 주세요'); };
-      ws.onclose = () => { if (!ok || Net.gotClosed) return; if (Net.host || !Net.onDrop) Net.onClosed(); else Net.onDrop(); };
+      ws.onerror = () => fail('연결에 실패했어요. 인터넷을 확인하고 다시 눌러 보세요 (서버 사용량이 많은 날에는 한국시간 오전 9시에 풀려요)');
+      ws.onclose = () => { if (!ok) { fail('연결이 끊겼어요. 잠시 뒤에 다시 눌러 보세요'); return; } if (Net.gotClosed) return; if (Net.host || !Net.onDrop) Net.onClosed(); else Net.onDrop(); };
     });
   },
   send(to, d) { if (Net.ws && Net.ws.readyState === 1) Net.ws.send(JSON.stringify({ to, d })); }
@@ -767,7 +770,7 @@ function stepBattle(dt) {
   // 탈출 지점
   if (!G.endless && G.obj !== 'r') ringStep(dt, hs);
   if (G.obj === 'e') { const g = G.goals[G.gi]; if (g) for (const p of hs2) if (Math.hypot(p.x - g[0], p.y - g[1]) < 85) { G.fx.push([g[0], g[1], 60, 'sum']); G.fl++; const nx = Math.min(g[0] + 800, G.ww - 60); G.goals = [[nx, roadY(nx, G.ww, G.wh)]]; for (const h of hs2) h.hp = Math.min(h.mx, h.hp + h.mx * 0.12); break; }
-    if (hs2.length && escGo(hs2)) { for (const id of G.order) { const h = G.pl[id]; h.x = Math.max(60, h.x - ESHIFT); } for (const e of G.en) e.x -= ESHIFT; for (const q of G.souls) q.x -= ESHIFT; for (const c of G.crates) c.x -= ESHIFT; for (const b of G.pj) b.x -= ESHIFT; for (const gq of G.goals) gq[0] -= ESHIFT; G.sf++; } }
+    if (hs2.length && !(G.ring && !G.ring.brk) && escGo(hs2)) { if (G.ring) G.ring.cx -= ESHIFT; for (const id of G.order) { const h = G.pl[id]; h.x = Math.max(60, h.x - ESHIFT); } for (const e of G.en) e.x -= ESHIFT; for (const q of G.souls) q.x -= ESHIFT; for (const c of G.crates) c.x -= ESHIFT; for (const b of G.pj) b.x -= ESHIFT; for (const gq of G.goals) gq[0] -= ESHIFT; G.sf++; } }
   if (G.obj === 'e' && hs2.length) { const lim = Math.min(...hs2.map((h) => h.x)) - 700; G.en = G.en.filter((e) => e.t === 'boss' || e.x > lim); }
   // 적 이동 / 공격
   for (const e of G.en) { const T = ET[e.t]; if (e.ef > 0) e.ef -= dt;
@@ -913,7 +916,7 @@ function hostMsg(from, m) {
   if (m.k === 'prof') { if (G.ph !== 'lobby' && !p) return; if (!p) addPlayer(from, m.name, m.role); else { p.name = String(m.name || p.name).slice(0, 8); if (ROLE[m.role]) p.role = m.role; } if (p || G.pl[from]) { const q0 = G.pl[from]; q0.aura = AUR[m.aura] && AUR[m.aura].s !== 't' ? m.aura : ''; q0.trail = AUR[m.tr] && AUR[m.tr].s === 't' ? m.tr : ''; q0.lvfx = LVF[m.lf] ? m.lf : ''; q0.ps = pasClean(m.ps); q0.bdr = BRD[m.bd] ? m.bd : ''; } { const q = G.pl[from]; if (q && m.tk) q.tk = String(m.tk).slice(0, 24); } return; }
   if (m.k === 'in') { const l = Math.hypot(m.mx, m.my) || 1, s = l > 1 ? 1 / l : 1; p.mvx = m.mx * s; p.mvy = m.my * s; }
   else if (m.k === 'skill' && G.ph === 'battle' && G.du && G.du.ph === 'fight' && p.cd <= 0 && p.hp > 0) { p.cd = 6; p.fz = 0.7; const l = Math.hypot(p.mvx, p.mvy) || 1; const dx = (Math.abs(p.mvx) + Math.abs(p.mvy) > 0.05 ? p.mvx / l : 1), dy = (Math.abs(p.mvx) + Math.abs(p.mvy) > 0.05 ? p.mvy / l : 0); p.x += dx * 130; p.y += dy * 130; G.fx.push([p.x, p.y, 40, 'puff']); }
-  else if (m.k === 'skill' && G.ph === 'battle' && !G.du && p.cd <= 0 && !p.down) castSkill(p);
+  else if (m.k === 'skill' && G.ph === 'battle' && !G.du && p.cd <= 0 && !p.down && !p.offer) castSkill(p);
   else if (m.k === 'cr' && G.ph === 'battle' && !G.du && G.cm && p.cr && p.cr !== 'guard' && (p.cc || 0) <= 0 && !p.down && p.hp > 0) castCr(p);
   else if (m.k === 'pause' && G.ph === 'battle' && (G.order.length === 1 || from === G.order[0])) { G.paused = !!m.v; G.pausedAt = G.paused ? Date.now() : 0; }
   else if (m.k === 'summon' && G.ph === 'battle' && G.obj !== 'e' && !G.du) doSummon(false);
@@ -1153,7 +1156,9 @@ function rejoin(from, d) {
   G.info = { id: Date.now() + Math.random(), tt: '🔌 ' + p.name + ' 다시 들어왔어요', tx: '이어서 함께 싸워요!' }; return true;
 }
 function sendProf() { sendHost({ k: 'prof', name: me.name, role: me.role, tk: TK, aura: me.aura || '', tr: me.tr || '', lf: myCos().lf, bd: myCos().bd, ps: pasActive() }); }
+let connecting = false;
 async function startAs(mode) {
+  if (connecting) return;
   me.name = ($('nick').value || '').trim().slice(0, 8) || '학생'; localStorage.setItem('hdg_nick', me.name);
   $('err').textContent = '';
   try {
@@ -1165,7 +1170,8 @@ async function startAs(mode) {
       let code = ($('roomCode').value || '').trim().toUpperCase(); Net.rurl = url;
       if (mode === 'create') code = Array.from({ length: 4 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[rint(32)]).join('');
       else if (!code) throw '방 코드를 입력해 주세요';
-      Net.rcode = code; await Net.connect(url, code, mode === 'create');
+      Net.rcode = code; connecting = true; const bs = ['btnCreate', 'btnJoin'].map($), old = bs.map((b) => b.textContent); bs.forEach((b) => { b.disabled = true; }); $('err').textContent = '⏳ 서버에 연결하는 중이에요… (최대 10초)'; bs[mode === 'create' ? 0 : 1].textContent = '연결 중…';
+      try { await Net.connect(url, code, mode === 'create'); } finally { connecting = false; bs.forEach((b, i) => { b.disabled = false; b.textContent = old[i]; }); $('err').textContent = ''; }
     }
   } catch (e) { $('err').textContent = typeof e === 'string' ? e : '연결 실패'; return; }
   Net.onClosed = () => { LASTROOM.clear(); alert((Net.why === 'idle' ? '한참 아무 신호가 없어서 방이 자동으로 닫혔어요.' : Net.why === 'max' ? '방은 최대 50분까지만 열려 있어서 시간이 다 되어 닫혔어요.' : '방이 닫혔어요.') + ' 처음 화면으로 돌아갑니다.'); location.reload(); };
@@ -1278,7 +1284,7 @@ function setupInput() {
   const up = (e) => { if (e.pointerId !== joy.id) return; joy.on = false; ring.style.display = knob.style.display = 'none'; };
   z.addEventListener('pointerup', up); z.addEventListener('pointercancel', up);
   const KN = (e) => { const c = e.code || ''; return c === 'KeyW' ? 'w' : c === 'KeyA' ? 'a' : c === 'KeyS' ? 's' : c === 'KeyD' ? 'd' : e.key.toLowerCase(); };
-  addEventListener('keydown', (e) => { keys[KN(e)] = 1; if (e.key === ' ') sendHost({ k: 'skill' }); if (e.key === 'Enter') sendHost({ k: 'summon' }); });
+  addEventListener('keydown', (e) => { keys[KN(e)] = 1; const t = e.target && e.target.tagName, typing = t === 'BUTTON' || t === 'INPUT' || t === 'SELECT' || t === 'TEXTAREA' || $('sBattle').classList.contains('pick'); if (typing) return; if (e.key === ' ') sendHost({ k: 'skill' }); if (e.key === 'Enter') sendHost({ k: 'summon' }); });
   addEventListener('keyup', (e) => { keys[KN(e)] = 0; });
   const clearKeys = () => { keys = {}; }; addEventListener('blur', clearKeys); document.addEventListener('visibilitychange', () => { if (document.hidden) clearKeys(); });
   $('btnSummon').onpointerdown = () => sendHost({ k: 'summon' }); $('btnUp').onpointerdown = () => sendHost({ k: 'upg' }); $('btnRep').onpointerdown = () => sendHost({ k: 'rep' });
